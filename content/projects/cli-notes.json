@@ -1,0 +1,17 @@
+{
+  "slug": "cli-notes",
+  "title": "CLI Notes",
+  "excerpt": "A minimalist command-line notes utility showcased via a browser terminal.",
+  "description": "CLI Notes is a simple note-taking tool. The demo highlights creating, listing, and deleting notes using a friendly terminal UI.",
+  "tags": ["CLI", "Productivity"],
+  "tech": ["Next.js", "xterm.js", "TypeScript"],
+  "screenshots": [
+    {
+      "src": "/images/projects/cli-notes/overview.png",
+      "alt": "CLI Notes overview"
+    }
+  ],
+  "demo": { "subdomain": "notes", "url": "https://notes.russellbomer.com" },
+  "featured": false,
+  "published": true
+}

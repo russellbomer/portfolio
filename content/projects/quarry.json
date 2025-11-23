@@ -1,0 +1,17 @@
+{
+  "slug": "quarry",
+  "title": "Quarry CLI Demo",
+  "excerpt": "Interactive terminal demo showcasing a web scraping CLI with safe, pre-baked outputs.",
+  "description": "Quarry demonstrates an xterm.js-driven terminal experience for a scraping CLI. The demo uses canned outputs to ensure safety and performance while conveying realistic behavior.",
+  "tags": ["CLI", "Demos", "Web Scraping"],
+  "tech": ["Next.js", "xterm.js", "TypeScript"],
+  "screenshots": [
+    {
+      "src": "/images/projects/quarry/terminal.png",
+      "alt": "Quarry terminal screenshot"
+    }
+  ],
+  "demo": { "subdomain": "quarry", "url": "https://quarry.russellbomer.com" },
+  "featured": true,
+  "published": true
+}

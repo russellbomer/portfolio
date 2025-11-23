@@ -1,0 +1,17 @@
+{
+  "slug": "portfolio-site",
+  "title": "Portfolio Platform",
+  "excerpt": "This very site: project listings, demos, and contact — built for performance and clarity.",
+  "description": "The portfolio showcases interactive demos, a content-driven project system, and a clean design system using your custom palette.",
+  "tags": ["Web", "Portfolio", "Design"],
+  "tech": ["Next.js", "Tailwind", "ShadCN"],
+  "screenshots": [
+    {
+      "src": "/images/projects/portfolio-site/home.png",
+      "alt": "Portfolio home"
+    }
+  ],
+  "demo": { "subdomain": "www", "url": "https://russellbomer.com" },
+  "featured": true,
+  "published": true
+}
