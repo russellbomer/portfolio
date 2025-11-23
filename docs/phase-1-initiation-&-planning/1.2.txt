@@ -47,7 +47,7 @@
 
 -- Identify any technical spikes or proof of concepts needed.
 
---- Refactoring the Next.js SaaS Starter template into a portfolio-focused site structure.
+--- Refactoring the base Next.js template into a portfolio-focused site structure.
 
 --- Implementing subdomain routing and isolation for interactive demos.
 
@@ -87,7 +87,7 @@
 
 --- Visitors are expected to value interactive, hands-on demos.
 
---- The Next.js SaaS Starter template can be refactored into a portfolio.
+--- The base Next.js template can be refactored into a portfolio.
 
 --- Interactive demos will be hosted on subdomains without authentication.
 
@@ -103,9 +103,9 @@
 
 - Capture technical constraints
 
--- Lock primary stack (Next.js SaaS starter, Postgres, Stripe).
+-- Lock primary stack (Next.js, Postgres, Stripe).
 
---- Framework: Next.js (using SaaS Starter template as foundation)
+--- Framework: Next.js
 
 --- Frontend: React with Tailwind CSS and ShadCN component library
 

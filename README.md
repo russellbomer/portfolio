@@ -1,8 +1,8 @@
-# Next.js SaaS Starter
+# Portfolio Platform (Next.js)
 
-This is a starter template for building a SaaS application using **Next.js** with support for authentication, Stripe integration for payments, and a dashboard for logged-in users.
+This repository powers a personal portfolio platform built with **Next.js** featuring interactive demos, authentication-ready foundations, Stripe integration scaffolding, and a project showcase dashboard.
 
-**Demo: [https://next-saas-start.vercel.app/](https://next-saas-start.vercel.app/)**
+**Live Site: [https://russellbomer.com/](https://russellbomer.com/)**
 
 ## Features
 
@@ -49,7 +49,7 @@ The project uses structured anchor domains to prevent decision drift and guide b
 | Organization & Collaboration     | Roles (hats), AI agent review principles, branching, commit policy | `docs/phase-1-initiation-&-planning/1.3.txt`, `ai/anchors.json` |
 | Schedule & Milestones (MVP Week) | Day-by-day milestones, spikes, phase mapping, exit criteria        | `docs/phase-1-initiation-&-planning/1.4.txt`, `ai/anchors.json` |
 
-Key VS Code settings exposing these anchors (new `portfolio.*` keys replace deprecated `saasStarter.*` & `project.*`):
+Key VS Code settings exposing these anchors:
 
 ```jsonc
 "portfolio.aiAnchorsPath": "ai/anchors.json",
@@ -75,8 +75,8 @@ Example:
 ## Getting Started
 
 ```bash
-git clone https://github.com/nextjs/saas-starter
-cd saas-starter
+git clone https://github.com/russellbomer/portfolio.git
+cd portfolio
 pnpm install
 ```
 
@@ -132,7 +132,7 @@ To test Stripe payments, use the following test card details:
 
 ## Going to Production
 
-When you're ready to deploy your SaaS application to production, follow these steps:
+When you're ready to deploy the portfolio platform to production, follow these steps:
 
 ### Set up a production Stripe webhook
 

@@ -9,19 +9,10 @@
     ],
     "version": 3,
     "lastUpdated": "2025-11-23",
-    "deprecatedKeys": {
-      "settings": [
-        "saasStarter.aiAnchorsPath",
-        "saasStarter.aiGuidelinesPath",
-        "saasStarter.scopePath",
-        "project.organizationDocPath",
-        "project.scheduleDocPath"
-      ],
-      "replacementPrefix": "portfolio."
-    }
+    "deprecatedKeys": {}
   },
   "vision": {
-    "summary": "Flexible, scalable personal portfolio SaaS showcasing interactive product demos (CLI-style terminals on subdomains) with a modern, modular Next.js + Tailwind + ShadCN stack designed for rapid iteration and future expansion (e-commerce, blog/newsletter, advanced demo envs)."
+    "summary": "Flexible, scalable personal portfolio platform showcasing interactive product demos (CLI-style terminals on subdomains) with a modern, modular Next.js + Tailwind + ShadCN stack designed for rapid iteration and future expansion (e-commerce, blog/newsletter, advanced demo envs)."
   },
   "differentiators": [
     "Interactive, immersive CLI-style demos on isolated subdomains for hands-on evaluation",
@@ -181,7 +172,7 @@
     "Primary goal is attracting freelance/consulting clients",
     "MVP prioritizes speed/showcasing skills over complex features",
     "Visitors value interactive, hands-on demos",
-    "SaaS Starter can be refactored into a portfolio",
+    "Base Next.js template can be refactored into a portfolio",
     "Interactive demos hosted on subdomains without authentication",
     "Future features: e-commerce, authentication, content, advanced analytics",
     "Deployment on DigitalOcean VPS; architecture portable to Hetzner",
@@ -190,7 +181,7 @@
     "Basic security, performance, and accessibility standards met for MVP"
   ],
   "technicalSpikes": [
-    "Refactor SaaS Starter to portfolio site structure",
+    "Refactor base template to portfolio site structure",
     "Implement subdomain routing and isolation for demos",
     "Build emulated terminal environments (e.g., xterm.js)",
     "Ensure responsive & accessible UI with Tailwind/ShadCN",
@@ -198,7 +189,7 @@
     "Optional POC: payments/subscriptions for future e-commerce"
   ],
   "stackConstraints": {
-    "framework": "Next.js (SaaS Starter foundation)",
+    "framework": "Next.js",
     "frontend": "React + Tailwind CSS + ShadCN",
     "hosting": "DigitalOcean VPS",
     "interactiveDemos": "xterm.js or similar",
