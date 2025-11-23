@@ -1,0 +1,11 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run ESLint on staged files (fallback to all if diff too large)
+STAGED=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E '\.(ts|tsx|js|jsx)$')
+if [ -n "$STAGED" ]; then
+  echo "Linting staged files..."
+  npx eslint --max-warnings=0 $STAGED || exit 1
+else
+  echo "No staged TS/JS files detected; skipping lint."
+fi

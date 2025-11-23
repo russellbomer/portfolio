@@ -1,0 +1,458 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "_meta": {
+    "sourceOfTruthFiles": [
+      "docs/phase-1-initiation-&-planning/1.1.txt",
+      "docs/phase-1-initiation-&-planning/1.2.txt",
+      "docs/phase-1-initiation-&-planning/1.3.txt",
+      "docs/phase-1-initiation-&-planning/1.4.txt"
+    ],
+    "version": 3,
+    "lastUpdated": "2025-11-23",
+    "deprecatedKeys": {
+      "settings": [
+        "saasStarter.aiAnchorsPath",
+        "saasStarter.aiGuidelinesPath",
+        "saasStarter.scopePath",
+        "project.organizationDocPath",
+        "project.scheduleDocPath"
+      ],
+      "replacementPrefix": "portfolio."
+    }
+  },
+  "vision": {
+    "summary": "Flexible, scalable personal portfolio SaaS showcasing interactive product demos (CLI-style terminals on subdomains) with a modern, modular Next.js + Tailwind + ShadCN stack designed for rapid iteration and future expansion (e-commerce, blog/newsletter, advanced demo envs)."
+  },
+  "differentiators": [
+    "Interactive, immersive CLI-style demos on isolated subdomains for hands-on evaluation",
+    "Architecture transparency via ADRs and concise technical write-ups",
+    "Future-ready modular foundation enabling staged expansion (e-commerce, content, advanced demos)",
+    "Performance & credibility prioritized with explicit KPIs and decision framework"
+  ],
+  "roadmap": {
+    "milestones": [
+      {
+        "id": "mvp",
+        "description": "Interactive portfolio with terminal demos & core showcase",
+        "status": "active"
+      },
+      {
+        "id": "ecommerce",
+        "description": "Digital product payments & licensing",
+        "status": "planned"
+      },
+      {
+        "id": "content",
+        "description": "Blog + newsletter content system",
+        "status": "planned"
+      },
+      {
+        "id": "advanced-demos",
+        "description": "Sophisticated multi-environment demos (containers/sandboxed services)",
+        "status": "planned"
+      }
+    ]
+  },
+  "personas": [
+    {
+      "id": "client",
+      "label": "Freelance-seeking client",
+      "goals": ["Assess capability quickly", "Decide to engage for work"],
+      "painPoints": ["Time-consuming vetting", "Need credible proof fast"],
+      "keyFeatures": [
+        "Polished portfolio",
+        "Clear project summaries",
+        "Direct contact path"
+      ]
+    },
+    {
+      "id": "manager",
+      "label": "Technical manager",
+      "goals": ["Validate technical depth", "Understand architecture choices"],
+      "painPoints": ["Hiring time constraints"],
+      "keyFeatures": [
+        "Architecture explanations",
+        "Live demos",
+        "Concise competence evidence"
+      ]
+    },
+    {
+      "id": "developer",
+      "label": "Fellow developer",
+      "goals": ["Inspiration", "Concrete implementation patterns"],
+      "painPoints": ["Lack of high-quality examples"],
+      "keyFeatures": [
+        "Interactive demos",
+        "Readable code",
+        "Technical write-ups"
+      ]
+    }
+  ],
+  "successMetrics": {
+    "activation": [
+      "Viewed interactive demo",
+      "Read full case study",
+      "Initiated contact/hiring inquiry"
+    ],
+    "retention": [
+      "Return visits for new demos/content",
+      "Newsletter engagement",
+      "Repeat project page interactions"
+    ]
+  },
+  "technicalKPIs": {
+    "pageLoadLatencyMsBudget": 1500,
+    "errorRateDemoEnvsPct": 1.0,
+    "uptimeTargetPct": 99.9
+  },
+  "performanceMetrics": {
+    "primaryLatencyMetric": "LCP",
+    "latencyBudgetMs": 1500,
+    "errorRateMetric": "demo_error_rate",
+    "errorRateBudgetPct": 1.0,
+    "uptimeMetric": "platform_uptime",
+    "uptimeTargetPct": 99.9,
+    "measurementTools": ["Web Vitals", "RUM", "Synthetic Checks"],
+    "collectionInterval": "per release"
+  },
+  "demoRequirements": {
+    "subdomainIsolation": true,
+    "cliStyleTerminalSupport": true,
+    "errorBoundaryRequired": true,
+    "coldStartBudgetMs": 800
+  },
+  "personaConstraints": {
+    "client": [
+      "Needs credibility proof in <5s to first meaningful interaction"
+    ],
+    "manager": ["Requires architecture clarity without deep code spelunking"],
+    "developer": ["Seeks reproducible patterns & annotated examples"]
+  },
+  "featureMappings": {
+    "client": [
+      "polished portfolio landing",
+      "clear project summaries",
+      "direct contact path"
+    ],
+    "manager": [
+      "architecture explanations",
+      "live demos with metrics",
+      "concise competence evidence"
+    ],
+    "developer": [
+      "interactive demos",
+      "readable code examples",
+      "technical write-ups"
+    ]
+  },
+  "scope": {
+    "inScope": {
+      "mvp": [
+        "project listings",
+        "interactive demos (subdomains)",
+        "basic content management",
+        "contact form",
+        "responsive design/layout",
+        "navigation/header/footer"
+      ],
+      "niceToHave": [
+        "blog/newsletter placeholders",
+        "SEO metadata & social sharing",
+        "simple search/filter for projects"
+      ],
+      "future": [
+        "authentication",
+        "billing/e-commerce/Stripe",
+        "analytics dashboard"
+      ]
+    },
+    "outOfScope": [
+      "user accounts and authentication (MVP)",
+      "billing or e-commerce (MVP)",
+      "full blog or newsletter system (MVP)",
+      "advanced analytics or site metrics (MVP)",
+      "advanced search or filtering (MVP)",
+      "multi-user admin or collaboration features (MVP)",
+      "complex third-party integrations (MVP)",
+      "large-scale or fully sandboxed demo environments (MVP)"
+    ]
+  },
+  "assumptions": [
+    "Primary goal is attracting freelance/consulting clients",
+    "MVP prioritizes speed/showcasing skills over complex features",
+    "Visitors value interactive, hands-on demos",
+    "SaaS Starter can be refactored into a portfolio",
+    "Interactive demos hosted on subdomains without authentication",
+    "Future features: e-commerce, authentication, content, advanced analytics",
+    "Deployment on DigitalOcean VPS; architecture portable to Hetzner",
+    "Responsive design using Tailwind/ShadCN",
+    "Key interactions: view projects, try demos, submit inquiries",
+    "Basic security, performance, and accessibility standards met for MVP"
+  ],
+  "technicalSpikes": [
+    "Refactor SaaS Starter to portfolio site structure",
+    "Implement subdomain routing and isolation for demos",
+    "Build emulated terminal environments (e.g., xterm.js)",
+    "Ensure responsive & accessible UI with Tailwind/ShadCN",
+    "Set up basic content management workflow",
+    "Optional POC: payments/subscriptions for future e-commerce"
+  ],
+  "stackConstraints": {
+    "framework": "Next.js (SaaS Starter foundation)",
+    "frontend": "React + Tailwind CSS + ShadCN",
+    "hosting": "DigitalOcean VPS",
+    "interactiveDemos": "xterm.js or similar",
+    "buildTooling": "Node.js, Next.js build tools, Git",
+    "futureIntegrations": [
+      "PostgreSQL + ORM",
+      "Stripe",
+      "blog/newsletter CMS",
+      "analytics tools"
+    ]
+  },
+  "hostingConstraints": [
+    "Host MVP site and demos on DigitalOcean VPS",
+    "Support subdomain routing per demo",
+    "VPS resource limits may constrain number/complexity of concurrent demos",
+    "Plan future migration to Hetzner; keep architecture portable",
+    "HA/load balancing/auto-scaling not required for MVP"
+  ],
+  "rolesAndResponsibilities": {
+    "hats": [
+      "product",
+      "development",
+      "operations",
+      "quality-assurance",
+      "documentation",
+      "ai-agents"
+    ],
+    "ownershipModel": "sole-developer-with-ai-augmentation",
+    "aiAgentPrinciples": {
+      "usage": "augmentation-only",
+      "reviewChecklist": [
+        "functional correctness",
+        "security implications",
+        "integration & architecture alignment",
+        "content clarity & tone",
+        "coding standards/style adherence"
+      ]
+    }
+  },
+
+  "collaborationWorkflow": {
+    "codeHost": "github",
+    "issueTracking": "github-issues",
+    "documentation": ["repo:/docs"],
+    "branching": {
+      "main": "stable/production",
+      "feature": "feature/<name>",
+      "hotfix": "hotfix/<name>"
+    },
+    "commitTypesAllowed": [
+      "feat",
+      "fix",
+      "docs",
+      "style",
+      "refactor",
+      "perf",
+      "test",
+      "build",
+      "ci",
+      "chore",
+      "revert"
+    ],
+    "prRequirements": [
+      "description",
+      "linked issues",
+      "demos/screenshots optional",
+      "ai-review-checked"
+    ]
+  },
+
+  "gatingPolicies": {
+    "prReviewRequiredForMain": true,
+    "aiOutputManualReviewRequired": true
+  },
+  "agentPolicies": {
+    "prioritiesOrder": [
+      "Credibility",
+      "Performance",
+      "Maintainability",
+      "Scalability",
+      "Iteration Speed"
+    ],
+    "prohibited": [
+      "Introducing unexplained third-party dependencies",
+      "Exposing secrets or credentials",
+      "Duplicating vision text without referencing source",
+      "Large refactors without explicit approval"
+    ],
+    "requiredChecks": [
+      "Link changes to personas or metrics",
+      "Consider performance budget",
+      "Preserve modular architecture",
+      "Confirm no sensitive data added"
+    ],
+    "defaultDecisionFramework": {
+      "question": "Which persona or KPI does this change advance?",
+      "steps": [
+        "Identify target persona/KPI",
+        "Assess performance impact",
+        "Validate maintainability",
+        "Document rationale"
+      ],
+      "fallback": "If unclear, request clarification before implementing."
+    }
+  },
+  "codeQuality": {
+    "style": "TypeScript strict, React functional components, Tailwind utility-first with extracted patterns when repeated",
+    "testing": {
+      "approach": "Add focused tests around new logic; avoid broad unrelated test changes",
+      "priorities": [
+        "Critical path demos",
+        "Data access layer",
+        "Session/auth flows"
+      ]
+    }
+  },
+  "promptGuidelines": {
+    "mustInclude": [
+      "Relevant persona or KPI",
+      "Performance consideration if user-facing"
+    ],
+    "avoid": [
+      "Ambiguous terms like 'optimize' without metric",
+      "Copying large unmodified vision blocks"
+    ],
+    "example": {
+      "good": "Add latency logging for demo terminal load to protect KPI (<1500ms).",
+      "bad": "Improve terminal demo."
+    }
+  },
+  "schedule": {
+    "version": 1,
+    "milestoneParent": "mvp",
+    "milestones": [
+      {
+        "id": "day-1",
+        "label": "Template Refactor & Listings",
+        "phase": "requirements",
+        "minimalFeatures": [
+          "portfolio refactor",
+          "project listings",
+          "basic CMS"
+        ],
+        "exitCriteria": [
+          "trim SaaS features",
+          "list pages display sample content"
+        ]
+      },
+      {
+        "id": "day-2",
+        "label": "Interactive Demo POC & Layout",
+        "phase": "build",
+        "minimalFeatures": [
+          "single terminal demo subdomain",
+          "nav/header/footer",
+          "responsive base"
+        ],
+        "exitCriteria": [
+          "demo reachable via subdomain",
+          "layout stable across breakpoints"
+        ]
+      },
+      {
+        "id": "day-3",
+        "label": "Contact & SEO",
+        "phase": "build",
+        "minimalFeatures": ["contact form", "SEO metadata", "social tags"],
+        "exitCriteria": ["form submits stub", "meta present on key pages"]
+      },
+      {
+        "id": "day-4",
+        "label": "QA & Bug Fixing",
+        "phase": "test",
+        "exitCriteria": ["no critical blocking bugs", "demos function reliably"]
+      },
+      {
+        "id": "day-5",
+        "label": "UI/UX Polish",
+        "phase": "build",
+        "exitCriteria": ["responsive verified", "visual polish pass complete"]
+      },
+      {
+        "id": "day-6",
+        "label": "Internal MVP Review",
+        "phase": "test",
+        "exitCriteria": ["MVP accepted for beta", "beta feedback plan ready"]
+      },
+      {
+        "id": "day-7",
+        "label": "Launch",
+        "phase": "launch",
+        "exitCriteria": ["production deploy executed", "demos + contact live"]
+      }
+    ],
+    "phaseMap": {
+      "requirements": ["day-1"],
+      "build": ["day-2", "day-3", "day-5"],
+      "test": ["day-4", "day-6"],
+      "launch": ["day-7"]
+    },
+    "timeboxedSpikes": [
+      {
+        "id": "spike-template-refactor",
+        "milestone": "day-1",
+        "timeboxHrs": 8,
+        "decision": "confirm minimal structure"
+      },
+      {
+        "id": "spike-demo-poc",
+        "milestone": "day-2",
+        "timeboxHrs": 8,
+        "decision": "subdomain demo feasibility"
+      },
+      {
+        "id": "spike-cms-approach",
+        "milestone": "day-1-2",
+        "timeboxHrs": 4,
+        "decision": "minimal CMS workflow"
+      },
+      {
+        "id": "spike-uiux-patterns",
+        "milestone": "day-5",
+        "timeboxHrs": 4,
+        "decision": "layout pattern consistency"
+      },
+      {
+        "id": "gate-mvp-review",
+        "milestone": "day-6",
+        "timeboxHrs": 4,
+        "decision": "beta go/no-go"
+      },
+      {
+        "id": "gate-launch",
+        "milestone": "day-7",
+        "timeboxHrs": 4,
+        "decision": "production go/no-go"
+      }
+    ],
+    "dependencies": {
+      "core": [
+        "nextjs-saas-starter",
+        "react",
+        "tailwind-shadcn",
+        "nodejs",
+        "github"
+      ],
+      "demo": ["xtermjs", "subdomain-routing", "digitalocean-vps"],
+      "content": ["project-content"]
+    },
+    "kpiConsiderations": [
+      "LCP < 1500ms",
+      "demo error rate < 1%",
+      "uptime 99.9%"
+    ],
+    "notes": "Condensed sequencing reference—days are relative and aspirational."
+  }
+}

@@ -1,0 +1,40 @@
+1.3 Project organization
+- Define roles and responsibilities
+
+-- List all “hats” (product, dev, ops, QA, docs, AI agents).
+--- I am sole developer and will use LLM/AI agentic coding assistants
+
+-- For each role, list primary responsibilities and decisions they own.
+--- All roles are delegated to me as sole dev and implemented using AI agents
+
+- Establish collaboration conventions
+
+-- Choose code host, issue tracker, and documentation location.
+--- Code Hosting: GitHub (repository for all source code, version control, and collaboration).
+--- Issue Tracking: GitHub Issues (linked to the code repository for bug tracking, feature requests, and project management).
+--- Documentation: GitHub Wiki or a dedicated /docs folder in the repository (for setup instructions, architecture notes, and technical references).
+
+-- Define branching strategy, code review rules, commit conventions.
+--- Branching Strategy:
+--- main: stable, production-ready code.
+--- dev: integration branch for ongoing work.
+--- feature/<name>: individual tasks/features from dev.
+--- hotfix/<name>: urgent fixes from main, merged into main and dev.
+--- Code Review Rules:
+--- All main merges require a PR with at least one review.
+--- PRs include change description, related issues, and demos/screenshots if relevant.
+--- Reviews check correctness, readability, maintainability, and style compliance.
+--- Commit Conventions:
+--- Use imperative mood and concise messages.
+--- Prefix types: feat:, fix:, docs:, refactor:, style:, chore:.
+--- Reference issue numbers when applicable (e.g., feat: add interactive demo (#12)).
+
+-- Define how AI agents are used (inputs, outputs, review requirements).
+--- Inputs: AI agents receive structured prompts such as project requirements, demo behavior specifications, UI/UX guidelines, coding tasks, or content outlines. This can include detailed instructions for creating interactive demos, sample data sets, or draft blog/newsletter content.
+--- Outputs: The agents generate code snippets, configuration files, documentation, sample content, or prototype components. For interactive demos, they might suggest shell commands, CLI behaviors, or UI component layouts. For content, outputs can include copy, markdown pages, or technical explanations.
+--- Review Requirements: Every AI-generated output must be manually reviewed by the developer before it is deployed or merged. This includes:
+--- Testing code to ensure it works as intended and integrates cleanly.
+--- Checking security implications, particularly in interactive demo environments.
+--- Validating content for technical accuracy, clarity, and tone.
+--- Ensuring outputs adhere to the project’s coding standards, architecture, and style guidelines.
+--- Principles: AI agents are strictly used as productivity and augmentation tools to accelerate development, prototyping, and content creation, not as autonomous decision-makers. The developer retains full control and responsibility for all final deliverables.

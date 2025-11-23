@@ -1,0 +1,54 @@
+name: PR Validation (Anchors & AI Review)
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR body for Persona/KPI/Scope/Constraints
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || '';
+            const personaMatch = body.match(/persona\s*:\s*(client|manager|developer)/i);
+            const hasPersona = !!personaMatch;
+            const kpiMatch = body.match(/kpi\s*:\s*([a-z0-9_\-<>\s%]+)/i);
+            const hasKPI = !!kpiMatch;
+            const hasScope = /scope\s*:/i.test(body);
+            const hasConstraints = /constraints\s*:/i.test(body);
+            if (!hasPersona || !hasKPI || !hasScope || !hasConstraints) {
+              core.setFailed('PR body must include valid "Persona:" (client|manager|developer), "KPI:", "Scope:", and "Constraints:" lines.');
+            } else {
+              core.info('Persona/KPI/Scope/Constraints validation passed.');
+            }
+
+      - name: Check PR body for AI manual review acknowledgment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || '';
+            const hasAIReviewAck = /\[x\]\s*AI output manually reviewed/i.test(body);
+            if (!hasAIReviewAck) {
+              core.setFailed('PR body must include a checked "[x] AI output manually reviewed" acknowledgment.');
+            } else {
+              core.info('AI manual review acknowledgment present.');
+            }
+
+      - name: Check PR body for Milestone & Phase lines (conditional)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || '';
+            const hasMilestone = /milestone\s*:/i.test(body);
+            const hasPhase = /phase\s*:/i.test(body);
+            const implicitDayRef = /day-[1-7]/i.test(body);
+            if (implicitDayRef && (!hasMilestone || !hasPhase)) {
+              core.warning('Detected day-X reference; add explicit "Milestone:" and "Phase:" lines for clarity.');
+            } else if (hasMilestone && hasPhase) {
+              core.info('Milestone & Phase present.');
+            } else {
+              core.info('No schedule context referenced; skipping milestone check.');
+            }

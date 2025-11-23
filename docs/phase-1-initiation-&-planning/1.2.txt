@@ -1,0 +1,130 @@
+1.2 Scope and constraints
+- Define in scope features
+-- List MVP features by module (auth, billing, dashboard, admin).
+--- Project listing pages with descriptions and key screenshots.
+
+--- Interactive demos hosted on subdomains (e.g., CLI apps in emulated terminals).
+
+--- Basic content management for adding/editing projects and demos.
+
+--- Contact form for client inquiries.
+
+--- Responsive design with Tailwind and ShadCN components.
+
+--- Navigation/header/footer with clear site structure.
+
+--- Blog/newsletter placeholders (without full functionality).
+
+--- SEO metadata and social sharing support.
+
+--- Optional: simple search/filter for projects.
+
+-- Mark each feature as “must have”, “nice to have”, or “future”.
+
+--- Project listings — must-have
+
+--- Interactive demos — must-have
+
+--- Content management — must-have
+
+--- Contact form — must-have
+
+--- Responsive design/layout — must-have
+
+--- Navigation/header/footer — must-have
+
+--- Blog/newsletter placeholders — nice-to-have
+
+--- SEO metadata/social sharing — nice-to-have
+
+--- Search/filter for projects — nice-to-have
+
+--- Authentication — future
+
+--- Billing/e-commerce/Stripe — future
+
+--- Analytics dashboard — future
+
+-- Identify any technical spikes or proof of concepts needed.
+
+--- Refactoring the Next.js SaaS Starter template into a portfolio-focused site structure.
+
+--- Implementing subdomain routing and isolation for interactive demos.
+
+--- Building emulated terminal environments for hands-on project demos (e.g., xterm.js).
+
+--- Ensuring responsive and accessible UI components using Tailwind/ShadCN.
+
+--- Setting up basic content management workflow for adding and updating projects.
+
+--- Optional future POC: integrating payments or subscriptions for e-commerce functionality.
+
+- Define out of scope items
+
+-- Explicitly list major features that will not be built in the first release.
+
+--- User accounts and authentication
+
+--- Billing or e-commerce (Stripe, subscriptions)
+
+--- Full blog or newsletter system
+
+--- Advanced analytics or site metrics
+
+--- Advanced search or filtering for projects
+
+--- Multi-user admin or collaboration features
+
+--- Complex third-party integrations
+
+--- Large-scale or fully sandboxed demo environments
+
+-- Document assumptions (e.g., English only, desktop first UI).
+
+--- The site’s main goal is to attract freelance and consulting clients.
+
+--- MVP prioritizes speed and showcasing skills over complex features.
+
+--- Visitors are expected to value interactive, hands-on demos.
+
+--- The Next.js SaaS Starter template can be refactored into a portfolio.
+
+--- Interactive demos will be hosted on subdomains without authentication.
+
+--- E-commerce, authentication, blog/newsletter, and advanced analytics are future features.
+
+--- Deployment is on a DigitalOcean VPS with adequate resources.
+
+--- Design will be responsive and use Tailwind/ShadCN.
+
+--- Key interactions: view projects, try demos, submit inquiries.
+
+--- Basic security, performance, and accessibility standards are met for MVP.
+
+- Capture technical constraints
+
+-- Lock primary stack (Next.js SaaS starter, Postgres, Stripe).
+
+--- Framework: Next.js (using SaaS Starter template as foundation)
+
+--- Frontend: React with Tailwind CSS and ShadCN component library
+
+--- Hosting / Deployment: VPS on DigitalOcean
+
+--- Interactive Demos: xterm.js (or similar) for terminal-style emulated environments
+
+--- Build & Tooling: Node.js, Vercel/Next.js build tools, Git for version control
+
+--- Future / Optional Integrations: PostgreSQL database with ORM, Stripe (billing), blog/newsletter CMS, analytics tools
+
+-- Document hosting constraints (DigitalOcean now, Hetzner later).
+
+--- The MVP site and all interactive demos will be hosted on a DigitalOcean VPS using existing credits.
+
+--- The hosting setup must support subdomain routing for each demo.
+
+--- Resource limits on the VPS (CPU, RAM, storage) may restrict the number or complexity of simultaneous interactive demos.
+
+--- Future migration to Hetzner is planned, so the architecture should remain portable and easy to redeploy.
+
+--- High availability, load balancing, or auto-scaling are not required for the MVP.

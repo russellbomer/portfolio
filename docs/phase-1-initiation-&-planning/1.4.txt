@@ -1,0 +1,60 @@
+1.4 High level schedule and milestones
+
+- Identify major milestones
+
+-- Define dates/targets for internal MVP, beta, and production.
+---Day 1: Refactor Next.js SaaS Starter template into portfolio structure; set up project listing pages and basic content management.
+---Day 2: Implement interactive demos on subdomains; configure navigation, header/footer, and responsive layout.
+---Day 3: Build contact form; integrate basic SEO metadata and social sharing.
+--- Day 4: QA testing of all demos, pages, and content; fix critical bugs.
+--- Day 5: Polish UI/UX, finalize content, and ensure responsive design across devices.
+--- Day 6: Internal MVP review and validation; prepare beta version for select client feedback.
+--- Day 7: Incorporate any last-minute adjustments; deploy production-ready site with interactive demos, polished portfolio, and contact functionality.
+
+-- For each, list the minimal feature set required.
+--- Day 1 – Template Refactor & Project Listings. Refactored Next.js SaaS Starter into portfolio structure. Project listing pages with title, description, and key screenshots. Basic content management for adding/updating projects.
+--- Day 2 – Interactive Demos & Layout. Interactive demos on subdomains (e.g., CLI emulated in xterm.js) Navigation, header/footer, and responsive layout
+--- Day 3 – Contact & SEO. Contact form for client inquiries. Basic SEO metadata and social sharing support
+--- Day 4 – QA & Bug Fixing. Testing all pages and demos. Fixing critical bugs affecting functionality or usability.
+--- Day 5 – UI/UX Polishing. Responsive design adjustments. Visual polish of project pages, navigation, and demos.
+--- Day 6 – Internal MVP Review & Beta Prep. Internal review of all core features. Prepare beta version for select client feedback
+--- Day 7 – Final Adjustments & Production Launch. Incorporate any last-minute fixes from internal review. Deploy production-ready site with fully functional interactive demos, project portfolio, and contact form.
+
+- Roughly sequence work
+
+-- Map milestones to SDLC phases (requirements, build, test, launch).
+
+--- Requirements (Day 1)
+---- Refactor Next.js SaaS Starter template into portfolio structure
+---- Define project listing pages and minimal content management
+--- Build (Days 2–3, 5)
+---- Implement interactive demos on subdomains
+---- Set up navigation, header/footer, and responsive layout
+---- Build contact form
+---- Apply basic SEO metadata and social sharing
+---- UI/UX polishing
+--- Test (Day 4, Day 6)
+---- QA testing of all pages, demos, and functionality
+---- Fix critical bugs and validate core features
+---- Internal MVP review
+--- Launch (Day 7)
+---- Final adjustments from testing/feedback
+---- Deploy production-ready site with interactive demos, project portfolio, and contact functionality
+
+-- Identify hard dependencies (e.g., DB must exist before billing dev).
+--- Next.js SaaS Starter template — foundational structure for the site.
+--- React — core frontend framework.
+--- Tailwind CSS & ShadCN — styling and component library for responsive UI.
+--- DigitalOcean VPS — hosting environment for the site and interactive demos.
+--- xterm.js (or similar) — for emulated terminal/demo environments.
+--- GitHub — code hosting, version control, and issue tracking.
+--- Node.js / npm — build and package management.
+--- Project content — descriptions, images/screenshots, demo scripts, and sample data (placeholders are okay for MVP but should be realistic)
+
+--Note time boxed spikes and decision deadlines.
+--- Template Refactor Spike (Day 1): Timebox 1 day to assess how the Next.js SaaS Starter can be adapted into a portfolio structure; decision deadline: confirm minimal structure and remove unnecessary SaaS features.
+--- Interactive Demo Proof-of-Concept (Day 2): Timebox 1 day to implement a single demo in an emulated terminal; decision deadline: confirm feasibility and subdomain routing approach for all demos.
+--- Content Management Approach (Day 1–2): Timebox 0.5–1 day to determine minimal workflow for adding/updating projects; decision deadline: finalize approach before building additional pages.
+--- UI/UX & Responsive Design Spike (Day 5): Timebox 0.5 day to test Tailwind/ShadCN components across screen sizes; decision deadline: confirm layout patterns and component usage for MVP consistency.
+--- Internal MVP Review (Day 6): Timebox 0.5 day to test all core functionality and demos; decision deadline: decide whether site is ready for beta release.
+--- Production Launch Approval (Day 7): Timebox 0.5 day for final checks and adjustments; decision deadline: confirm site is fully functional and polished for live deployment.
