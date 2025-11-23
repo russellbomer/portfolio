@@ -1,0 +1,224 @@
+2.2 Functional requirements
+- Capture feature level requirements
+
+-- Short description.
+
+--- Project Listings
+---- Project Card Component — Display each project with title, description excerpt, key screenshot/image, and link to full project page. Built with ShadCN components and Tailwind styling for consistent design.
+---- Project Detail Page — Full project page including extended description, multiple screenshots, tech stack used, key outcomes/metrics, and call-to-action linking to demo or contact form. Server-rendered via Next.js for SEO.
+---- Project Filtering/Navigation — Simple category or tag-based navigation to browse projects (e.g., "Web Apps," "CLI Tools," "Backend"). Initially implemented as static filters in the UI; no full-text search required for MVP.
+
+--- Interactive Demos
+---- Subdomain Routing for Demos — Configure DigitalOcean VPS to route demo subdomains (e.g., quarry.portfolio.com) to corresponding demo environments. Each demo runs isolated on its own port.
+---- Emulated Terminal Demo Environment — Implement xterm.js-based terminal emulator for CLI applications (e.g., Quarry web scraping tool). Pre-loaded with sample commands and output to showcase functionality without live backend processing.
+---- Demo Session Management — Basic session handling for each demo (e.g., terminal state persists during a user's session but resets on reload or timeout). No authentication required; demos are publicly accessible.
+
+--- Contact & Lead Generation
+---- Contact Form — Simple form with fields: name, email, message, and project/service interest dropdown. Client-side validation for required fields and email format; form submission sends inquiry email to your inbox via nodemailer or similar.
+---- Contact Form Success Feedback — Display success message after form submission; optionally include next steps or expected response time.
+
+--- Navigation & Layout
+---- Header/Navigation Bar — Fixed or sticky header with site logo/name, navigation links (Home, Projects, About, Contact), and responsive mobile menu. Built with ShadCN components.
+---- Footer — Basic footer with copyright, social links (GitHub, LinkedIn, etc.), and optional contact CTA. Responsive and consistent across all pages.
+---- Home/Landing Page — Hero section introducing yourself and portfolio purpose, featured projects section, and CTA to explore demos or contact. Emphasizes interactive demos as differentiator.
+---- Responsive Design — All pages adapt seamlessly to mobile, tablet, and desktop viewports using Tailwind utilities and ShadCN responsive components.
+
+--- Content Management
+---- Project Content Storage — Projects defined as markdown files or JSON objects in the repository (e.g., /content/projects/). Each project includes title, description, screenshots, tech stack, demo link, and metadata.
+---- Static Site Generation — Next.js static generation (SSG) or incremental static regeneration (ISR) for project pages to ensure fast load times and SEO optimization.
+
+--- SEO & Social Sharing
+---- SEO Metadata — Meta tags (title, description, keywords) and Open Graph tags for each project page and the homepage. Configured via Next.js head or a metadata utility for consistency.
+---- Social Sharing Support — Open Graph and Twitter Card meta tags to enable proper link previews when portfolio or project pages are shared on social media.
+---- Sitemap & Robots.txt — Auto-generated sitemap.xml and robots.txt for search engine indexing; configured in Next.js public folder.
+
+--- Design & UX
+---- Consistent Design System — Use Tailwind CSS for spacing, typography, and colors; leverage ShadCN prebuilt components (buttons, cards, forms) for UI consistency and rapid development.
+---- Visual Polish & Accessibility — Ensure adequate color contrast, readable typography, and keyboard navigation for basic accessibility. No WCAG AA audit required for MVP, but common best practices applied.
+
+- Preconditions and triggers.
+
+-- Project listings
+
+--- Project Card Component
+---- Preconditions: Project data exists in content storage; ShadCN and Tailwind are configured.
+---- Triggers: User navigates to Projects page or homepage; project list is rendered.
+
+--- Project Detail Page
+---- Preconditions: Individual project markdown/JSON file exists; Next.js routing is configured.
+---- Triggers: User clicks on a project card or navigates directly to /projects/[slug].
+
+--- Project Filtering/Navigation
+---- Preconditions: Projects have tags or categories assigned; filter UI component is built.
+---- Triggers: User clicks a category/tag filter; page filters and displays matching projects.
+
+-- Interactive Demos
+
+--- Subdomain Routing for Demos
+---- Preconditions: DigitalOcean VPS is provisioned; DNS records point subdomains to VPS; reverse proxy (nginx) is configured.
+---- Triggers: User navigates to a demo subdomain (e.g., quarry.portfolio.com); reverse proxy routes request to demo port.
+
+--- Emulated Terminal Demo Environment
+---- Preconditions: xterm.js is installed and configured; demo port is accessible via subdomain routing; sample commands/output are pre-loaded.
+---- Triggers: User visits demo subdomain; xterm.js initializes and displays terminal emulator with sample prompt.
+
+--- Demo Session Management
+---- Preconditions: Demo environment is running; session state tracking is implemented (e.g., in-memory or Redis).
+---- Triggers: User enters terminal commands; session state persists until session expires or user leaves. Demo resets on new session or timeout.
+
+-- Contact & Lead Generation
+
+--- Contact Form
+---- Preconditions: Contact form component is built; email service (nodemailer, SendGrid, etc.) is configured; environment variables for email credentials are set.
+---- Triggers: User fills out form and clicks Submit; form validates input and sends email on success.
+
+--- Contact Form Success Feedback
+---- Preconditions: Contact form submission succeeds; success message UI component exists.
+---- Triggers: Form submission completes successfully; success message displays for 3–5 seconds, then redirects or clears.
+
+-- Navigation & Layout
+
+--- Header/Navigation Bar
+---- Preconditions: ShadCN components and Tailwind are available; navigation links are defined.
+---- Triggers: Page loads; header renders with navigation links. Mobile menu opens when user clicks hamburger icon on small screens.
+
+--- Footer
+---- Preconditions: Footer component exists; social links and copyright text are configured.
+---- Triggers: Page loads; footer renders at bottom of all pages.
+
+--- Home/Landing Page
+---- Preconditions: Hero content, featured projects data, and CTA links are defined.
+---- Triggers: User navigates to / or site root; homepage renders with hero section and featured projects.
+
+--- Responsive Design
+---- Preconditions: Tailwind breakpoints and responsive utilities are applied to all components; mobile/tablet/desktop viewport sizes are tested.
+---- Triggers: User resizes browser or visits site on mobile/tablet device; layout adjusts according to Tailwind breakpoints.
+
+-- Content Management
+
+--- Project Content Storage
+---- Preconditions: /content/projects/ directory exists; project markdown/JSON schema is defined.
+---- Triggers: Developer adds or updates project file in content directory; Next.js hot-reloads during development or regenerates on deploy.
+
+--- Static Site Generation
+----Preconditions: Next.js SSG/ISR is configured; build script is set up; project pages have static generation enabled.
+----Triggers: Build process runs (on deploy or scheduled); Next.js pre-generates HTML for all project pages and homepage.
+
+-- SEO & Social Sharing
+
+--- SEO Metadata
+---- Preconditions: Next.js Head component or metadata utility is configured; meta tag values are defined per page.
+---- Triggers: Page loads in browser; meta tags are rendered in HTML head for search engines and browsers to read.
+
+--- Social Sharing Support
+---- Preconditions: Open Graph and Twitter Card meta tags are added to pages; content and image URLs are defined.
+---- Triggers: User shares portfolio link on social media; platform reads meta tags and generates preview with title, description, and image.
+
+--- Sitemap & Robots.txt
+---- Preconditions: Sitemap generation plugin or script is configured (e.g., next-sitemap); robots.txt file is created.
+---- Triggers: Build process runs; sitemap is auto-generated and placed in public folder; robots.txt is available at /robots.txt.
+
+-- Design & UX
+
+--- Consistent Design System
+---- Preconditions: Tailwind config is customized (colors, fonts, spacing); ShadCN components are installed and imported.
+----Triggers: Components are built; they automatically use consistent Tailwind utilities and ShadCN styling.
+
+--- Visual Polish & Accessibility
+---- Preconditions: Accessibility guidelines are applied during component development; contrast ratios and keyboard navigation are tested.
+---- Triggers: Developer builds components and tests in browser; accessible patterns (focus states, semantic HTML, alt text) are implemented.
+
+- “Done” criteria.
+
+-- Project Listings
+--- Project Card Component — Renders with title, excerpt, image, and link; responsive; consistent styling; hover states work.
+--- Project Detail Page — Displays full content and metadata; SEO-optimized; all links functional; responsive.
+--- Project Filtering/Navigation — Filters display and function; clicking filter updates project list; "All projects" option works.
+
+-- Interactive Demos
+--- Subdomain Routing for Demos — DNS configured; nginx reverse proxy routes subdomain traffic correctly; HTTPS enabled.
+--- Emulated Terminal Demo Environment — xterm.js initializes; sample commands execute; output displays; responsive.
+--- Demo Session Management — User interactions persist; session resets on timeout or reload; no errors.
+
+-- Contact & Lead Generation
+--- Contact Form — All fields present; client-side validation works; email sends to inbox; no server errors.
+--- Contact Form Success Feedback — Success message displays after submission; form clears or redirects.
+
+-- Navigation & Layout
+--- Header/Navigation Bar — Displays on all pages; links functional; mobile menu works; sticky/fixed.
+--- Footer — Displays on all pages with copyright and social links; responsive; no content overlap.
+--- Home/Landing Page — Hero section, featured projects, CTAs all present and functional; responsive.
+--- Responsive Design — Pages display correctly at 320px, 768px, 1920px+; no horizontal scroll; text readable.
+
+-- Content Management
+--- Project Content Storage — 3–5 sample projects created with consistent schema; version-controlled in Git.
+--- Static Site Generation — Build generates HTML for all pages; pages load quickly; no build errors.
+--- SEO & Social Sharing
+--- SEO Metadata — Meta tags present and unique per page; visible in HTML source.
+--- Social Sharing Support — Social media previews display correctly (title, description, image) on Twitter/LinkedIn/Facebook.
+--- Sitemap & Robots.txt — sitemap.xml and robots.txt present, valid, and accessible.
+
+-- Design & UX
+--- Consistent Design System — All components use Tailwind/ShadCN; no conflicting custom CSS; uniform styling.
+--- Visual Polish & Accessibility — WCAG AA contrast ratios met; keyboard-accessible; alt text on images; no a11y warnings.
+
+- Group into epics/modules
+
+-- Group related features into epics (auth, billing, dashboard, admin).
+
+--- Portfolio & Content Epic:
+---- Project Card Component
+---- Project Detail Page
+---- Project Filtering/Navigation
+---- Home/Landing Page
+---- Project Content Storage
+---- Static Site Generation
+
+--- Interactive Demos Epic:
+---- Subdomain Routing for Demos
+---- Emulated Terminal Demo Environment
+---- Demo Session Management
+
+--- Lead Generation & Engagement Epic:
+---- Contact Form
+---- Contact Form Success Feedback
+
+--- Navigation & Layout Epic:
+---- Header/Navigation Bar
+---- Footer
+---- Responsive Design
+
+--- SEO & Discoverability Epic:
+---- SEO Metadata
+---- Social Sharing Support
+---- Sitemap & Robots.txt
+
+--- Design System Epic:
+---- Consistent Design System
+---- Visual Polish & Accessibility
+
+-- For each epic, define its objective and boundaries.
+
+--- Portfolio & Content Epic
+---- Objective: Enable visitors to browse and view project details with minimal friction.
+---- Boundaries: Static content (markdown/JSON files); no CMS, database, or search. Deferred: Advanced filtering, full-text search, versioning.
+
+--- Interactive Demos Epic
+---- Objective: Showcase live, interactive project demos via isolated subdomain environments.
+---- Boundaries: Read-only demos with pre-loaded sample data; no authentication required; xterm.js for terminal emulation. Deferred: Live backend integration, persistent sessions, multi-user support.
+
+--- Lead Generation & Engagement Epic
+---- Objective: Capture visitor contact information and service inquiries.
+---- Boundaries: Simple form (name, email, message, service dropdown); email to inbox only; no CRM integration. Deferred: CRM integration, automated workflows, lead tracking.
+
+--- Navigation & Layout Epic
+---- Objective: Provide consistent, intuitive navigation and layout across all devices.
+---- Boundaries: Global header/footer; simple navigation (Home, Projects, About, Contact); basic mobile menu. Deferred: Mega-menus, breadcrumbs, dynamic navigation.
+
+--- SEO & Discoverability Epic
+---- Objective: Ensure search engine discovery and social media shareability with rich previews.
+---- Boundaries: Static meta/OG tags per page; auto-generated sitemap and robots.txt. Deferred: Search Console integration, analytics, keyword optimization.
+
+--- Design System Epic
+---- Objective: Establish consistent, accessible visual language using Tailwind and ShadCN.
+---- Boundaries: Tailwind utilities and pre-built ShadCN components only; WCAG AA best practices. Deferred: Design tokens documentation, Storybook, custom components, theme switching.
