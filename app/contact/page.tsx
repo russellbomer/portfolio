@@ -7,15 +7,19 @@ export const metadata = {
   description: "Get in touch for freelance and consulting inquiries.",
 };
 
+import { ContactForm } from "@/components/contact/ContactForm";
+
 export default function ContactPage() {
   return (
-    <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <h1 className="text-3xl font-bold text-gray-900 mb-4">Contact</h1>
-      <p className="text-gray-600">
-        This is a placeholder for the contact form (MVP MUST). The form will be
-        implemented in a future step while keeping performance, accessibility,
-        and security constraints in mind.
-      </p>
+    <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-6">
+      <header className="space-y-2">
+        <h1 className="text-3xl font-bold text-foreground">Contact</h1>
+        <p className="text-muted-foreground text-sm">
+          Use the form below to reach out regarding collaboration, consulting,
+          or general questions.
+        </p>
+      </header>
+      <ContactForm />
     </main>
   );
 }

@@ -78,6 +78,8 @@
 @layer utilities {
   body {
     font-family: "Manrope", Arial, Helvetica, sans-serif;
+    font-size: 1.0625rem; /* 17px base for improved readability */
+    line-height: 1.55;
   }
 }
 
@@ -158,120 +160,18 @@
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-/*
-  ---break---
-*/
-
-:root {
-  /* Custom palette: light mode */
-  --background: #eeeefa; /* Alabaster */
-  --foreground: #3b3a36; /* Black Olive */
-  --card: #ffffff;
-  --card-foreground: #3b3a36;
-  --popover: #ffffff;
-  --popover-foreground: #3b3a36;
-  --primary: #94af9f; /* Morning Blue */
-  --primary-foreground: #3b3a36;
-  --secondary: #c8d5b9; /* Pastel Sage */
-  --secondary-foreground: #3b3a36;
-  --muted: #a4c3a2; /* Leafy Green (muted surfaces) */
-  --muted-foreground: #3b3a36;
-  --accent: #a4c3a2; /* Accent aligns with Theme 2 */
-  --accent-foreground: #3b3a36;
-  --destructive: #c45719; /* Orange Roughly */
-  --destructive-foreground: #ffffff;
-  --border: #c8d5b9; /* Subtle borders */
-  --input: #c8d5b9;
-  --ring: #6b8f71; /* Cambridge Blue focus */
-  --chart-1: #94af9f;
-  --chart-2: #a4c3a2;
-  --chart-3: #6b8f71;
-  --chart-4: #567c55;
-  --chart-5: #c8d5b9;
-  --radius: 0.6rem;
-}
-
-/*
-  ---break---
-*/
-
-.dark {
-  /* Derived dark palette */
-  --background: #3b3a36; /* Black Olive */
-  --foreground: #eeeefa; /* Alabaster */
-  --card: #3b3a36;
-  --card-foreground: #eeeefa;
-  --popover: #3b3a36;
-  --popover-foreground: #eeeefa;
-  --primary: #6b8f71; /* Cambridge Blue */
-  --primary-foreground: #eeeefa;
-  --secondary: #567c55; /* Axolotl */
-  --secondary-foreground: #eeeefa;
-  --muted: #567c55;
-  --muted-foreground: #eeeefa;
-  --accent: #94af9f; /* Morning Blue */
-  --accent-foreground: #3b3a36;
-  --destructive: #c45719;
-  --destructive-foreground: #ffffff;
-  --border: #6b8f71;
-  --input: #6b8f71;
-  --ring: #94af9f;
-  --chart-1: #6b8f71;
-  --chart-2: #94af9f;
-  --chart-3: #a4c3a2;
-  --chart-4: #c8d5b9;
-  --chart-5: #567c55;
-}
-
-/*
-  ---break---
-*/
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-}
-
-/*
-  ---break---
-*/
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
+  html {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
   }
 }
+
+/* Custom palette overrides removed for clean slate. */

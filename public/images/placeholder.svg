@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" fill="none">
+  <rect width="1200" height="675" fill="hsl(0,0%,96%)"/>
+  <rect x="60" y="60" width="1080" height="555" rx="16" stroke="hsl(0,0%,80%)" stroke-width="4" stroke-dasharray="12 12" fill="none"/>
+  <g font-family="Menlo, Monaco, Consolas, 'Liberation Mono', monospace" font-size="36" fill="hsl(0,0%,55%)" text-anchor="middle">
+    <text x="600" y="350">Image placeholder</text>
+  </g>
+</svg>

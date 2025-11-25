@@ -1,0 +1,18 @@
+{
+  "slug": "simplytics",
+  "title": "Simplytics Analytics Platform",
+  "excerpt": "Live REST API and web dashboard for real-time analytics. Coming soon.",
+  "description": "Status: In active development.\n\nSimplytics delivers a unified analytics layer with a production-grade REST API and responsive dashboard so teams can explore their data without spinning up custom tooling. The MVP focuses on high-signal metrics, granular filtering, and an opinionated permissions model built for client engagements.\n\nCurrent work includes finalizing the ingest pipeline, polishing the dashboard UX, and wrapping the API with robust observability. A detailed case study and public demo will ship alongside the beta release.",
+  "status": "coming-soon",
+  "tags": ["Web", "Analytics", "API"],
+  "tech": ["Next.js", "TypeScript", "PostgreSQL", "REST"],
+  "screenshots": [
+    {
+      "src": "/images/placeholder.svg",
+      "alt": "Simplytics analytics dashboard – coming soon"
+    }
+  ],
+  "demo": {},
+  "featured": true,
+  "published": true
+}

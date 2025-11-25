@@ -1,0 +1,18 @@
+{
+  "slug": "nfl-analytics-dashboard",
+  "title": "NFL Football Analytics Dashboard",
+  "excerpt": "Comprehensive NFL performance analytics experience for coaching and scouting teams. Coming soon.",
+  "description": "Status: In planning and early prototyping.\n\nThis dashboard distills league, team, and player data into actionable insights for coaching staffs and analysts. Planned modules include drive efficiency breakdowns, situational play-calling heatmaps, and personnel group visualizations backed by a modern data warehouse.\n\nDesign explorations and data modeling are underway. The interactive experience, full write-up, and demo environment will follow in a future release.",
+  "status": "coming-soon",
+  "tags": ["Analytics", "Sports", "Dashboard"],
+  "tech": ["Next.js", "TypeScript", "DuckDB", "Tailwind"],
+  "screenshots": [
+    {
+      "src": "/images/placeholder.svg",
+      "alt": "NFL analytics dashboard concept – coming soon"
+    }
+  ],
+  "demo": {},
+  "featured": false,
+  "published": true
+}

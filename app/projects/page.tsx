@@ -1,8 +1,14 @@
-import { ProjectCard } from "@/components/projects/ProjectCard";
-import { ProjectFilter } from "@/components/projects/ProjectFilter";
 import { getAllTags, getPublishedProjects } from "@/lib/content/projects";
+import { buildMetadata } from "@/lib/seo/meta";
+import ProjectsClient from "../../components/projects/ProjectsClient";
 
 export const dynamic = "force-static";
+
+export const metadata = buildMetadata({
+  title: "Projects",
+  description: "Interactive demos and selected case studies.",
+  pathname: "/projects",
+});
 
 export default async function ProjectsPage() {
   const [projects, tags] = await Promise.all([
@@ -21,45 +27,5 @@ export default async function ProjectsPage() {
 
       <ProjectsClient initialProjects={projects} allTags={tags} />
     </main>
-  );
-}
-
-function ProjectsClient({
-  initialProjects,
-  allTags,
-}: {
-  initialProjects: Awaited<ReturnType<typeof getPublishedProjects>>;
-  allTags: string[];
-}) {
-  // Client boundary for filters
-  return (
-    <div>
-      <ProjectFilter
-        allTags={allTags}
-        onChange={(active) => {
-          const list = document.querySelectorAll<HTMLElement>("[data-tags]");
-          list.forEach((el) => {
-            const tags = (el.dataset.tags ?? "").split(",").filter(Boolean);
-            const show =
-              active.length === 0 || active.every((t) => tags.includes(t));
-            el.style.display = show ? "" : "none";
-          });
-        }}
-      />
-
-      <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {initialProjects.map((p) => (
-          <div key={p.slug} data-tags={p.tags.join(",")}>
-            <ProjectCard
-              slug={p.slug}
-              title={p.title}
-              excerpt={p.excerpt}
-              tags={p.tags}
-              image={p.screenshots[0]}
-            />
-          </div>
-        ))}
-      </section>
-    </div>
   );
 }

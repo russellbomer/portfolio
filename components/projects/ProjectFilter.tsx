@@ -32,8 +32,9 @@ export function ProjectFilter({
             <button
               key={t}
               type="button"
+              aria-pressed={isOn}
               onClick={() => toggle(t)}
-              className={`rounded px-2 py-1 text-xs border ${
+              className={`rounded px-2 py-1 text-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                 isOn
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary text-secondary-foreground"
@@ -50,7 +51,7 @@ export function ProjectFilter({
               setActive([]);
               onChange([]);
             }}
-            className="rounded px-2 py-1 text-xs border bg-accent text-accent-foreground"
+            className="rounded px-2 py-1 text-sm border bg-accent text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             Clear
           </button>

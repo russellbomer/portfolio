@@ -13,6 +13,7 @@ export const Project = z.object({
   title: z.string(),
   excerpt: z.string(),
   description: z.string(),
+  status: z.enum(["live", "coming-soon", "beta"]).default("live"),
   tags: z.array(z.string()).default([]),
   tech: z.array(z.string()).default([]),
   screenshots: z.array(Screenshot).default([]),

@@ -1,0 +1,70 @@
+{
+  "light": [
+    {
+      "pair": "foreground vs background",
+      "ratio": 10.793588943430404
+    },
+    {
+      "pair": "primary-foreground vs primary",
+      "ratio": 4.823682684603597
+    },
+    {
+      "pair": "secondary-foreground vs secondary",
+      "ratio": 4.201796799880435
+    },
+    {
+      "pair": "accent-foreground vs accent",
+      "ratio": 4.823682684603597
+    },
+    {
+      "pair": "destructive-foreground vs destructive",
+      "ratio": 4.201796799880435
+    },
+    {
+      "pair": "muted-foreground vs muted",
+      "ratio": 7.519754708307719
+    },
+    {
+      "pair": "card-foreground vs card",
+      "ratio": 7.519754708307719
+    },
+    {
+      "pair": "popover-foreground vs popover",
+      "ratio": 4.761206099708492
+    }
+  ],
+  "dark": [
+    {
+      "pair": "foreground vs background",
+      "ratio": 4.658731400785716
+    },
+    {
+      "pair": "primary-foreground vs primary",
+      "ratio": 4.823682684603597
+    },
+    {
+      "pair": "secondary-foreground vs secondary",
+      "ratio": 4.201796799880435
+    },
+    {
+      "pair": "accent-foreground vs accent",
+      "ratio": 4.8331617142153025
+    },
+    {
+      "pair": "destructive-foreground vs destructive",
+      "ratio": 4.201796799880435
+    },
+    {
+      "pair": "muted-foreground vs muted",
+      "ratio": 4.1088154947577
+    },
+    {
+      "pair": "card-foreground vs card",
+      "ratio": 10.793588943430404
+    },
+    {
+      "pair": "popover-foreground vs popover",
+      "ratio": 4.823682684603597
+    }
+  ]
+}
