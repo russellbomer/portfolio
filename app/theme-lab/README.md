@@ -151,8 +151,7 @@ types/
 schemas/
   theme.ts                    # Zod validation
 
-data/
-  example-theme.json          # Default palette
+portfolio-theme-final.json    # Default palette and role mappings
 ```
 
 ### Color Scale Generation
@@ -207,21 +206,6 @@ The ThemeProvider component dynamically sets these variables based on the curren
 - **Ferrum**: `22 77% 43%` - Secondary/accent brand color
 
 To unlock, manually edit the JSON or remove the `locked` property.
-
-### Default Scheme Rules
-
-**Light Mode:**
-
-- Background must be Linen
-- Foreground must be Kalamata
-- Primary must use Fern
-- Secondary/Destructive must use Ferrum
-
-**Dark Mode:**
-
-- Background typically Kalamata
-- Foreground typically Linen
-- Brand colors remain consistent
 
 ## Troubleshooting
 

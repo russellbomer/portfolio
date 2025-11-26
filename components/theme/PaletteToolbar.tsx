@@ -38,7 +38,7 @@ export function PaletteToolbar({
   onAdd,
 }: PaletteToolbarProps) {
   return (
-    <div className="border-b bg-card/80 backdrop-blur supports-[backdrop-filter]:bg-card/60">
+    <div className="border-b border-neutral-200 bg-white text-black">
       <div className="container mx-auto flex flex-wrap items-center gap-3 px-4 py-3">
         <TooltipProvider delayDuration={150}>
           <div className="flex flex-wrap items-center gap-2 overflow-x-auto">
@@ -54,7 +54,12 @@ export function PaletteToolbar({
           </div>
         </TooltipProvider>
 
-        <Button size="sm" variant="outline" className="ml-auto" onClick={onAdd}>
+        <Button
+          size="sm"
+          variant="outline"
+          className="ml-auto border-neutral-300 text-black hover:bg-neutral-100"
+          onClick={onAdd}
+        >
           Add Color
         </Button>
       </div>
@@ -142,7 +147,7 @@ function PaletteSwatch({
           <PopoverTrigger asChild>
             <button
               type="button"
-              className="relative size-9 rounded-full border border-border transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="relative size-9 rounded-full border border-neutral-300 transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500"
               style={{ backgroundColor: `hsl(${color.hsl})` }}
             >
               {color.locked && (
@@ -156,19 +161,29 @@ function PaletteSwatch({
             </button>
           </PopoverTrigger>
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent
+          className="border border-neutral-200 bg-white text-black"
+          style={{
+            backgroundColor: "#ffffff",
+            color: "#000000",
+            borderColor: "#e5e7eb",
+          }}
+        >
           <div className="space-y-1">
-            <p className="text-xs font-semibold">{color.name}</p>
-            <p className="text-[11px] text-muted-foreground">#{color.id}</p>
-            <p className="text-[11px] text-muted-foreground">HSL {color.hsl}</p>
-            <p className="text-[11px] text-muted-foreground">{hexValue}</p>
+            <p className="text-xs font-semibold text-black">{color.name}</p>
+            <p className="text-[11px] text-neutral-600">#{color.id}</p>
+            <p className="text-[11px] text-neutral-600">HSL {color.hsl}</p>
+            <p className="text-[11px] text-neutral-600">{hexValue}</p>
           </div>
         </TooltipContent>
       </Tooltip>
-      <PopoverContent className="w-80 space-y-4" align="start">
+      <PopoverContent
+        className="w-80 space-y-4 border border-neutral-200 bg-white text-black"
+        align="start"
+      >
         <div className="flex items-start gap-3">
           <div
-            className="size-12 shrink-0 rounded-md border"
+            className="size-12 shrink-0 rounded-md border border-neutral-300"
             style={{ backgroundColor: `hsl(${color.hsl})` }}
           />
           <div className="flex-1">
@@ -177,9 +192,9 @@ function PaletteSwatch({
               onChange={(event) => setName(event.target.value)}
               onBlur={handleNameBlur}
               disabled={color.locked}
-              className="h-8 text-sm"
+              className="h-8 border border-neutral-300 bg-white text-sm text-black disabled:opacity-70"
             />
-            <div className="mt-1 flex items-center justify-between text-[11px] text-muted-foreground">
+            <div className="mt-1 flex items-center justify-between text-[11px] text-neutral-600">
               <span>ID #{color.id}</span>
               <span>{color.scale.length} shades</span>
             </div>
@@ -190,37 +205,47 @@ function PaletteSwatch({
           <HexColorPicker color={hexValue} onChange={handleHexChange} />
           <div className="flex items-center gap-2">
             <div className="flex-1">
-              <label className="block text-[11px] uppercase tracking-wide text-muted-foreground">
+              <label className="block text-[11px] uppercase tracking-wide text-neutral-600">
                 Hex
               </label>
-              <div className="mt-1 flex items-center gap-2 rounded border px-2">
-                <span className="text-sm text-muted-foreground">#</span>
+              <div className="mt-1 flex items-center gap-2 rounded border border-neutral-300 px-2">
+                <span className="text-sm text-neutral-600">#</span>
                 <HexColorInput
                   color={hexValue.replace(/^#/, "")}
                   onChange={handleHexChange}
-                  className="h-8 flex-1 border-0 bg-transparent text-sm outline-none"
+                  className="h-8 flex-1 border-0 bg-transparent text-sm text-black outline-none"
                 />
               </div>
             </div>
             <div className="flex-1">
-              <label className="block text-[11px] uppercase tracking-wide text-muted-foreground">
+              <label className="block text-[11px] uppercase tracking-wide text-neutral-600">
                 HSL
               </label>
               <Input
                 value={hslValue}
                 onChange={(event) => handleHslChange(event.target.value)}
-                className="h-8 font-mono text-[12px]"
+                className="h-8 border border-neutral-300 bg-white font-mono text-[12px] text-black"
               />
             </div>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 text-xs">
-          <Button size="sm" variant="outline" onClick={handleGenerateScale}>
+          <Button
+            size="sm"
+            variant="outline"
+            className="border-neutral-300 text-black hover:bg-neutral-100"
+            onClick={handleGenerateScale}
+          >
             Generate Scale
           </Button>
           {color.scale.length > 0 && (
-            <Button size="sm" variant="ghost" onClick={handleClearScale}>
+            <Button
+              size="sm"
+              variant="ghost"
+              className="text-black hover:bg-neutral-100"
+              onClick={handleClearScale}
+            >
               Clear Scale
             </Button>
           )}
@@ -228,7 +253,7 @@ function PaletteSwatch({
             <Button
               size="sm"
               variant="ghost"
-              className="ml-auto text-destructive"
+              className="ml-auto text-red-600 hover:bg-neutral-100"
               onClick={handleDelete}
             >
               Remove

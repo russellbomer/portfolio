@@ -1,10 +1,32 @@
 #!/usr/bin/env node
+/* eslint-env node */
 /**
  * Non-blocking drift detection between README anchors overview table and ai/anchors.json domains.
  * Prints warnings if domains missing from table or extra entries in table.
  */
 import fs from "fs";
 import path from "path";
+
+const domainAliasBySource = new Map([
+  ["docs/phase-1-initiation-&-planning/1.1.txt", "Vision & Personas"],
+  ["docs/phase-1-initiation-&-planning/1.2.txt", "Scope & Constraints"],
+  [
+    "docs/phase-1-initiation-&-planning/1.3.txt",
+    "Organization & Collaboration",
+  ],
+  [
+    "docs/phase-1-initiation-&-planning/1.4.txt",
+    "Schedule & Milestones (MVP Week)",
+  ],
+]);
+
+function deriveDomainsFromAnchors(anchors) {
+  const files = anchors?._meta?.sourceOfTruthFiles;
+  if (!Array.isArray(files)) return [];
+  return files
+    .map((file) => domainAliasBySource.get(file))
+    .filter((domain) => typeof domain === "string");
+}
 
 const root = process.cwd();
 const anchorsPath = path.join(root, "ai", "anchors.json");
@@ -43,12 +65,17 @@ function main() {
     return;
   }
 
-  const expectedDomains = [
-    "Vision & Personas",
-    "Scope & Constraints",
-    "Organization & Collaboration",
-    "Schedule & Milestones (MVP Week)",
-  ];
+  const expectedDomains = (() => {
+    const derived = deriveDomainsFromAnchors(anchors);
+    return derived.length
+      ? derived
+      : [
+          "Vision & Personas",
+          "Scope & Constraints",
+          "Organization & Collaboration",
+          "Schedule & Milestones (MVP Week)",
+        ];
+  })();
   const tableDomains = parseReadmeDomains(readmeRaw);
 
   const missing = expectedDomains.filter((d) => !tableDomains.includes(d));

@@ -37,7 +37,7 @@ A quick reference for common questions and issues in this repository. For the in
 ## General
 
 - Where are the theme tokens?
-  - See `portfolio-theme-alpha.json` and `components/theme/*`.
+  - See `portfolio-theme-final.json` and `components/theme/*`.
 - How do I regenerate the sitemap?
   - `npm run postbuild` triggers the script, or run `node scripts/generate-sitemap.mjs` manually.
 - Where are the demos wired?

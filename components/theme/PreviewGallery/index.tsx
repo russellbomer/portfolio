@@ -3,24 +3,34 @@
 /**
  * Combined preview gallery component
  */
+import type { SemanticRole } from "@/types/theme";
 import { useState } from "react";
 import { ApplicationPreview } from "./ApplicationPreview";
-import { ContentPreview } from "./ContentPreview";
-import { FormsPreview } from "./FormsPreview";
-import { StatesPreview } from "./StatesPreview";
-import { SurfacesPreview } from "./SurfacesPreview";
+import { ContentFormsPreview } from "./ContentPreview";
+import { CorePreview } from "./FormsPreview";
+import { FeedbackPreview } from "./StatesPreview";
+import { FoundationsPreview } from "./SurfacesPreview";
 
-type PreviewTab = "application" | "forms" | "surfaces" | "content" | "states";
+type PreviewTab =
+  | "application"
+  | "foundations"
+  | "core"
+  | "content"
+  | "feedback";
 
-export function PreviewGallery() {
+interface PreviewGalleryProps {
+  onRoleActivate?: (role: SemanticRole) => void;
+}
+
+export function PreviewGallery({ onRoleActivate }: PreviewGalleryProps) {
   const [activeTab, setActiveTab] = useState<PreviewTab>("application");
 
   const tabs: { id: PreviewTab; label: string }[] = [
-    { id: "application", label: "Application" },
-    { id: "forms", label: "Forms" },
-    { id: "surfaces", label: "Surfaces" },
-    { id: "content", label: "Content" },
-    { id: "states", label: "States" },
+    { id: "application", label: "Scenes" },
+    { id: "foundations", label: "Foundations" },
+    { id: "core", label: "Core UI" },
+    { id: "content", label: "Content & Forms" },
+    { id: "feedback", label: "Feedback" },
   ];
 
   return (
@@ -44,11 +54,21 @@ export function PreviewGallery() {
 
       {/* Content */}
       <div className="rounded-lg border bg-card p-6">
-        {activeTab === "application" && <ApplicationPreview />}
-        {activeTab === "forms" && <FormsPreview />}
-        {activeTab === "surfaces" && <SurfacesPreview />}
-        {activeTab === "content" && <ContentPreview />}
-        {activeTab === "states" && <StatesPreview />}
+        {activeTab === "application" && (
+          <ApplicationPreview onRoleActivate={onRoleActivate} />
+        )}
+        {activeTab === "foundations" && (
+          <FoundationsPreview onRoleActivate={onRoleActivate} />
+        )}
+        {activeTab === "core" && (
+          <CorePreview onRoleActivate={onRoleActivate} />
+        )}
+        {activeTab === "content" && (
+          <ContentFormsPreview onRoleActivate={onRoleActivate} />
+        )}
+        {activeTab === "feedback" && (
+          <FeedbackPreview onRoleActivate={onRoleActivate} />
+        )}
       </div>
     </div>
   );

@@ -4,12 +4,12 @@ Concise reference for the portfolio theme architecture. For the full interactive
 
 ## Core Concepts
 
-- **Palette:** Array of base colors in `portfolio-theme-alpha.json`, each with an `id`, human name, and HSL triplet string formatted as `"H S% L%"` (no commas, degrees, or `hsl()` wrapper).
+- **Palette:** Array of base colors in `portfolio-theme-final.json`, each with an `id`, human name, and HSL triplet string formatted as `"H S% L%"` (no commas, degrees, or `hsl()` wrapper).
 - **Schemes:** Separate `light` and `dark` objects map semantic roles (e.g. `background`, `foreground`, `primary`, `accent-foreground`) to a `baseColorId` (and optional `shadeKey` when a scale exists).
 - **Semantic Roles:** Provide indirection so UI components never reference palette colors directly—enables global re‑themability and accessibility tuning.
 - **Locked Colors:** Brand colors (`fern`, `ferrum`) marked with `"locked": true` to prevent accidental mutation; you can remove the flag in JSON for experimental rebranding.
 
-## File: `portfolio-theme-alpha.json`
+## File: `portfolio-theme-final.json`
 
 Minimal shape (omitting some roles for brevity):
 
@@ -18,21 +18,21 @@ Minimal shape (omitting some roles for brevity):
   "name": "Portfolio Theme",
   "version": 1,
   "palette": [
-    { "id": "linen", "hsl": "44 48% 96%" },
-    { "id": "fern", "hsl": "118 19% 39%", "locked": true },
-    { "id": "ferrum", "hsl": "22 77% 43%", "locked": true }
+    { "id": "linen", "hsl": "44 48% 94%" },
+    { "id": "fern", "hsl": "118 19% 41%", "locked": true },
+    { "id": "ferrum", "hsl": "22 76% 36%", "locked": true }
   ],
   "schemes": {
     "light": {
       "background": { "baseColorId": "linen" },
       "foreground": { "baseColorId": "kalamata" },
       "primary": { "baseColorId": "fern" },
-      "primary-foreground": { "baseColorId": "linen" }
+      "primary-foreground": { "baseColorId": "optical" }
     },
     "dark": {
-      "background": { "baseColorId": "aventurine" },
+      "background": { "baseColorId": "thorn" },
       "foreground": { "baseColorId": "linen" },
-      "primary": { "baseColorId": "fern" },
+      "primary": { "baseColorId": "thorn" },
       "primary-foreground": { "baseColorId": "linen" }
     }
   }
@@ -46,7 +46,7 @@ Minimal shape (omitting some roles for brevity):
 ## Editing Workflow
 
 1. **Interactive:** Visit `/theme-lab` → adjust palette and role mappings live. Contrast badges surface WCAG compliance.
-2. **JSON Manual:** Edit `portfolio-theme-alpha.json` directly; keep HSL formatting consistent. Avoid adding `hsl()` wrappers; store raw triplets.
+2. **JSON Manual:** Edit `portfolio-theme-final.json` directly; keep HSL formatting consistent. Avoid adding `hsl()` wrappers; store raw triplets.
 3. **Import/Export:** Use Theme Lab buttons (or shortcuts `I` / `E`) to serialize / restore complete token sets.
 4. **Sharing:** The Theme Lab can encode the entire theme in a base64 URL param; recipients load the theme instantly.
 

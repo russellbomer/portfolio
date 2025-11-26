@@ -132,7 +132,7 @@ Treat all unchecked critical items as **blocking** for a production launch unles
 ## 6. Design System & Accessibility
 
 - [ ] **Theme tokens are internally consistent**
-      `portfolio-theme-alpha.json` (and any active theme file) validates against `schemas/theme.ts` and loads without runtime errors in `/theme-lab`.
+      `portfolio-theme-final.json` (and any active theme file) validates against `schemas/theme.ts` and loads without runtime errors in `/theme-lab`.
 
 - [ ] **Contrast audit passes for primary pairs**
 

@@ -4,13 +4,13 @@
  * Custom hook for managing theme tokens state
  * Handles import/export, URL sync, localStorage, and presets
  */
-import exampleTheme from "@/data/example-theme.json";
 import { loadTheme, saveTheme } from "@/lib/storage";
 import {
   clearThemeFromUrl,
   getThemeFromUrl,
   updateUrlWithTheme,
 } from "@/lib/url";
+import defaultTheme from "@/portfolio-theme-final.json";
 import { validateThemeTokens } from "@/schemas/theme";
 import type { SchemeName, ThemeTokens } from "@/types/theme";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -21,7 +21,7 @@ export function useThemeTokens() {
   // Important: initialize with a stable value for SSR and first client render
   // Then, after mount, load URL/localStorage theme to avoid hydration mismatch
   const [tokens, setTokens] = useState<ThemeTokens>(
-    () => exampleTheme as ThemeTokens
+    () => defaultTheme as ThemeTokens
   );
 
   const [scheme, setScheme] = useState<SchemeName>("light");
@@ -43,7 +43,7 @@ export function useThemeTokens() {
         setTokens(savedTheme);
       }
     } catch (_) {
-      // ignore and keep example theme
+      // ignore and keep default theme
     }
   }, []);
 
@@ -102,9 +102,9 @@ export function useThemeTokens() {
     return window.location.href;
   }, [tokens]);
 
-  // Reset to example theme
+  // Reset to default theme
   const resetTheme = useCallback(() => {
-    setTokens(exampleTheme as ThemeTokens);
+    setTokens(defaultTheme as ThemeTokens);
     clearThemeFromUrl();
   }, []);
 

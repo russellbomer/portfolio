@@ -2,7 +2,7 @@
 
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { initWebVitals } from "@/lib/analytics/web-vitals";
-import tokensJson from "@/portfolio-theme-alpha.json";
+import tokensJson from "@/portfolio-theme-final.json";
 import type { SchemeName, ThemeTokens } from "@/types/theme";
 import React, {
   useCallback,

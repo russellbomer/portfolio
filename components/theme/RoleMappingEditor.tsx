@@ -4,6 +4,7 @@
  * RoleMappingEditor component
  * Assign semantic roles with lock indicators and contrast checking
  */
+import { roleGroups } from "@/lib/theme/role-groups";
 import type {
   BaseColor,
   RoleMapping,
@@ -11,7 +12,7 @@ import type {
   SemanticRole,
 } from "@/types/theme";
 import { semanticRoles } from "@/types/theme";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ContrastBadge } from "./ContrastBadge";
 
 interface RoleMappingEditorProps {
@@ -19,202 +20,11 @@ interface RoleMappingEditorProps {
   mapping: RoleMapping;
   palette: BaseColor[];
   onChange: (mapping: RoleMapping) => void;
+  highlightedRole?: SemanticRole | null;
+  onClearHighlight?: () => void;
 }
 
-const foundationRoles: SemanticRole[] = [
-  "background",
-  "foreground",
-  "subtle-background",
-  "subtle-foreground",
-  "body-background",
-  "section-background",
-  "background-inverse",
-  "foreground-inverse",
-  "overlay-backdrop",
-  "overlay-foreground",
-  "page-border",
-  "page-ring",
-  "surface-default",
-  "surface-default-foreground",
-  "surface-muted",
-  "surface-muted-foreground",
-  "surface-contrast",
-  "surface-contrast-foreground",
-  "surface-overlay",
-  "surface-overlay-foreground",
-  "shadow-color",
-  "divider",
-  "scrim",
-  "selection",
-];
-
-const shadcnCoreRoles: SemanticRole[] = [
-  "muted",
-  "muted-foreground",
-  "popover",
-  "popover-foreground",
-  "card",
-  "card-foreground",
-  "border",
-  "input",
-  "ring",
-  "primary",
-  "primary-foreground",
-  "secondary",
-  "secondary-foreground",
-  "accent",
-  "accent-foreground",
-  "destructive",
-  "destructive-foreground",
-];
-
-const navigationRoles: SemanticRole[] = [
-  "header-background",
-  "header-foreground",
-  "header-border",
-  "header-active",
-  "header-active-foreground",
-  "nav-link",
-  "nav-link-hover",
-  "nav-link-active",
-  "nav-link-muted",
-  "footer-background",
-  "footer-foreground",
-  "footer-border",
-  "footer-accent",
-  "footer-accent-foreground",
-  "breadcrumb-background",
-  "breadcrumb-foreground",
-  "breadcrumb-active",
-  "breadcrumb-separator",
-  "sidebar-background",
-  "sidebar-foreground",
-  "sidebar-active",
-  "sidebar-border",
-];
-
-const featureRoles: SemanticRole[] = [
-  "hero-background",
-  "hero-foreground",
-  "hero-accent",
-  "hero-accent-foreground",
-  "cta-background",
-  "cta-foreground",
-  "cta-border",
-  "cta-ring",
-  "cta-hover",
-  "testimonial-background",
-  "testimonial-foreground",
-  "testimonial-emphasis",
-  "metrics-background",
-  "metrics-foreground",
-  "metric-positive",
-  "metric-negative",
-  "timeline-background",
-  "timeline-foreground",
-  "timeline-marker",
-  "timeline-connector",
-];
-
-const contentRoles: SemanticRole[] = [
-  "form-background",
-  "form-foreground",
-  "input-background",
-  "input-foreground",
-  "input-placeholder",
-  "input-border",
-  "input-ring",
-  "table-header",
-  "table-header-foreground",
-  "table-row",
-  "table-row-foreground",
-  "table-row-alt",
-  "table-row-alt-foreground",
-  "code-background",
-  "code-foreground",
-  "code-border",
-  "code-accent",
-  "quote-background",
-  "quote-foreground",
-  "quote-border",
-  "quote-accent",
-  "tag-background",
-  "tag-foreground",
-  "tag-border",
-  "tag-active",
-  "tooltip-background",
-  "tooltip-foreground",
-  "tooltip-border",
-  "gallery-background",
-  "gallery-foreground",
-  "link",
-  "link-hover",
-  "link-muted",
-  "link-visited",
-];
-
-const actionsFeedbackRoles: SemanticRole[] = [
-  "success",
-  "success-foreground",
-  "success-muted",
-  "success-border",
-  "warning",
-  "warning-foreground",
-  "warning-muted",
-  "warning-border",
-  "info",
-  "info-foreground",
-  "info-muted",
-  "info-border",
-  "error",
-  "error-foreground",
-  "error-muted",
-  "error-border",
-  "focus-ring",
-  "active-ring",
-  "disabled-background",
-  "disabled-foreground",
-  "brand-primary",
-  "brand-secondary",
-  "brand-tertiary",
-];
-
-const mediaRoles: SemanticRole[] = [
-  "chart-1",
-  "chart-2",
-  "chart-3",
-  "chart-4",
-  "chart-5",
-  "chart-6",
-  "chart-7",
-  "chart-8",
-  "chart-accent",
-  "chart-grid",
-  "chart-axis",
-  "avatar-background",
-  "avatar-foreground",
-  "avatar-ring",
-  "modal-background",
-  "modal-foreground",
-  "modal-overlay",
-  "modal-border",
-  "video-overlay",
-  "video-controls",
-  "terminal-background",
-  "terminal-foreground",
-  "terminal-cursor",
-  "terminal-prompt",
-];
-
-const groupedRoles = [
-  ...foundationRoles,
-  ...shadcnCoreRoles,
-  ...navigationRoles,
-  ...featureRoles,
-  ...contentRoles,
-  ...actionsFeedbackRoles,
-  ...mediaRoles,
-];
+const groupedRoles = roleGroups.flatMap((group) => group.roles);
 
 const missingRoles = semanticRoles.filter(
   (role) => !groupedRoles.includes(role)
@@ -223,16 +33,6 @@ const missingRoles = semanticRoles.filter(
 if (missingRoles.length > 0 && process.env.NODE_ENV !== "production") {
   console.warn("RoleMappingEditor missing role groups for:", missingRoles);
 }
-
-const roleGroups: { title: string; roles: SemanticRole[] }[] = [
-  { title: "Foundations", roles: foundationRoles },
-  { title: "Shadcn Core", roles: shadcnCoreRoles },
-  { title: "Navigation", roles: navigationRoles },
-  { title: "Feature Sections", roles: featureRoles },
-  { title: "Content & Forms", roles: contentRoles },
-  { title: "Feedback & Status", roles: actionsFeedbackRoles },
-  { title: "Media & Data", roles: mediaRoles },
-];
 
 const contrastPairs: Array<{
   fg: SemanticRole;
@@ -285,6 +85,8 @@ export function RoleMappingEditor({
   mapping,
   palette,
   onChange,
+  highlightedRole,
+  onClearHighlight,
 }: RoleMappingEditorProps) {
   // Local role-level lock state (UI-only)
   const [roleLocks, setRoleLocks] = useState<Record<SemanticRole, boolean>>(
@@ -309,6 +111,7 @@ export function RoleMappingEditor({
     if (!baseColorId) {
       return;
     }
+    onClearHighlight?.();
     onChange({
       ...mapping,
       [role]: { baseColorId, shadeKey },
@@ -352,18 +155,34 @@ export function RoleMappingEditor({
       }
       newMapping[role] = { baseColorId: randomBase.id, shadeKey };
     });
+    onClearHighlight?.();
     onChange(newMapping);
   };
 
+  const roleRefs = useRef<Record<SemanticRole, HTMLDivElement | null>>(
+    {} as Record<SemanticRole, HTMLDivElement | null>
+  );
+
+  useEffect(() => {
+    if (!highlightedRole) return;
+    const node = roleRefs.current[highlightedRole];
+    if (!node) return;
+    node.scrollIntoView({ behavior: "smooth", block: "center" });
+    const select = node.querySelector("select");
+    if (select instanceof HTMLSelectElement) {
+      select.focus({ preventScroll: true });
+    }
+  }, [highlightedRole]);
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-black">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold capitalize">{scheme} Scheme</h3>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={randomizeMapping}
-            className="h-8 rounded-md border bg-background px-3 text-xs hover:bg-accent hover:text-accent-foreground"
+            className="h-8 rounded-md border border-neutral-300 bg-white px-3 text-xs text-black hover:bg-neutral-100"
             title="Randomize unlocked roles"
           >
             Randomize
@@ -371,54 +190,81 @@ export function RoleMappingEditor({
         </div>
       </div>
 
-      {/* Role assignments */}
       <div className="space-y-4">
         {roleGroups.map((group) => (
-          <div key={group.title} className="space-y-2">
-            <h4 className="text-sm font-medium text-muted-foreground">
-              {group.title}
-            </h4>
-            <div className="space-y-2 rounded-lg border bg-card p-3">
+          <section key={group.id} className="space-y-2">
+            <h4 className="text-sm font-semibold">{group.title}</h4>
+            <div className="space-y-2 rounded-lg border border-neutral-200 bg-white p-3">
               {group.roles.map((role) => {
                 const entry = mapping[role];
                 const baseColorId = entry?.baseColorId ?? "";
                 const shadeKey = entry?.shadeKey;
                 const baseColor = palette.find((c) => c.id === baseColorId);
                 const locked = isLocked(role);
-                const showPlaceholder = !entry;
+                const isHighlighted = highlightedRole === role;
+                const previewColor = (() => {
+                  if (!baseColor) return null;
+                  if (shadeKey && baseColor.scale.length > 0) {
+                    const shade = baseColor.scale.find(
+                      (s) => s.key === shadeKey
+                    );
+                    return shade?.hsl ?? baseColor.hsl;
+                  }
+                  return baseColor.hsl;
+                })();
 
                 return (
-                  <div key={role} className="flex items-center gap-3">
-                    <div className="w-40 text-xs font-medium">{role}</div>
+                  <div
+                    key={role}
+                    ref={(node) => {
+                      roleRefs.current[role] = node;
+                    }}
+                    data-role-row={role}
+                    className={`flex items-center gap-3 rounded-md border border-neutral-200 bg-white px-2 py-2 transition-shadow ${
+                      isHighlighted
+                        ? "border-blue-500 shadow-sm ring-1 ring-blue-400"
+                        : ""
+                    }`}
+                  >
+                    <div className="flex w-44 flex-col text-xs text-black">
+                      <span className="font-medium capitalize">{role}</span>
+                      {baseColor && (
+                        <span className="text-neutral-500">
+                          {baseColor.name}
+                          {shadeKey ? ` • ${shadeKey}` : ""}
+                        </span>
+                      )}
+                    </div>
+
                     <select
                       value={baseColorId}
-                      onChange={(e) =>
-                        handleRoleChange(role, e.target.value, shadeKey)
+                      onChange={(event) =>
+                        handleRoleChange(role, event.target.value, undefined)
                       }
                       disabled={locked}
-                      className="h-8 flex-1 rounded-md border bg-background px-2 text-xs disabled:opacity-50"
+                      className="h-8 flex-1 rounded-md border border-neutral-300 bg-white px-2 text-xs text-black disabled:opacity-50"
                     >
-                      <option value="">
-                        {showPlaceholder ? "Select color" : "Unassigned"}
-                      </option>
+                      <option value="">Select color</option>
                       {palette.map((color) => (
                         <option key={color.id} value={color.id}>
-                          {color.name} {color.locked ? "🔒" : ""}
+                          {color.name}
+                          {color.locked ? " 🔒" : ""}
                         </option>
                       ))}
                     </select>
+
                     {baseColor && baseColor.scale.length > 0 && (
                       <select
-                        value={shadeKey || ""}
-                        onChange={(e) =>
+                        value={shadeKey ?? ""}
+                        onChange={(event) =>
                           handleRoleChange(
                             role,
                             baseColorId,
-                            e.target.value || undefined
+                            event.target.value || undefined
                           )
                         }
                         disabled={locked}
-                        className="h-8 w-20 rounded-md border bg-background px-2 text-xs disabled:opacity-50"
+                        className="h-8 w-24 rounded-md border border-neutral-300 bg-white px-2 text-xs text-black disabled:opacity-50"
                       >
                         <option value="">Base</option>
                         {baseColor.scale.map((shade) => (
@@ -428,19 +274,22 @@ export function RoleMappingEditor({
                         ))}
                       </select>
                     )}
+
                     <div
-                      className="h-8 w-8 shrink-0 rounded border-2 bg-[color:var(--color-card)]"
+                      className="h-8 w-8 shrink-0 rounded border border-neutral-200"
                       style={{
-                        backgroundColor: baseColor
-                          ? `hsl(${getColorForRole(role)})`
-                          : "hsl(var(--muted))",
+                        backgroundColor: previewColor
+                          ? `hsl(${previewColor})`
+                          : "transparent",
                       }}
+                      aria-label={`Preview color for ${role}`}
                     />
+
                     <button
                       type="button"
                       onClick={() => toggleRoleLock(role)}
                       className={`text-xs ${
-                        locked ? "text-amber-600" : "text-muted-foreground"
+                        locked ? "text-amber-600" : "text-neutral-500"
                       }`}
                       title={locked ? "Unlock role" : "Lock role"}
                     >
@@ -450,28 +299,27 @@ export function RoleMappingEditor({
                 );
               })}
             </div>
-          </div>
+          </section>
         ))}
       </div>
 
-      {/* Contrast checks */}
       <div className="space-y-2">
-        <h4 className="text-sm font-medium text-muted-foreground">
-          Contrast Checks
-        </h4>
-        <div className="space-y-2 rounded-lg border bg-card p-3">
+        <h4 className="text-sm font-semibold">Contrast Checks</h4>
+        <div className="space-y-2 rounded-lg border border-neutral-200 bg-white p-3">
           {contrastPairs.map(({ fg, bg, label }) => {
             const fgColor = getColorForRole(fg);
             const bgColor = getColorForRole(bg);
 
-            if (!fgColor || !bgColor) return null;
+            if (!fgColor || !bgColor) {
+              return null;
+            }
 
             return (
               <div
                 key={`${fg}-${bg}`}
-                className="flex items-center justify-between"
+                className="flex items-center justify-between text-xs text-black"
               >
-                <span className="text-sm">{label}</span>
+                <span className="font-medium text-neutral-600">{label}</span>
                 <ContrastBadge foreground={fgColor} background={bgColor} />
               </div>
             );

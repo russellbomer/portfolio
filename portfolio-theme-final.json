@@ -52,7 +52,7 @@
     {
       "id": "ferrum",
       "name": "Ferrum",
-      "hsl": "22 77% 43%",
+      "hsl": "22 76% 36%",
       "scale": [],
       "locked": true
     },
@@ -66,6 +66,48 @@
       "id": "creamsicle",
       "name": "Creamsicle",
       "hsl": "23 81% 63%",
+      "scale": []
+    },
+    {
+      "id": "thorn",
+      "name": "Thorn",
+      "hsl": "107 18% 15%",
+      "scale": []
+    },
+    {
+      "id": "peachfuzz",
+      "name": "Peachfuzz",
+      "hsl": "23 100% 91%",
+      "scale": []
+    },
+    {
+      "id": "Midnight",
+      "name": "Midnight",
+      "hsl": "0 0% 0%",
+      "scale": []
+    },
+    {
+      "id": "scarlet",
+      "name": "Scarlet",
+      "hsl": "0 100% 50%",
+      "scale": []
+    },
+    {
+      "id": "optical",
+      "name": "Optical",
+      "hsl": "0 0% 100%",
+      "scale": []
+    },
+    {
+      "id": "canary",
+      "name": "Canary",
+      "hsl": "59 100% 50%",
+      "scale": []
+    },
+    {
+      "id": "dew",
+      "name": "Dew",
+      "hsl": "120 68% 94%",
       "scale": []
     }
   ],
@@ -108,7 +150,7 @@
         "baseColorId": "fern"
       },
       "primary-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "optical"
       },
       "secondary": {
         "baseColorId": "ferrum"
@@ -117,10 +159,10 @@
         "baseColorId": "linen"
       },
       "accent": {
-        "baseColorId": "fern"
+        "baseColorId": "mistral"
       },
       "accent-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "Midnight"
       },
       "destructive": {
         "baseColorId": "ferrum"
@@ -129,7 +171,7 @@
         "baseColorId": "linen"
       },
       "subtle-background": {
-        "baseColorId": "mistral"
+        "baseColorId": "celadon"
       },
       "subtle-foreground": {
         "baseColorId": "kalamata"
@@ -150,10 +192,10 @@
         "baseColorId": "linen"
       },
       "surface-default-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "Midnight"
       },
       "surface-muted": {
-        "baseColorId": "mistral"
+        "baseColorId": "linen"
       },
       "surface-muted-foreground": {
         "baseColorId": "kalamata"
@@ -192,10 +234,10 @@
         "baseColorId": "fern"
       },
       "nav-link-active": {
-        "baseColorId": "ferrum"
+        "baseColorId": "linen"
       },
       "nav-link-muted": {
-        "baseColorId": "bayleaf"
+        "baseColorId": "kalamata"
       },
       "footer-background": {
         "baseColorId": "kalamata"
@@ -255,7 +297,7 @@
         "baseColorId": "linen"
       },
       "cta-border": {
-        "baseColorId": "fern"
+        "baseColorId": "Midnight"
       },
       "cta-ring": {
         "baseColorId": "fern"
@@ -267,7 +309,7 @@
         "baseColorId": "mistral"
       },
       "testimonial-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "thorn"
       },
       "testimonial-emphasis": {
         "baseColorId": "fern"
@@ -324,10 +366,10 @@
         "baseColorId": "ferrum"
       },
       "code-accent": {
-        "baseColorId": "fern"
+        "baseColorId": "optical"
       },
       "quote-background": {
-        "baseColorId": "mistral"
+        "baseColorId": "linen"
       },
       "quote-foreground": {
         "baseColorId": "kalamata"
@@ -345,25 +387,25 @@
         "baseColorId": "kalamata"
       },
       "input-background": {
-        "baseColorId": "linen"
-      },
-      "input-foreground": {
-        "baseColorId": "kalamata"
-      },
-      "input-placeholder": {
-        "baseColorId": "bayleaf"
-      },
-      "input-border": {
-        "baseColorId": "ferrum"
-      },
-      "input-ring": {
-        "baseColorId": "fern"
-      },
-      "tag-background": {
         "baseColorId": "mistral"
       },
+      "input-foreground": {
+        "baseColorId": "Midnight"
+      },
+      "input-placeholder": {
+        "baseColorId": "Midnight"
+      },
+      "input-border": {
+        "baseColorId": "Midnight"
+      },
+      "input-ring": {
+        "baseColorId": "ferrum"
+      },
+      "tag-background": {
+        "baseColorId": "aventurine"
+      },
       "tag-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "linen"
       },
       "tag-border": {
         "baseColorId": "fern"
@@ -372,22 +414,22 @@
         "baseColorId": "fern"
       },
       "success": {
-        "baseColorId": "fern"
+        "baseColorId": "ferrum"
       },
       "success-foreground": {
         "baseColorId": "linen"
       },
       "success-muted": {
-        "baseColorId": "celadon"
+        "baseColorId": "kalamata"
       },
       "success-border": {
         "baseColorId": "fern"
       },
       "warning": {
-        "baseColorId": "creamsicle"
+        "baseColorId": "Midnight"
       },
       "warning-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "optical"
       },
       "warning-muted": {
         "baseColorId": "ferrum"
@@ -396,13 +438,13 @@
         "baseColorId": "ferrum"
       },
       "info": {
-        "baseColorId": "eucalyptus"
+        "baseColorId": "thorn"
       },
       "info-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "linen"
       },
       "info-muted": {
-        "baseColorId": "bayleaf"
+        "baseColorId": "aventurine"
       },
       "info-border": {
         "baseColorId": "eucalyptus"
@@ -411,7 +453,7 @@
         "baseColorId": "ferrum"
       },
       "error-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "optical"
       },
       "error-muted": {
         "baseColorId": "creamsicle"
@@ -420,16 +462,16 @@
         "baseColorId": "ferrum"
       },
       "focus-ring": {
-        "baseColorId": "fern"
-      },
-      "active-ring": {
         "baseColorId": "ferrum"
       },
+      "active-ring": {
+        "baseColorId": "Midnight"
+      },
       "disabled-background": {
-        "baseColorId": "mistral"
+        "baseColorId": "optical"
       },
       "disabled-foreground": {
-        "baseColorId": "bayleaf"
+        "baseColorId": "mistral"
       },
       "tooltip-background": {
         "baseColorId": "kalamata"
@@ -441,37 +483,37 @@
         "baseColorId": "ferrum"
       },
       "chart-1": {
-        "baseColorId": "ferrum"
-      },
-      "chart-2": {
-        "baseColorId": "fern"
-      },
-      "chart-3": {
         "baseColorId": "eucalyptus"
       },
-      "chart-4": {
-        "baseColorId": "creamsicle"
+      "chart-2": {
+        "baseColorId": "ferrum"
       },
-      "chart-5": {
-        "baseColorId": "celadon"
-      },
-      "chart-6": {
-        "baseColorId": "bayleaf"
-      },
-      "chart-7": {
-        "baseColorId": "kalamata"
-      },
-      "chart-8": {
+      "chart-3": {
         "baseColorId": "mistral"
       },
-      "chart-accent": {
+      "chart-4": {
+        "baseColorId": "kalamata"
+      },
+      "chart-5": {
+        "baseColorId": "creamsicle"
+      },
+      "chart-6": {
         "baseColorId": "fern"
       },
+      "chart-7": {
+        "baseColorId": "peachfuzz"
+      },
+      "chart-8": {
+        "baseColorId": "celadon"
+      },
+      "chart-accent": {
+        "baseColorId": "kalamata"
+      },
       "chart-grid": {
-        "baseColorId": "bayleaf"
+        "baseColorId": "thorn"
       },
       "chart-axis": {
-        "baseColorId": "kalamata"
+        "baseColorId": "thorn"
       },
       "avatar-background": {
         "baseColorId": "fern"
@@ -483,10 +525,10 @@
         "baseColorId": "ferrum"
       },
       "modal-background": {
-        "baseColorId": "linen"
+        "baseColorId": "thorn"
       },
       "modal-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "linen"
       },
       "modal-overlay": {
         "baseColorId": "kalamata"
@@ -510,34 +552,34 @@
         "baseColorId": "kalamata"
       },
       "terminal-foreground": {
-        "baseColorId": "eucalyptus"
+        "baseColorId": "mistral"
       },
       "terminal-cursor": {
         "baseColorId": "creamsicle"
       },
       "terminal-prompt": {
-        "baseColorId": "fern"
+        "baseColorId": "linen"
       },
       "brand-primary": {
-        "baseColorId": "fern"
+        "baseColorId": "aventurine"
       },
       "brand-secondary": {
         "baseColorId": "ferrum"
       },
       "brand-tertiary": {
-        "baseColorId": "eucalyptus"
+        "baseColorId": "creamsicle"
       },
       "link": {
-        "baseColorId": "fern"
+        "baseColorId": "linen"
       },
       "link-hover": {
         "baseColorId": "ferrum"
       },
       "link-muted": {
-        "baseColorId": "bayleaf"
+        "baseColorId": "aventurine"
       },
       "link-visited": {
-        "baseColorId": "eucalyptus"
+        "baseColorId": "kalamata"
       },
       "shadow-color": {
         "baseColorId": "kalamata"
@@ -566,118 +608,118 @@
     },
     "dark": {
       "background": {
-        "baseColorId": "kalamata"
+        "baseColorId": "thorn"
       },
       "foreground": {
         "baseColorId": "linen"
       },
       "muted": {
-        "baseColorId": "aventurine"
+        "baseColorId": "fern"
       },
       "muted-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "optical"
       },
       "popover": {
-        "baseColorId": "bayleaf"
+        "baseColorId": "creamsicle"
       },
       "popover-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "Midnight"
       },
       "card": {
-        "baseColorId": "aventurine"
+        "baseColorId": "thorn"
       },
       "card-foreground": {
         "baseColorId": "linen"
       },
       "border": {
-        "baseColorId": "fern"
+        "baseColorId": "ferrum"
       },
       "input": {
-        "baseColorId": "fern"
-      },
-      "ring": {
-        "baseColorId": "creamsicle"
-      },
-      "primary": {
-        "baseColorId": "creamsicle"
-      },
-      "primary-foreground": {
-        "baseColorId": "kalamata"
-      },
-      "secondary": {
         "baseColorId": "eucalyptus"
       },
-      "secondary-foreground": {
-        "baseColorId": "kalamata"
-      },
-      "accent": {
+      "ring": {
         "baseColorId": "ferrum"
       },
-      "accent-foreground": {
+      "primary": {
+        "baseColorId": "thorn"
+      },
+      "primary-foreground": {
         "baseColorId": "linen"
       },
-      "destructive": {
-        "baseColorId": "ferrum"
-      },
-      "destructive-foreground": {
-        "baseColorId": "linen"
-      },
-      "subtle-background": {
-        "baseColorId": "aventurine"
-      },
-      "subtle-foreground": {
-        "baseColorId": "linen"
-      },
-      "body-background": {
-        "baseColorId": "kalamata"
-      },
-      "section-background": {
-        "baseColorId": "aventurine"
-      },
-      "page-border": {
-        "baseColorId": "fern"
-      },
-      "page-ring": {
+      "secondary": {
         "baseColorId": "creamsicle"
       },
+      "secondary-foreground": {
+        "baseColorId": "Midnight"
+      },
+      "accent": {
+        "baseColorId": "creamsicle"
+      },
+      "accent-foreground": {
+        "baseColorId": "Midnight"
+      },
+      "destructive": {
+        "baseColorId": "scarlet"
+      },
+      "destructive-foreground": {
+        "baseColorId": "Midnight"
+      },
+      "subtle-background": {
+        "baseColorId": "bayleaf"
+      },
+      "subtle-foreground": {
+        "baseColorId": "optical"
+      },
+      "body-background": {
+        "baseColorId": "eucalyptus"
+      },
+      "section-background": {
+        "baseColorId": "kalamata"
+      },
+      "page-border": {
+        "baseColorId": "creamsicle"
+      },
+      "page-ring": {
+        "baseColorId": "linen"
+      },
       "surface-default": {
-        "baseColorId": "aventurine"
+        "baseColorId": "thorn"
       },
       "surface-default-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "optical"
       },
       "surface-muted": {
-        "baseColorId": "bayleaf"
+        "baseColorId": "aventurine"
       },
       "surface-muted-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "Midnight"
       },
       "surface-contrast": {
-        "baseColorId": "ferrum"
+        "baseColorId": "optical"
       },
       "surface-contrast-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "optical"
       },
       "surface-overlay": {
-        "baseColorId": "bayleaf"
+        "baseColorId": "dew"
       },
       "surface-overlay-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "Midnight"
       },
       "header-background": {
-        "baseColorId": "aventurine"
+        "baseColorId": "thorn"
       },
       "header-foreground": {
         "baseColorId": "linen"
       },
       "header-border": {
-        "baseColorId": "fern"
+        "baseColorId": "creamsicle"
       },
       "header-active": {
-        "baseColorId": "fern"
+        "baseColorId": "creamsicle"
       },
       "header-active-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "fern"
       },
       "nav-link": {
         "baseColorId": "linen"
@@ -686,61 +728,61 @@
         "baseColorId": "creamsicle"
       },
       "nav-link-active": {
-        "baseColorId": "fern"
+        "baseColorId": "linen"
       },
       "nav-link-muted": {
         "baseColorId": "eucalyptus"
       },
       "footer-background": {
-        "baseColorId": "kalamata"
+        "baseColorId": "thorn"
       },
       "footer-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "optical"
       },
       "footer-border": {
-        "baseColorId": "fern"
+        "baseColorId": "ferrum"
       },
       "footer-accent": {
         "baseColorId": "creamsicle"
       },
       "footer-accent-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "Midnight"
       },
       "breadcrumb-background": {
-        "baseColorId": "aventurine"
+        "baseColorId": "eucalyptus"
       },
       "breadcrumb-foreground": {
         "baseColorId": "linen"
       },
       "breadcrumb-active": {
-        "baseColorId": "creamsicle"
+        "baseColorId": "bayleaf"
       },
       "breadcrumb-separator": {
-        "baseColorId": "fern"
+        "baseColorId": "thorn"
       },
       "sidebar-background": {
-        "baseColorId": "aventurine"
+        "baseColorId": "thorn"
       },
       "sidebar-foreground": {
         "baseColorId": "linen"
       },
       "sidebar-active": {
-        "baseColorId": "creamsicle"
+        "baseColorId": "ferrum"
       },
       "sidebar-border": {
-        "baseColorId": "fern"
+        "baseColorId": "creamsicle"
       },
       "hero-background": {
-        "baseColorId": "bayleaf"
+        "baseColorId": "aventurine"
       },
       "hero-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "thorn"
       },
       "hero-accent": {
-        "baseColorId": "fern"
+        "baseColorId": "linen"
       },
       "hero-accent-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "thorn"
       },
       "cta-background": {
         "baseColorId": "ferrum"
@@ -749,310 +791,310 @@
         "baseColorId": "linen"
       },
       "cta-border": {
-        "baseColorId": "fern"
+        "baseColorId": "linen"
       },
       "cta-ring": {
-        "baseColorId": "creamsicle"
+        "baseColorId": "fern"
       },
       "cta-hover": {
         "baseColorId": "creamsicle"
       },
       "testimonial-background": {
-        "baseColorId": "aventurine"
+        "baseColorId": "mistral"
       },
       "testimonial-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "thorn"
       },
       "testimonial-emphasis": {
-        "baseColorId": "creamsicle"
+        "baseColorId": "ferrum"
       },
       "metrics-background": {
         "baseColorId": "aventurine"
       },
       "metrics-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "Midnight"
       },
       "metric-positive": {
-        "baseColorId": "fern"
+        "baseColorId": "Midnight"
       },
       "metric-negative": {
-        "baseColorId": "ferrum"
-      },
-      "timeline-background": {
-        "baseColorId": "aventurine"
-      },
-      "timeline-foreground": {
-        "baseColorId": "linen"
-      },
-      "timeline-marker": {
         "baseColorId": "creamsicle"
       },
+      "timeline-background": {
+        "baseColorId": "celadon"
+      },
+      "timeline-foreground": {
+        "baseColorId": "thorn"
+      },
+      "timeline-marker": {
+        "baseColorId": "ferrum"
+      },
       "timeline-connector": {
-        "baseColorId": "fern"
+        "baseColorId": "linen"
       },
       "table-header": {
-        "baseColorId": "fern"
+        "baseColorId": "thorn"
       },
       "table-header-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "linen"
       },
       "table-row": {
-        "baseColorId": "aventurine"
+        "baseColorId": "linen"
       },
       "table-row-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "thorn"
       },
       "table-row-alt": {
-        "baseColorId": "bayleaf"
+        "baseColorId": "mistral"
       },
       "table-row-alt-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "thorn"
       },
       "code-background": {
         "baseColorId": "kalamata"
       },
       "code-foreground": {
-        "baseColorId": "creamsicle"
+        "baseColorId": "optical"
       },
       "code-border": {
-        "baseColorId": "fern"
+        "baseColorId": "creamsicle"
       },
       "code-accent": {
-        "baseColorId": "creamsicle"
-      },
-      "quote-background": {
-        "baseColorId": "aventurine"
-      },
-      "quote-foreground": {
         "baseColorId": "linen"
       },
+      "quote-background": {
+        "baseColorId": "linen"
+      },
+      "quote-foreground": {
+        "baseColorId": "Midnight"
+      },
       "quote-border": {
-        "baseColorId": "fern"
+        "baseColorId": "creamsicle"
       },
       "quote-accent": {
-        "baseColorId": "creamsicle"
+        "baseColorId": "aventurine"
       },
       "form-background": {
         "baseColorId": "aventurine"
       },
       "form-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "optical"
       },
       "input-background": {
-        "baseColorId": "kalamata"
+        "baseColorId": "mistral"
       },
       "input-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "Midnight"
       },
       "input-placeholder": {
-        "baseColorId": "eucalyptus"
+        "baseColorId": "optical"
       },
       "input-border": {
-        "baseColorId": "fern"
+        "baseColorId": "Midnight"
       },
       "input-ring": {
-        "baseColorId": "creamsicle"
+        "baseColorId": "optical"
       },
       "tag-background": {
-        "baseColorId": "bayleaf"
+        "baseColorId": "aventurine"
       },
       "tag-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "Midnight"
       },
       "tag-border": {
-        "baseColorId": "fern"
+        "baseColorId": "ferrum"
       },
       "tag-active": {
-        "baseColorId": "creamsicle"
+        "baseColorId": "ferrum"
       },
       "success": {
-        "baseColorId": "fern"
+        "baseColorId": "creamsicle"
       },
       "success-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "Midnight"
       },
       "success-muted": {
-        "baseColorId": "bayleaf"
+        "baseColorId": "aventurine"
       },
       "success-border": {
-        "baseColorId": "fern"
+        "baseColorId": "ferrum"
       },
       "warning": {
         "baseColorId": "creamsicle"
       },
       "warning-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "Midnight"
       },
       "warning-muted": {
-        "baseColorId": "ferrum"
+        "baseColorId": "celadon"
       },
       "warning-border": {
         "baseColorId": "ferrum"
       },
       "info": {
-        "baseColorId": "eucalyptus"
+        "baseColorId": "creamsicle"
       },
       "info-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "Midnight"
       },
       "info-muted": {
-        "baseColorId": "bayleaf"
-      },
-      "info-border": {
-        "baseColorId": "eucalyptus"
-      },
-      "error": {
-        "baseColorId": "ferrum"
-      },
-      "error-foreground": {
-        "baseColorId": "linen"
-      },
-      "error-muted": {
-        "baseColorId": "creamsicle"
-      },
-      "error-border": {
-        "baseColorId": "ferrum"
-      },
-      "focus-ring": {
-        "baseColorId": "creamsicle"
-      },
-      "active-ring": {
-        "baseColorId": "fern"
-      },
-      "disabled-background": {
         "baseColorId": "aventurine"
       },
-      "disabled-foreground": {
-        "baseColorId": "eucalyptus"
-      },
-      "tooltip-background": {
-        "baseColorId": "kalamata"
-      },
-      "tooltip-foreground": {
+      "info-border": {
         "baseColorId": "linen"
       },
-      "tooltip-border": {
-        "baseColorId": "fern"
-      },
-      "chart-1": {
+      "error": {
         "baseColorId": "creamsicle"
       },
-      "chart-2": {
-        "baseColorId": "fern"
+      "error-foreground": {
+        "baseColorId": "Midnight"
       },
-      "chart-3": {
-        "baseColorId": "eucalyptus"
-      },
-      "chart-4": {
-        "baseColorId": "ferrum"
-      },
-      "chart-5": {
+      "error-muted": {
         "baseColorId": "celadon"
       },
-      "chart-6": {
-        "baseColorId": "bayleaf"
-      },
-      "chart-7": {
-        "baseColorId": "linen"
-      },
-      "chart-8": {
-        "baseColorId": "mistral"
-      },
-      "chart-accent": {
+      "error-border": {
         "baseColorId": "creamsicle"
       },
-      "chart-grid": {
-        "baseColorId": "bayleaf"
+      "focus-ring": {
+        "baseColorId": "kalamata"
       },
-      "chart-axis": {
+      "active-ring": {
+        "baseColorId": "dew"
+      },
+      "disabled-background": {
+        "baseColorId": "dew"
+      },
+      "disabled-foreground": {
+        "baseColorId": "kalamata"
+      },
+      "tooltip-background": {
         "baseColorId": "linen"
       },
+      "tooltip-foreground": {
+        "baseColorId": "Midnight"
+      },
+      "tooltip-border": {
+        "baseColorId": "ferrum"
+      },
+      "chart-1": {
+        "baseColorId": "eucalyptus"
+      },
+      "chart-2": {
+        "baseColorId": "ferrum"
+      },
+      "chart-3": {
+        "baseColorId": "mistral"
+      },
+      "chart-4": {
+        "baseColorId": "linen"
+      },
+      "chart-5": {
+        "baseColorId": "creamsicle"
+      },
+      "chart-6": {
+        "baseColorId": "thorn"
+      },
+      "chart-7": {
+        "baseColorId": "peachfuzz"
+      },
+      "chart-8": {
+        "baseColorId": "celadon"
+      },
+      "chart-accent": {
+        "baseColorId": "linen"
+      },
+      "chart-grid": {
+        "baseColorId": "thorn"
+      },
+      "chart-axis": {
+        "baseColorId": "thorn"
+      },
       "avatar-background": {
-        "baseColorId": "fern"
+        "baseColorId": "ferrum"
       },
       "avatar-foreground": {
-        "baseColorId": "kalamata"
+        "baseColorId": "linen"
       },
       "avatar-ring": {
         "baseColorId": "creamsicle"
       },
       "modal-background": {
-        "baseColorId": "aventurine"
+        "baseColorId": "peachfuzz"
       },
       "modal-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "Midnight"
       },
       "modal-overlay": {
-        "baseColorId": "kalamata"
+        "baseColorId": "ferrum"
       },
       "modal-border": {
-        "baseColorId": "fern"
+        "baseColorId": "ferrum"
       },
       "video-overlay": {
-        "baseColorId": "kalamata"
+        "baseColorId": "linen"
       },
       "video-controls": {
         "baseColorId": "linen"
       },
       "gallery-background": {
-        "baseColorId": "aventurine"
+        "baseColorId": "bayleaf"
       },
       "gallery-foreground": {
-        "baseColorId": "linen"
+        "baseColorId": "bayleaf"
       },
       "terminal-background": {
         "baseColorId": "kalamata"
       },
       "terminal-foreground": {
-        "baseColorId": "eucalyptus"
-      },
-      "terminal-cursor": {
-        "baseColorId": "creamsicle"
-      },
-      "terminal-prompt": {
-        "baseColorId": "fern"
-      },
-      "brand-primary": {
-        "baseColorId": "fern"
-      },
-      "brand-secondary": {
-        "baseColorId": "ferrum"
-      },
-      "brand-tertiary": {
-        "baseColorId": "eucalyptus"
-      },
-      "link": {
-        "baseColorId": "creamsicle"
-      },
-      "link-hover": {
-        "baseColorId": "fern"
-      },
-      "link-muted": {
-        "baseColorId": "eucalyptus"
-      },
-      "link-visited": {
-        "baseColorId": "celadon"
-      },
-      "shadow-color": {
-        "baseColorId": "kalamata"
-      },
-      "divider": {
-        "baseColorId": "fern"
-      },
-      "scrim": {
-        "baseColorId": "kalamata"
-      },
-      "selection": {
-        "baseColorId": "creamsicle"
-      },
-      "background-inverse": {
         "baseColorId": "linen"
       },
+      "terminal-cursor": {
+        "baseColorId": "peachfuzz"
+      },
+      "terminal-prompt": {
+        "baseColorId": "creamsicle"
+      },
+      "brand-primary": {
+        "baseColorId": "eucalyptus"
+      },
+      "brand-secondary": {
+        "baseColorId": "creamsicle"
+      },
+      "brand-tertiary": {
+        "baseColorId": "ferrum"
+      },
+      "link": {
+        "baseColorId": "linen"
+      },
+      "link-hover": {
+        "baseColorId": "aventurine"
+      },
+      "link-muted": {
+        "baseColorId": "mistral"
+      },
+      "link-visited": {
+        "baseColorId": "creamsicle"
+      },
+      "shadow-color": {
+        "baseColorId": "linen"
+      },
+      "divider": {
+        "baseColorId": "ferrum"
+      },
+      "scrim": {
+        "baseColorId": "Midnight"
+      },
+      "selection": {
+        "baseColorId": "aventurine"
+      },
+      "background-inverse": {
+        "baseColorId": "bayleaf"
+      },
       "foreground-inverse": {
-        "baseColorId": "kalamata"
+        "baseColorId": "linen"
       },
       "overlay-backdrop": {
-        "baseColorId": "kalamata"
+        "baseColorId": "dew"
       },
       "overlay-foreground": {
         "baseColorId": "linen"

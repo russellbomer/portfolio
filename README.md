@@ -125,7 +125,7 @@ For current portfolio functionality minimal env configuration is required. Futur
 
 ### Theme Workflow
 
-1. Edit `portfolio-theme-alpha.json` or create a new theme JSON.
+1. Edit `portfolio-theme-final.json` or create a new theme JSON.
 2. The `AppThemeProvider` ingests tokens and maps HSL triplets to CSS variables (`--background`, `--primary`, etc.).
 3. Styleguide pages visualize scale, contrast, and allow experimentation.
 4. Components consume tokens via `hsl(var(--token))` pattern.

@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+/* eslint-env node */
+
 // Contrast audit script for portfolio theme
 // Computes WCAG contrast ratios for key semantic pairs.
 import fs from "fs";
@@ -37,7 +39,7 @@ function getColorById(theme, id) {
   return theme.palette.find((c) => c.id === id);
 }
 
-const themePath = path.resolve(process.cwd(), "portfolio-theme-alpha.json");
+const themePath = path.resolve(process.cwd(), "portfolio-theme-final.json");
 let raw, theme;
 try {
   raw = fs.readFileSync(themePath, "utf8");
