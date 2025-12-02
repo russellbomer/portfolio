@@ -230,7 +230,7 @@ A craftsman-themed personal portfolio platform built with Next.js 15, featuring 
     - Commit all deployment configs
     - Push to GitHub: `git push -u origin deploy/terminal-live`
     - Dependencies: A.3, A.5, A.6, A.7, A.8, A.9
-    - Status: [ ]
+    - Status: [x] ✅ Completed 2025-12-02
 
 13. **A.11 — Deploy and test Live PTY on VPS**
 

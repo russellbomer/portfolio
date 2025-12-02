@@ -373,51 +373,46 @@ export default function TerminalDemo() {
   };
 
   return (
-    <div className="w-full rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden font-mono text-sm relative">
+    <div className="w-full h-full flex flex-col font-mono text-sm relative">
       {!FEATURE_ENABLED && (
         <div className="absolute inset-x-0 top-0 z-10 bg-yellow-100 text-yellow-900 text-xs px-3 py-1 border-b">
           Live terminal demo is disabled. Coming soon.
         </div>
       )}
-      <div className="p-4 pt-6">
+      <div className="flex-1 flex flex-col min-h-0">
         {wsError && (
-          <div className="mb-2 rounded bg-red-100 text-red-800 text-xs px-3 py-2 border border-red-300">
+          <div className="mb-2 rounded bg-red-100 text-red-800 text-xs px-3 py-2 border border-red-300 shrink-0">
             <strong>Terminal connection error:</strong> {wsError}
             <br />
             <span className="font-mono">{WS_URL}</span>
           </div>
         )}
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 rounded-full bg-destructive/80"></div>
-            <div className="w-3 h-3 rounded-full bg-accent/70"></div>
-            <div className="w-3 h-3 rounded-full bg-primary/70"></div>
-          </div>
-          <button
-            onClick={copyToClipboard}
-            className="text-muted-foreground hover:text-foreground transition-colors"
-            aria-label="Copy to clipboard"
-          >
-            {copied ? (
-              <Check className="h-5 w-5" />
-            ) : (
-              <Copy className="h-5 w-5" />
-            )}
-          </button>
-        </div>
-        <div className="rounded border bg-background p-2 min-h-48">
-          <div ref={containerRef} />
-          <div className="mt-2 text-[11px] text-muted-foreground">
-            Mode:{" "}
-            {FEATURE_ENABLED
-              ? isLive
-                ? "Live"
-                : "Demo (fallback)"
-              : "Demo (feature off)"}
-            {FEATURE_ENABLED && <> • WS: {WS_URL}</>}
+        <div className="flex-1 min-h-0 flex flex-col">
+          <div ref={containerRef} className="flex-1 min-h-0" />
+          <div className="mt-2 text-[11px] text-white/70 shrink-0 flex items-center justify-between">
+            <span>
+              Mode:{" "}
+              {FEATURE_ENABLED
+                ? isLive
+                  ? "Live"
+                  : "Demo (fallback)"
+                : "Demo (feature off)"}
+              {FEATURE_ENABLED && <> • WS: {WS_URL}</>}
+            </span>
+            <button
+              onClick={copyToClipboard}
+              className="text-white/70 hover:text-white transition-colors"
+              aria-label="Copy to clipboard"
+            >
+              {copied ? (
+                <Check className="h-4 w-4" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+            </button>
           </div>
           {!loaded && (
-            <div className="space-y-2">
+            <div className="space-y-2 shrink-0">
               {script.map((line, i) => (
                 <div key={i}>
                   <span className="text-primary">$</span> {line}
@@ -426,7 +421,7 @@ export default function TerminalDemo() {
             </div>
           )}
           {loaded && (
-            <div className="mt-2 text-xs text-muted-foreground">
+            <div className="mt-2 text-xs text-white/70 shrink-0">
               Inactive: {Math.floor(session.inactiveMs / 1000)}s / Auto reset at{" "}
               {new Date(session.expiresAt).toLocaleTimeString()}
             </div>
