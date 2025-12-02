@@ -1,0 +1,41 @@
+[Unit]
+Description=Portfolio Terminal WebSocket Server
+Documentation=https://github.com/russellbomer/portfolio
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/portfolio
+
+# Environment variables
+Environment=NODE_ENV=production
+Environment=TERMINAL_PORT=4001
+Environment=TERMINAL_HOST=127.0.0.1
+Environment=TERMINAL_DEBUG=false
+
+# Start the terminal server
+ExecStart=/usr/bin/node server/terminal/server.js
+
+# Restart policy
+Restart=always
+RestartSec=5
+StartLimitInterval=60
+StartLimitBurst=3
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=terminal-server
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/www/portfolio
+
+[Install]
+WantedBy=multi-user.target
