@@ -16,8 +16,8 @@ Environment=TERMINAL_PORT=4001
 Environment=TERMINAL_HOST=127.0.0.1
 Environment=TERMINAL_DEBUG=false
 
-# Start the terminal server
-ExecStart=/usr/bin/node server/terminal/server.js
+# Start the terminal server (use npx tsx for TypeScript)
+ExecStart=/usr/bin/npx tsx server/terminal/server.ts
 
 # Restart policy
 Restart=always
