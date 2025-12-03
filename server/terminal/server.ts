@@ -60,17 +60,6 @@ wss.on("connection", (ws: WebSocket, req) => {
     spawnCmd = QUARRY_PATH;
     spawnArgs = []; // quarry starts in interactive mode by default
     log(`[pty] quarry mode enabled, spawning: ${spawnCmd}`);
-  } else if (AUTO_RUN_CMD) {
-    // Shell mode with auto-run: spawn bash -c with clear + command
-    // This hides the initial prompt and runs the command cleanly
-    spawnCmd = process.platform === "win32" ? "powershell.exe" : "bash";
-    spawnArgs =
-      process.platform === "win32"
-        ? ["-Command", `cls; ${AUTO_RUN_CMD.trim()}`]
-        : ["-c", `clear && ${AUTO_RUN_CMD.trim()}`];
-    log(
-      `[pty] shell with auto-run, spawning: ${spawnCmd} ${spawnArgs.join(" ")}`
-    );
   } else {
     // Fallback to interactive shell (for development/testing)
     spawnCmd =
@@ -101,15 +90,39 @@ wss.on("connection", (ws: WebSocket, req) => {
     log(`[pty] spawned: ${spawnCmd}`);
   } catch (err) {
     console.error(`[pty] failed to spawn: ${spawnCmd}`, err);
-    ws.send(
-      `\u001b[1;31m[server]\u001b[0m Failed to spawn: ${spawnCmd}\r\n`
-    );
+    ws.send(`\u001b[1;31m[server]\u001b[0m Failed to spawn: ${spawnCmd}\r\n`);
     ws.close();
     return;
   }
 
+  // For auto-run mode: buffer output until we see the quarry banner, then send
+  let buffering = !!AUTO_RUN_CMD;
+  let outputBuffer = "";
+  const QUARRY_BANNER_MARKER = "██████"; // Part of the ASCII art banner
+
+  // Auto-run command after a brief delay to let shell initialize
+  if (AUTO_RUN_CMD) {
+    setTimeout(() => {
+      // Send clear command first, then the auto-run command
+      proc.write("clear && " + AUTO_RUN_CMD.trim() + "\n");
+    }, 50);
+  }
+
   const onData = (data: string) => {
-    if (ws.readyState === ws.OPEN) ws.send(data);
+    if (buffering) {
+      outputBuffer += data;
+      // Check if we've received the quarry banner
+      if (outputBuffer.includes(QUARRY_BANNER_MARKER)) {
+        buffering = false;
+        // Find where the banner starts and only send from there
+        const bannerStart = outputBuffer.indexOf("\x1b["); // First ANSI escape (clear screen)
+        const cleanOutput = bannerStart >= 0 ? outputBuffer.slice(bannerStart) : outputBuffer;
+        if (ws.readyState === ws.OPEN) ws.send(cleanOutput);
+        outputBuffer = "";
+      }
+    } else {
+      if (ws.readyState === ws.OPEN) ws.send(data);
+    }
     if (data && typeof data === "string" && data.trim()) {
       log(`[pty] data: ${data.slice(0, 80).replace(/\r|\n/g, " ")}`);
     }
