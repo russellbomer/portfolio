@@ -16,6 +16,9 @@ Environment=TERMINAL_PORT=4001
 Environment=TERMINAL_HOST=127.0.0.1
 Environment=TERMINAL_DEBUG=false
 Environment=HOME=/home/deploy
+Environment=TERMINAL_QUARRY_MODE=true
+Environment=TERMINAL_QUARRY_PATH=/usr/local/bin/quarry
+Environment=TERMINAL_CWD=/tmp
 
 # Start the terminal server (use npx tsx for TypeScript)
 ExecStart=/usr/bin/npx tsx server/terminal/server.ts

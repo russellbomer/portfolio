@@ -19,11 +19,10 @@ try {
 
 const PORT = parseInt(process.env.TERMINAL_PORT || "4000", 10);
 const HOST = process.env.TERMINAL_HOST || "127.0.0.1";
-const DEFAULT_SHELL =
-  process.env.TERMINAL_SHELL ||
-  (process.platform === "win32"
-    ? "powershell.exe"
-    : process.env.SHELL || "bash");
+
+// Quarry-only mode: spawn quarry interactive shell instead of bash
+const QUARRY_MODE = process.env.TERMINAL_QUARRY_MODE !== "false"; // default: true
+const QUARRY_PATH = process.env.TERMINAL_QUARRY_PATH || "quarry"; // path to quarry binary
 
 const server = http.createServer((req, res) => {
   if (req.url === "/health") {
@@ -51,15 +50,29 @@ wss.on("connection", (ws: WebSocket, req) => {
   const rows = 24;
   const ptyEnv = { ...process.env };
 
-  const shell = DEFAULT_SHELL;
-  log(`[pty] resolved shell: ${shell}`);
+  // Determine what to spawn: quarry interactive mode or a shell
+  let spawnCmd: string;
+  let spawnArgs: string[];
+  
+  if (QUARRY_MODE) {
+    // Spawn quarry in interactive mode
+    spawnCmd = QUARRY_PATH;
+    spawnArgs = []; // quarry starts in interactive mode by default
+    log(`[pty] quarry mode enabled, spawning: ${spawnCmd}`);
+  } else {
+    // Fallback to shell (for development/testing)
+    spawnCmd = process.platform === "win32" ? "powershell.exe" : (process.env.SHELL || "bash");
+    spawnArgs = [];
+    log(`[pty] shell mode, spawning: ${spawnCmd}`);
+  }
+
   let proc;
   try {
-    proc = pty.spawn(shell, [], {
+    proc = pty.spawn(spawnCmd, spawnArgs, {
       name: "xterm-color",
       cols,
       rows,
-      cwd: process.cwd(),
+      cwd: process.env.TERMINAL_CWD || process.cwd(),
       env: ptyEnv,
     });
     if (!proc) {
@@ -70,17 +83,22 @@ wss.on("connection", (ws: WebSocket, req) => {
       ws.close();
       return;
     }
-    log(`[pty] spawned shell: ${shell}`);
+    log(`[pty] spawned: ${spawnCmd}`);
   } catch (err) {
-    console.error(`[pty] failed to spawn shell: ${shell}`, err);
+    console.error(`[pty] failed to spawn: ${spawnCmd}`, err);
     ws.send(
-      `\u001b[1;31m[server]\u001b[0m Failed to spawn shell: ${shell}\r\n`
+      `\u001b[1;31m[server]\u001b[0m Failed to spawn ${QUARRY_MODE ? 'quarry' : 'shell'}: ${spawnCmd}\r\n`
     );
     ws.close();
     return;
   }
 
-  ws.send("\u001b[1;32m[server]\u001b[0m PTY started\r\n");
+  // Send welcome message
+  if (QUARRY_MODE) {
+    ws.send("\u001b[1;32m[quarry]\u001b[0m Interactive session started. Type 'help' for commands.\r\n");
+  } else {
+    ws.send("\u001b[1;32m[server]\u001b[0m PTY started\r\n");
+  }
 
   const onData = (data: string) => {
     if (ws.readyState === ws.OPEN) ws.send(data);
