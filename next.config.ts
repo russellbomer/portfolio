@@ -13,6 +13,21 @@ const nextConfig: NextConfig = {
     // Linting still runs in editor and via `npm run lint`
     ignoreDuringBuilds: true,
   },
+  async rewrites() {
+    return [
+      {
+        // When accessing quarry subdomain root, serve terminal demo
+        source: "/",
+        destination: "/demos/terminal",
+        has: [
+          {
+            type: "host",
+            value: "quarry.russellbomer.com",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
