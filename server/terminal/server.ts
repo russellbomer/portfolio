@@ -60,8 +60,19 @@ wss.on("connection", (ws: WebSocket, req) => {
     spawnCmd = QUARRY_PATH;
     spawnArgs = []; // quarry starts in interactive mode by default
     log(`[pty] quarry mode enabled, spawning: ${spawnCmd}`);
+  } else if (AUTO_RUN_CMD) {
+    // Shell mode with auto-run: spawn bash -c with clear + command
+    // This hides the initial prompt and runs the command cleanly
+    spawnCmd = process.platform === "win32" ? "powershell.exe" : "bash";
+    spawnArgs =
+      process.platform === "win32"
+        ? ["-Command", `cls; ${AUTO_RUN_CMD.trim()}`]
+        : ["-c", `clear && ${AUTO_RUN_CMD.trim()}`];
+    log(
+      `[pty] shell with auto-run, spawning: ${spawnCmd} ${spawnArgs.join(" ")}`
+    );
   } else {
-    // Fallback to shell (for development/testing)
+    // Fallback to interactive shell (for development/testing)
     spawnCmd =
       process.platform === "win32"
         ? "powershell.exe"
@@ -91,34 +102,14 @@ wss.on("connection", (ws: WebSocket, req) => {
   } catch (err) {
     console.error(`[pty] failed to spawn: ${spawnCmd}`, err);
     ws.send(
-      `\u001b[1;31m[server]\u001b[0m Failed to spawn ${
-        QUARRY_MODE ? "quarry" : "shell"
-      }: ${spawnCmd}\r\n`
+      `\u001b[1;31m[server]\u001b[0m Failed to spawn: ${spawnCmd}\r\n`
     );
     ws.close();
     return;
   }
 
-  // Send welcome message
-  if (QUARRY_MODE) {
-    ws.send(
-      "\u001b[1;32m[quarry]\u001b[0m Interactive session started. Type 'help' for commands.\r\n"
-    );
-  } else {
-    ws.send("\u001b[1;32m[server]\u001b[0m PTY started\r\n");
-    
-    // Auto-run command if configured (for shell mode)
-    if (AUTO_RUN_CMD) {
-      setTimeout(() => {
-        log(`[pty] auto-running command: ${AUTO_RUN_CMD.trim()}`);
-        proc.write(AUTO_RUN_CMD);
-      }, 500); // small delay to let shell initialize
-    }
-  }
-
   const onData = (data: string) => {
     if (ws.readyState === ws.OPEN) ws.send(data);
-    // Log a snippet of PTY output for debugging
     if (data && typeof data === "string" && data.trim()) {
       log(`[pty] data: ${data.slice(0, 80).replace(/\r|\n/g, " ")}`);
     }
@@ -156,22 +147,10 @@ wss.on("connection", (ws: WebSocket, req) => {
 
   proc.onExit(({ exitCode, signal }: { exitCode: number; signal: number }) => {
     log(`[pty] process exited with code ${exitCode}, signal ${signal}`);
-    try {
-      ws.send(
-        `\r\n\u001b[1;31m[server]\u001b[0m PTY exited (code ${exitCode}, signal ${signal})\r\n`
-      );
-    } catch {}
     ws.close();
   });
   proc.on("error", (err: any) => {
     console.error("[pty] error:", err);
-    try {
-      ws.send(
-        `\r\n\u001b[1;31m[server]\u001b[0m PTY error: ${
-          err?.message || err
-        }\r\n`
-      );
-    } catch {}
     ws.close();
   });
 

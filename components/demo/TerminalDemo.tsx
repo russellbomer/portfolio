@@ -154,9 +154,7 @@ export default function TerminalDemo() {
         term.open(containerRef.current!);
         const fitAddon = new FitAddon();
         term.loadAddon(fitAddon);
-        term.writeln("Portfolio Terminal Demo\r\n");
-        term.writeln(`Session: ${session.sessionId}`);
-        term.writeln("Initializing…\r\n");
+        // Clean startup - no messages before quarry banner
         // Initial fit after a tick so container is laid out
         setTimeout(() => {
           try {
@@ -268,9 +266,6 @@ export default function TerminalDemo() {
             ws.onopen = () => {
               liveRef.current = true;
               setIsLive(true);
-              term.writeln(
-                "\x1b[1;32m[client]\x1b[0m connected to live terminal\r\n"
-              );
               attachLiveHandlers(ws);
             };
             ws.onmessage = (ev) => {
