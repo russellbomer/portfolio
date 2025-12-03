@@ -6,8 +6,8 @@ Requires=docker.service
 
 [Service]
 Type=simple
-User=www-data
-Group=www-data
+User=deploy
+Group=deploy
 WorkingDirectory=/var/www/portfolio
 
 # Environment variables
@@ -15,6 +15,7 @@ Environment=NODE_ENV=production
 Environment=TERMINAL_PORT=4001
 Environment=TERMINAL_HOST=127.0.0.1
 Environment=TERMINAL_DEBUG=false
+Environment=HOME=/home/deploy
 
 # Start the terminal server (use npx tsx for TypeScript)
 ExecStart=/usr/bin/npx tsx server/terminal/server.ts
