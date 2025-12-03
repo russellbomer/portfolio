@@ -116,7 +116,8 @@ wss.on("connection", (ws: WebSocket, req) => {
         buffering = false;
         // Find where the banner starts and only send from there
         const bannerStart = outputBuffer.indexOf("\x1b["); // First ANSI escape (clear screen)
-        const cleanOutput = bannerStart >= 0 ? outputBuffer.slice(bannerStart) : outputBuffer;
+        const cleanOutput =
+          bannerStart >= 0 ? outputBuffer.slice(bannerStart) : outputBuffer;
         if (ws.readyState === ws.OPEN) ws.send(cleanOutput);
         outputBuffer = "";
       }

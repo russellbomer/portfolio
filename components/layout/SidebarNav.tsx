@@ -6,10 +6,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const navItems = [
-  { id: "about", label: "About", href: "/about" },
-  { id: "practice", label: "Practice", href: "/practice" },
-  { id: "work", label: "Work", href: "/work" },
-  { id: "connect", label: "Connect", href: "/connect" },
+  { id: "about", label: "About", href: "#about" },
+  { id: "practice", label: "Practice", href: "#practice" },
+  { id: "work", label: "Work", href: "#work" },
+  { id: "connect", label: "Connect", href: "#connect" },
 ];
 
 // Character animation variants for typing effect
