@@ -3,6 +3,7 @@
 import DemoErrorBoundary from "@/components/demo/DemoErrorBoundary";
 import { DemoSessionProvider } from "@/components/demo/DemoSessionProvider";
 import nextDynamic from "next/dynamic";
+import Link from "next/link";
 
 const TerminalDemo = nextDynamic(
   () => import("@/components/demo/TerminalDemo"),
@@ -26,6 +27,16 @@ export default function TerminalDemoPage() {
       id="main-content"
       className="h-[100dvh] overflow-hidden flex flex-col py-4 pl-6 pr-6 lg:pr-[420px]"
     >
+      <nav className="mb-3 shrink-0">
+        <Link
+          href="/work"
+          className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <span>←</span>
+          <span>Back to projects</span>
+        </Link>
+      </nav>
+
       <div className="rounded-lg border border-border/50 bg-[hsl(var(--thorn))] overflow-hidden flex-1 flex flex-col min-h-0">
         <div className="flex items-center gap-2 px-4 py-2 bg-muted/10 border-b border-border/30 shrink-0">
           <div className="flex gap-1.5">

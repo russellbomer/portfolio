@@ -12,9 +12,10 @@ export function BackToTop() {
     const checkIfAtBottom = () => {
       const scrollPosition = window.scrollY + window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
-      // Show button when within 100px of the bottom
+      // Only show if page is scrollable AND near bottom
+      const isScrollable = documentHeight > window.innerHeight + 50;
       const isNearBottom = scrollPosition >= documentHeight - 100;
-      setIsVisible(isNearBottom);
+      setIsVisible(isScrollable && isNearBottom);
     };
 
     // Initial check
