@@ -4,6 +4,12 @@
 #   docker-compose up -d          # Start container
 #   docker-compose down           # Stop container
 #   docker-compose logs -f        # View logs
+#
+# Session file storage:
+#   Files generated in /home/quarry/output/<session-id>/ are accessible
+#   via bind mount at ./data/quarry-output/ on the host.
+#   Sessions are cleaned up on WebSocket disconnect.
+#   Daily container restart at 04:00 clears accumulated tmpfs data.
 
 version: "3.8"
 
@@ -25,8 +31,9 @@ services:
       - quarry-net
 
     # Volume for session outputs (downloadable files)
+    # Bind mount allows terminal server to read files directly
     volumes:
-      - quarry-output:/home/quarry/output
+      - ./data/quarry-output:/home/quarry/output
 
     # Resource limits
     deploy:
@@ -41,17 +48,22 @@ services:
     # Security options
     security_opt:
       - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
 
     # Read-only root filesystem with specific writable paths
     read_only: true
     tmpfs:
+      # General temp files
       - /tmp:size=64M,mode=1777
-      - /home/quarry/.npm:size=64M,mode=755
+      # Full /home/quarry as tmpfs - allows quarry to write anywhere
+      # The bind mount at /home/quarry/output overlays this for persistent session files
+      - /home/quarry:size=256M,mode=755,uid=1000,gid=1000
 
 networks:
   quarry-net:
     driver: bridge
-
-volumes:
-  quarry-output:
-    driver: local

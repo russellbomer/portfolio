@@ -84,8 +84,35 @@ Whenever the terminal client or backend changes:
 
 Maintaining this checklist helps keep the interactive demos reliable and reduces surprises during launch.
 
+## 7. Performance metrics validation
+
+Measure and document key performance indicators:
+
+### LCP (Largest Contentful Paint)
+
+1. Open Chrome DevTools → Lighthouse tab
+2. Run Performance audit on `/demos/terminal`
+3. Target: **< 1500ms**
+
+### Cold start to "Mode: Live"
+
+1. Open Chrome DevTools → Performance tab
+2. Enable Screenshots, disable cache
+3. Click reload button in Performance panel to record
+4. Find timestamp when "Mode: Live" appears in screenshots
+5. Target: **< 800ms**
+
+### Performance Budgets
+
+| Metric          | Target   | Notes                                 |
+| --------------- | -------- | ------------------------------------- |
+| LCP             | < 1500ms | Largest Contentful Paint on demo page |
+| Cold start      | < 800ms  | Time from navigation to "Mode: Live"  |
+| Demo error rate | < 1%     | WebSocket connection failures         |
+
 ## Verification Log
 
-| Date       | Tester        | Environment | Notes                                     |
-| ---------- | ------------- | ----------- | ----------------------------------------- |
-| 2025-11-26 | Russell Bomer | Local (dev) | `/demos` rendered, live PTY & fallback OK |
+| Date       | Tester        | Environment      | Notes                                                                                 |
+| ---------- | ------------- | ---------------- | ------------------------------------------------------------------------------------- |
+| 2025-11-26 | Russell Bomer | Local (dev)      | `/demos` rendered, live PTY & fallback OK                                             |
+| 2025-12-03 | Russell Bomer | Production (VPS) | LCP: 720ms ✅, Cold start: 167ms (no throttle) / 533ms (4x CPU) ✅. All metrics pass. |

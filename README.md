@@ -7,9 +7,9 @@ A craftsman-themed personal portfolio built with **Next.js 15**, featuring scrol
 ## Features
 
 - **Animated Landing Page** — Scroll-driven sections with Framer Motion, typewriter effects, and custom cursor
-- **Projects Showcase** (`/projects`) — Filterable gallery of work with detailed case study pages
+- **Projects Showcase** (`/work`) — Curated gallery of projects with live demos and case studies
 - **Interactive Demos** (`/demos`) — Sandboxed terminal and component demonstrations
-- **Contact Form** (`/contact`) — Email integration via Resend API
+- **Contact Form** (`/connect`) — Email integration via Resend API
 - **Theme System** — 6-color craftsman palette with light/dark mode support
 - **Subdomain Routing** — Demo isolation via wildcard DNS (see ADR-0001)
 
@@ -112,4 +112,3 @@ For Vercel deployment, push to GitHub and connect via the Vercel dashboard. Requ
 - `BASE_URL` — Production domain
 - `POSTGRES_URL` — Database connection string
 - `RESEND_API_KEY` — Email service API key
-- `AUTH_SECRET` — Generate with `openssl rand -base64 32`

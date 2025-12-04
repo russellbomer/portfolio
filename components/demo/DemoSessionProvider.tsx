@@ -1,6 +1,7 @@
 "use client";
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -9,11 +10,13 @@ import React, {
 
 export interface DemoSession {
   sessionId: string;
+  serverSessionId: string | null;
   startedAt: number;
   expiresAt: number;
   inactiveMs: number;
   reset: () => void;
   touch: () => void;
+  setServerSessionId: (id: string) => void;
 }
 
 const TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
@@ -28,25 +31,32 @@ export const DemoSessionProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [sessionId, setSessionId] = useState(() => genId());
+  const [serverSessionId, setServerSessionId] = useState<string | null>(null);
   const [startedAt, setStartedAt] = useState(() => Date.now());
   const [expiresAt, setExpiresAt] = useState(() => Date.now() + TIMEOUT_MS);
   const [inactiveMs, setInactiveMs] = useState(0);
-  const lastTouchRef = useRef(Date.now());
+  const lastTouchRef = useRef<number>(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const reset = () => {
+  // Initialize lastTouchRef on mount
+  useEffect(() => {
+    lastTouchRef.current = Date.now();
+  }, []);
+
+  const reset = useCallback(() => {
     setSessionId(genId());
+    setServerSessionId(null);
     const now = Date.now();
     setStartedAt(now);
     setExpiresAt(now + TIMEOUT_MS);
     lastTouchRef.current = now;
     setInactiveMs(0);
-  };
+  }, []);
 
-  const touch = () => {
+  const touch = useCallback(() => {
     lastTouchRef.current = Date.now();
     setExpiresAt(lastTouchRef.current + TIMEOUT_MS);
-  };
+  }, []);
 
   useEffect(() => {
     timerRef.current = setInterval(() => {
@@ -60,11 +70,20 @@ export const DemoSessionProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, []);
+  }, [reset]);
 
   return (
     <DemoSessionContext.Provider
-      value={{ sessionId, startedAt, expiresAt, inactiveMs, reset, touch }}
+      value={{
+        sessionId,
+        serverSessionId,
+        startedAt,
+        expiresAt,
+        inactiveMs,
+        reset,
+        touch,
+        setServerSessionId,
+      }}
     >
       {children}
     </DemoSessionContext.Provider>

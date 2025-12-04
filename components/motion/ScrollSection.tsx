@@ -7,7 +7,7 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 interface ScrollSectionProps {
   children: ReactNode;
@@ -32,6 +32,14 @@ export function ScrollSection({
 }: ScrollSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -71,14 +79,25 @@ export function ScrollSection({
     setIsInteractive(latest > 0.3);
   });
 
-  if (shouldReduceMotion) {
+  // Mobile or reduced motion: natural scroll with fade-in animation
+  if (shouldReduceMotion || isMobile) {
     return (
-      <section id={id} className={`h-screen flex items-center ${className}`}>
+      <motion.section
+        id={id}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-10%" }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className={`min-h-screen flex items-center py-16 ${
+          !isFirst ? "border-t border-[hsl(var(--rust)/0.2)]" : ""
+        } ${className}`}
+      >
         {children}
-      </section>
+      </motion.section>
     );
   }
 
+  // Desktop: fixed content with scroll-driven opacity
   return (
     <>
       {/* Scroll trigger area - invisible spacer */}

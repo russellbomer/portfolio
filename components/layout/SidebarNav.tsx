@@ -2,14 +2,13 @@
 
 import type { Variants } from "framer-motion";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const navItems = [
-  { id: "about", label: "About", href: "#about" },
-  { id: "practice", label: "Practice", href: "#practice" },
-  { id: "work", label: "Work", href: "#work" },
-  { id: "connect", label: "Connect", href: "#connect" },
+  { id: "about", label: "About" },
+  { id: "practice", label: "Practice" },
+  { id: "work", label: "Work" },
+  { id: "connect", label: "Connect" },
 ];
 
 // Character animation variants for typing effect
@@ -89,19 +88,50 @@ export function SidebarNav() {
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
+  // Scroll to section with offset to align with peak content opacity
+  // Each section has 200vh scroll trigger, content at full opacity from 40-60% scroll progress
+  // Scrolling to 50% of the trigger (100vh into it) centers the content at peak opacity
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (!element) return;
+
+    const rect = element.getBoundingClientRect();
+    const elementTop = rect.top + window.scrollY;
+    const elementHeight = rect.height; // 200vh typically
+
+    // Scroll to 50% of the section's scroll trigger for peak opacity positioning
+    // This places the content at the scroll position where opacity = 1
+    const targetScroll =
+      elementTop + elementHeight * 0.5 - window.innerHeight * 0.5;
+
+    window.scrollTo({
+      top: Math.max(0, targetScroll),
+      behavior: "smooth",
+    });
+  };
+
   useEffect(() => {
     // Observer for active section tracking
+    // Each section has a 200vh scroll trigger with content at full opacity from 40-60% scroll progress
+    // Peak visibility center is at 50% scroll progress of each section
+    // Using -40% top margin to detect slightly before geometric center
+    // This aligns the nav highlight with when content "feels" most prominent
     const sectionObserver = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
+        // Find the entry that's currently intersecting with highest ratio
+        const intersecting = entries.filter((e) => e.isIntersecting);
+        if (intersecting.length > 0) {
+          const best = intersecting.reduce((a, b) =>
+            a.intersectionRatio > b.intersectionRatio ? a : b
+          );
+          setActiveSection(best.target.id);
+        }
       },
       {
-        rootMargin: "-50% 0px -50% 0px",
-        threshold: 0,
+        // Detection band: 40% from top, 59% from bottom = 1% visible zone at 40% height
+        // This triggers when section is at peak-opacity scroll position
+        rootMargin: "-40% 0px -59% 0px",
+        threshold: [0, 0.25, 0.5, 0.75, 1],
       }
     );
 
@@ -148,15 +178,16 @@ export function SidebarNav() {
           className="fixed left-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4"
           aria-label="Section navigation"
         >
-          {navItems.map(({ id, label, href }) => {
+          {navItems.map(({ id, label }) => {
             const isActive = activeSection === id;
             const isHovered = hoveredSection === id;
             const showLabel = isActive || isHovered;
 
             return (
-              <Link
+              <button
                 key={id}
-                href={href}
+                type="button"
+                onClick={() => scrollToSection(id)}
                 onMouseEnter={() => setHoveredSection(id)}
                 onMouseLeave={() => setHoveredSection(null)}
                 className="group relative flex items-center gap-3 text-left"
@@ -180,7 +211,7 @@ export function SidebarNav() {
                     )}
                   </AnimatePresence>
                 </div>
-              </Link>
+              </button>
             );
           })}
         </motion.nav>

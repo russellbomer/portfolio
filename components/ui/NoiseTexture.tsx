@@ -12,8 +12,10 @@ export function NoiseTexture() {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    // Check initial state
-    setIsDark(document.documentElement.classList.contains("dark"));
+    // Check initial state - use queueMicrotask to avoid synchronous setState
+    queueMicrotask(() => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    });
 
     // Watch for theme changes
     const observer = new MutationObserver((mutations) => {

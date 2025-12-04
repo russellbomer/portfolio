@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 interface TypewriterTextProps {
@@ -27,16 +27,23 @@ export function TypewriterText({
   hideCursorOnComplete = false,
   onComplete,
 }: TypewriterTextProps) {
-  const [displayedText, setDisplayedText] = useState("");
+  // Handle reduced motion - set state synchronously before render
+  const initialComplete = shouldReduceMotion;
+  const [displayedText, setDisplayedText] = useState(
+    shouldReduceMotion ? text : ""
+  );
   const [isTyping, setIsTyping] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
-  const shouldReduceMotion = useReducedMotion();
+  const [isComplete, setIsComplete] = useState(initialComplete);
+
+  // Fire onComplete callback for reduced motion
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      onComplete?.();
+    }
+  }, [onComplete]);
 
   useEffect(() => {
     if (shouldReduceMotion) {
-      setDisplayedText(text);
-      setIsComplete(true);
-      onComplete?.();
       return;
     }
 
@@ -45,7 +52,7 @@ export function TypewriterText({
     }, delay);
 
     return () => clearTimeout(startTimeout);
-  }, [delay, shouldReduceMotion, text, onComplete]);
+  }, [delay]);
 
   useEffect(() => {
     if (!isTyping || shouldReduceMotion) return;
@@ -56,18 +63,26 @@ export function TypewriterText({
       }, speed);
 
       return () => clearTimeout(timeout);
-    } else {
-      setIsComplete(true);
-      onComplete?.();
+    } else if (!isComplete) {
+      // Using queueMicrotask to avoid synchronous setState warning
+      queueMicrotask(() => {
+        setIsComplete(true);
+        onComplete?.();
+      });
     }
-  }, [displayedText, isTyping, text, speed, shouldReduceMotion, onComplete]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [displayedText, isTyping, text, speed, isComplete]);
 
-  return (
-    <span className={className}>
-      {displayedText}
+  // Split text to attach cursor to last character (prevents cursor from wrapping alone)
+  const lastChar = displayedText.slice(-1);
+  const textWithoutLast = displayedText.slice(0, -1);
+  const hasText = displayedText.length > 0;
+
+  const cursor = (
+    <>
       {showCursor && isTyping && !isComplete && (
         <motion.span
-          className="inline-block w-[2px] h-[1em] bg-current ml-1 align-middle"
+          className="inline-block w-[2px] h-[1em] bg-current ml-0.5 align-middle"
           animate={{ opacity: [1, 0] }}
           transition={{
             duration: 0.6,
@@ -78,19 +93,27 @@ export function TypewriterText({
       )}
       {showCursor && isComplete && !hideCursorOnComplete && (
         <motion.span
-          className="inline-block w-[2px] h-[1em] bg-current ml-1 align-middle"
+          className="inline-block w-[2px] h-[1em] bg-current ml-0.5 align-middle"
           initial={{ opacity: 1 }}
-          animate={{ opacity: 0 }}
+          animate={{ opacity: 0, width: 0, marginLeft: 0 }}
           transition={{ duration: 0.5, delay: 1 }}
         />
       )}
+    </>
+  );
+
+  return (
+    <span className={className}>
+      {textWithoutLast}
+      {hasText && (
+        <span className="whitespace-nowrap">
+          {lastChar}
+          {cursor}
+        </span>
+      )}
+      {!hasText && cursor}
     </span>
   );
-}
-
-interface TypewriterSequenceProps {
-  children: React.ReactNode;
-  className?: string;
 }
 
 interface TypewriterLineProps {

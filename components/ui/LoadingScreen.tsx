@@ -9,25 +9,94 @@ interface LoadingScreenProps {
   minDuration?: number;
 }
 
+// Total time to lock scroll: loading screen + hero text animation
+// Loading: 2500ms display + 1200ms fade = 3700ms
+// Hero animation ends at ~9960ms from initial load
+// Add small buffer for smoothness
+const SCROLL_LOCK_DURATION = 10200; // ms
+
 export function LoadingScreen({ minDuration = 2500 }: LoadingScreenProps) {
   const [isLoading, setIsLoading] = useState(true);
-  const [hasShownInitial, setHasShownInitial] = useState(false);
   const pathname = usePathname();
+
+  // Lock scroll on homepage during loading + hero animation
+  useEffect(() => {
+    if (pathname !== "/") {
+      return;
+    }
+
+    // Store original styles
+    const originalStyle = {
+      overflow: document.body.style.overflow,
+      position: document.body.style.position,
+      top: document.body.style.top,
+      left: document.body.style.left,
+      right: document.body.style.right,
+      width: document.body.style.width,
+      height: document.body.style.height,
+    };
+    const scrollY = window.scrollY;
+
+    // Lock scroll - comprehensive approach for mobile
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.width = "100%";
+    document.body.style.height = "100%";
+
+    // Also prevent touchmove during lock
+    const preventScroll = (e: TouchEvent) => {
+      e.preventDefault();
+    };
+    document.addEventListener("touchmove", preventScroll, { passive: false });
+
+    // Unlock after full animation sequence
+    const scrollTimer = setTimeout(() => {
+      // Restore original styles
+      document.body.style.overflow = originalStyle.overflow;
+      document.body.style.position = originalStyle.position;
+      document.body.style.top = originalStyle.top;
+      document.body.style.left = originalStyle.left;
+      document.body.style.right = originalStyle.right;
+      document.body.style.width = originalStyle.width;
+      document.body.style.height = originalStyle.height;
+
+      // Restore scroll position
+      window.scrollTo(0, scrollY);
+
+      // Remove touch listener
+      document.removeEventListener("touchmove", preventScroll);
+    }, SCROLL_LOCK_DURATION);
+
+    return () => {
+      clearTimeout(scrollTimer);
+      document.body.style.overflow = originalStyle.overflow;
+      document.body.style.position = originalStyle.position;
+      document.body.style.top = originalStyle.top;
+      document.body.style.left = originalStyle.left;
+      document.body.style.right = originalStyle.right;
+      document.body.style.width = originalStyle.width;
+      document.body.style.height = originalStyle.height;
+      window.scrollTo(0, scrollY);
+      document.removeEventListener("touchmove", preventScroll);
+    };
+  }, [pathname]);
 
   // Show loading on initial mount and when navigating to home
   useEffect(() => {
     // Only show loading screen on homepage
     if (pathname !== "/") {
-      setIsLoading(false);
+      queueMicrotask(() => setIsLoading(false));
       return;
     }
 
-    // Show loading screen
-    setIsLoading(true);
+    // Show loading screen - use queueMicrotask to avoid synchronous setState warning
+    queueMicrotask(() => setIsLoading(true));
 
     const timer = setTimeout(() => {
       setIsLoading(false);
-      setHasShownInitial(true);
     }, minDuration);
 
     return () => clearTimeout(timer);

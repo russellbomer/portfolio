@@ -1,0 +1,32 @@
+# Quarry Sandbox Container Restart Service
+#
+# This service restarts the quarry-sandbox container to clear accumulated
+# tmpfs data from sessions. Triggered daily by quarry-restart.timer.
+#
+# Installation:
+#   sudo cp deploy/systemd/quarry-restart.* /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable quarry-restart.timer
+#
+# Manual trigger:
+#   sudo systemctl start quarry-restart.service
+#
+# Check timer status:
+#   sudo systemctl list-timers | grep quarry
+
+[Unit]
+Description=Restart Quarry sandbox container
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/docker restart quarry-sandbox
+ExecStartPost=/bin/echo "Quarry sandbox container restarted at $(date)"
+
+# Log output
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

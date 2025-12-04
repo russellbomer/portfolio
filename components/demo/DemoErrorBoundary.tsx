@@ -3,7 +3,7 @@ import React from "react";
 
 interface State {
   hasError: boolean;
-  error?: any;
+  error?: Error;
 }
 
 export default class DemoErrorBoundary extends React.Component<
@@ -12,11 +12,11 @@ export default class DemoErrorBoundary extends React.Component<
 > {
   state: State = { hasError: false };
 
-  static getDerivedStateFromError(error: any): State {
+  static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: any, info: any) {
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
     if (process.env.NODE_ENV !== "production") {
       console.error("[DemoError]", error, info);
     }

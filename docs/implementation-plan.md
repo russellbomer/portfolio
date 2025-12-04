@@ -1,9 +1,9 @@
 # Visual Overhaul Implementation Plan
 
-**Status:** Final
+**Status:** ✅ Complete (December 2025)
 **Branch:** `feature/landing-page-v2`
 **Created:** November 28, 2025
-**Last Updated:** November 28, 2025
+**Last Updated:** December 4, 2025
 
 ---
 
@@ -488,15 +488,15 @@ Current placeholder: "Software shaped by sawdust, music, and mise en place"
 
 ## 6. Deferred Items
 
-| Item                    | Status       | Notes                                         |
-| ----------------------- | ------------ | --------------------------------------------- |
-| Animated SVG signature  | Deferred     | Implement when asset ready                    |
-| Custom illustrations    | Deferred     | May self-create, wife, or commission          |
-| Dark mode refinement    | Post-launch  | Basic implementation in Phase 2, refine later |
-| Visual regression tests | Post-launch  | Set up Playwright later                       |
-| Metrics/counter section | Removed      | May revisit later                             |
-| Writing content         | Deferred     | "Coming soon" for now                         |
-| Loading skeletons       | Nice-to-have | Lower priority                                |
+| Item                       | Status          | Notes                                |
+| -------------------------- | --------------- | ------------------------------------ |
+| ~~Animated SVG signature~~ | **Scrapped**    | Removed from scope                   |
+| Custom illustrations       | Deferred        | May self-create, wife, or commission |
+| ~~Dark mode refinement~~   | ✅ **Complete** | Completed during visual overhaul     |
+| Visual regression tests    | Post-launch     | Set up Playwright later              |
+| Metrics/counter section    | Removed         | May revisit later                    |
+| Writing content            | Deferred        | "Coming soon" for now                |
+| Loading skeletons          | Nice-to-have    | Lower priority                       |
 
 ---
 
@@ -544,14 +544,14 @@ Current placeholder: "Software shaped by sawdust, music, and mise en place"
 
 ## 8. Implementation Checklist
 
-| Phase | Key Deliverable                              | Priority |
-| ----- | -------------------------------------------- | -------- |
-| 1     | Animation infrastructure + motion components | High     |
-| 2     | 4-color palette + texture exploration        | High     |
-| 3     | Scrollable landing page with all sections    | High     |
-| 4     | Sticky sidebar nav + minimal footer          | High     |
-| 5     | Secondary pages + route renames              | Medium   |
-| 6     | Cleanup + audits (perf/a11y MUST-HAVE)       | High     |
+| Phase | Key Deliverable                              | Priority | Status      |
+| ----- | -------------------------------------------- | -------- | ----------- |
+| 1     | Animation infrastructure + motion components | High     | ✅ Complete |
+| 2     | 4-color palette + texture exploration        | High     | ✅ Complete |
+| 3     | Scrollable landing page with all sections    | High     | ✅ Complete |
+| 4     | Sticky sidebar nav + minimal footer          | High     | ✅ Complete |
+| 5     | Secondary pages + route renames              | Medium   | ✅ Complete |
+| 6     | Cleanup + audits (perf/a11y MUST-HAVE)       | High     | ✅ Complete |
 
 ---
 
@@ -561,3 +561,16 @@ Current placeholder: "Software shaped by sawdust, music, and mise en place"
 - **Base:** Create from `main`
 - **Current branch preserved:** `feature/phase2-refactor` remains untouched
 - **Approach:** Direct rewrite (no feature flags)
+
+---
+
+## 10. Completion Notes (December 2025)
+
+All phases completed. Additional work done during visual overhaul:
+
+- **Dark mode**: Fully refined (moved from deferred to complete)
+- **Route structure**: `/work` and `/writing` routes implemented as planned
+- **Performance**: LCP < 1500ms achieved, Lighthouse scores maintained
+- **Accessibility**: prefers-reduced-motion respected, keyboard navigation working
+- **Interactive demo**: Terminal demo with live PTY, file download capability
+- **Legacy cleanup**: Auth/Stripe code removed (separate Phase C effort)

@@ -23,7 +23,7 @@ const projects: Array<{
     slug: "quarry",
     title: "Quarry",
     description:
-      "An intuitive web scraping toolkit with intelligent templates and interactive workflows. Extract, transform, and export web data with ease.",
+      "A web scraping toolkit designed around simplicity. Foreman provides a fully guided, batteries-included tutorial. The wizard offers a customizable step-by-step workflow. Advanced users can drive the CLI directly with flags for full control.",
     tech: ["Python", "Typer", "Rich", "Pandas"],
     status: "live",
     link: {
@@ -36,7 +36,7 @@ const projects: Array<{
     slug: "portfolio",
     title: "Portfolio Site",
     description:
-      "This very site—built with Next.js, Tailwind, and Framer Motion. A playground for design ideas and new techniques.",
+      "(This very site.) A Next.js/React application built from scratch — responsive design, fluid animations, accessible markup, and a clean component architecture.",
     tech: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
     status: "live",
     link: {
@@ -81,8 +81,7 @@ export default function WorkPage() {
           Work
         </h1>
         <p className="text-lg text-muted-foreground">
-          A selection of projects and experiments. Some shipped, some in
-          progress, all built with care.
+          Selected projects for your perusal, including live demos where noted.
         </p>
       </header>
 

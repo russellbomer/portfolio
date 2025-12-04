@@ -1,7 +1,11 @@
 "use client";
 
 import DemoErrorBoundary from "@/components/demo/DemoErrorBoundary";
-import { DemoSessionProvider } from "@/components/demo/DemoSessionProvider";
+import {
+  DemoSessionProvider,
+  useDemoSession,
+} from "@/components/demo/DemoSessionProvider";
+import { FileDownloader } from "@/components/demo/FileDownloader";
 import nextDynamic from "next/dynamic";
 import Link from "next/link";
 
@@ -20,6 +24,31 @@ const TerminalDemo = nextDynamic(
 );
 
 export const dynamic = "force-dynamic";
+
+// Derive the file API base URL from the WebSocket URL
+const WS_URL =
+  (typeof process !== "undefined" &&
+    (process.env.NEXT_PUBLIC_TERMINAL_WS_URL as string)) ||
+  "ws://127.0.0.1:4000/ws";
+
+function getFileApiBaseUrl(): string {
+  return WS_URL.replace("/ws", "")
+    .replace("wss:", "https:")
+    .replace("ws:", "http:");
+}
+
+// Inner component that has access to session context
+function TerminalWithFileDownloader() {
+  const session = useDemoSession();
+  const baseUrl = getFileApiBaseUrl();
+
+  return (
+    <div className="relative w-full h-full">
+      <TerminalDemo />
+      <FileDownloader sessionId={session.serverSessionId} baseUrl={baseUrl} />
+    </div>
+  );
+}
 
 export default function TerminalDemoPage() {
   return (
@@ -48,10 +77,10 @@ export default function TerminalDemoPage() {
             quarry — terminal
           </span>
         </div>
-        <div className="p-4 flex-1 min-h-0 overflow-hidden">
+        <div className="p-4 flex-1 min-h-0 overflow-hidden relative">
           <DemoErrorBoundary>
             <DemoSessionProvider>
-              <TerminalDemo />
+              <TerminalWithFileDownloader />
             </DemoSessionProvider>
           </DemoErrorBoundary>
         </div>

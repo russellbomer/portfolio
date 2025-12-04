@@ -15,6 +15,6 @@ export async function listProjects(): Promise<ProjectSummary[]> {
   return [];
 }
 
-export async function getProject(id: string): Promise<ProjectSummary | null> {
+export async function getProject(_id: string): Promise<ProjectSummary | null> {
   return null;
 }

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata = buildMetadata({
   title: "Writing",
-  description: "Thoughts on software, craft, and the spaces in between.",
+  description: "Thoughts on my work, my life, and the occasional tangent.",
   pathname: "/writing",
 });
 
@@ -33,7 +33,7 @@ export default function WritingPage() {
           Writing
         </h1>
         <p className="text-lg text-muted-foreground">
-          Thoughts on software, craft, and the spaces in between.
+          Thoughts on my work, my life, and the occasional tangent.
         </p>
       </header>
 

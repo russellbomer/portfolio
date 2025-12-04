@@ -21,7 +21,7 @@ const WS_URL =
 export default function TerminalDemo() {
   const session = useDemoSession();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const termRef = useRef<any>(null);
+  const termRef = useRef<InstanceType<XTerm["Terminal"]> | null>(null);
   const xtermRef = useRef<XTerm | null>(null);
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -159,7 +159,9 @@ export default function TerminalDemo() {
         setTimeout(() => {
           try {
             fitAddon.fit();
-          } catch {}
+          } catch {
+            // Ignore fit errors during initialization
+          }
         }, 0);
         setLoaded(true);
         scheduleReset();
@@ -168,10 +170,14 @@ export default function TerminalDemo() {
         const detachHandlers = () => {
           try {
             dataDisposableRef.current?.dispose();
-          } catch {}
+          } catch {
+            // Ignore dispose errors
+          }
           try {
             resizeDisposableRef.current?.dispose();
-          } catch {}
+          } catch {
+            // Ignore dispose errors
+          }
           dataDisposableRef.current = null;
           resizeDisposableRef.current = null;
         };
@@ -208,7 +214,7 @@ export default function TerminalDemo() {
         };
 
         // helper: attach live handlers
-        const attachLiveHandlers = (ws: WebSocket) => {
+        const attachLiveHandlers = (_ws: WebSocket) => {
           detachHandlers();
           const dataDisp = term.onData((data: string) => {
             scheduleReset();
@@ -243,7 +249,9 @@ export default function TerminalDemo() {
         const doFit = () => {
           try {
             fitAddon.fit();
-          } catch {}
+          } catch {
+            // Ignore fit errors on resize
+          }
         };
         resizeObserver =
           typeof ResizeObserver !== "undefined" && containerRef.current
@@ -271,6 +279,18 @@ export default function TerminalDemo() {
             ws.onmessage = (ev) => {
               if (!termRef.current) return;
               const data = typeof ev.data === "string" ? ev.data : "";
+
+              // Check for session message from server
+              try {
+                const msg = JSON.parse(data);
+                if (msg && msg.type === "session" && msg.id) {
+                  session.setServerSessionId(msg.id);
+                  return; // Don't write session message to terminal
+                }
+              } catch {
+                // Not JSON, treat as terminal output
+              }
+
               termRef.current.write(data);
             };
             ws.onclose = (ev) => {
@@ -323,7 +343,7 @@ export default function TerminalDemo() {
             printPrompt();
           });
         }
-      } catch (e) {
+      } catch {
         // Graceful fallback to non-xterm preview
         setLoaded(false);
       }
@@ -334,7 +354,9 @@ export default function TerminalDemo() {
       if (wsRef.current) {
         try {
           wsRef.current.close();
-        } catch {}
+        } catch {
+          // Ignore close errors
+        }
         wsRef.current = null;
       }
       try {
@@ -342,23 +364,32 @@ export default function TerminalDemo() {
           window.removeEventListener("resize", handleWindowResize);
         }
         handleWindowResize = null;
-      } catch {}
+      } catch {
+        // Ignore cleanup errors
+      }
       try {
         // disconnect any resize observer
         resizeObserver?.disconnect?.();
         resizeObserver = null;
-      } catch {}
+      } catch {
+        // Ignore cleanup errors
+      }
       try {
         dataDisposableRef.current?.dispose();
-      } catch {}
+      } catch {
+        // Ignore dispose errors
+      }
       try {
         resizeDisposableRef.current?.dispose();
-      } catch {}
+      } catch {
+        // Ignore dispose errors
+      }
       if (termRef.current) {
         termRef.current.dispose?.();
         termRef.current = null;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const copyToClipboard = () => {

@@ -1,0 +1,28 @@
+# Quarry Sandbox Container Restart Timer
+#
+# Triggers quarry-restart.service daily at 04:00 to clear accumulated
+# tmpfs data from terminal sessions.
+#
+# Installation:
+#   sudo cp deploy/systemd/quarry-restart.* /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now quarry-restart.timer
+#
+# Check next trigger time:
+#   sudo systemctl list-timers | grep quarry
+
+[Unit]
+Description=Daily restart of Quarry sandbox container
+
+[Timer]
+# Run daily at 04:00 local time (low traffic period)
+OnCalendar=*-*-* 04:00:00
+
+# If the system was off at 04:00, run on next boot
+Persistent=true
+
+# Add random delay up to 5 minutes to avoid thundering herd
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target

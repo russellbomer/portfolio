@@ -23,12 +23,12 @@ export default function ConnectPage() {
       <header className="space-y-2">
         <h1 className="text-3xl font-bold text-foreground">Connect</h1>
         <p className="text-sm text-muted-foreground">
-          Share what you’re planning to build and I’ll follow up within one
-          business day to schedule a discovery call or deliver next steps.
+          Share what you're planning to build and I'll get back to you as soon
+          as I can.
         </p>
         <p className="text-sm text-muted-foreground">
-          Include timelines, team context, and whether you need interactive
-          demos so I can prepare the most relevant ideas before we talk.
+          Include timeline, context, and any relevant details so I can come
+          prepared with ideas you'll love.
         </p>
       </header>
       <ContactForm />

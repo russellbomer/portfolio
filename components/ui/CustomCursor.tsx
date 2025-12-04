@@ -14,7 +14,8 @@ export function CustomCursor() {
   useEffect(() => {
     // Only show custom cursor on devices with fine pointer (mouse)
     const finePointer = window.matchMedia("(pointer: fine)").matches;
-    setHasFinePointer(finePointer);
+    // Use queueMicrotask to avoid synchronous setState warning
+    queueMicrotask(() => setHasFinePointer(finePointer));
     if (!finePointer) return;
 
     const moveCursor = (e: MouseEvent) => {

@@ -4,21 +4,31 @@ A minimal Node HTTP + WebSocket bridge that powers the interactive terminal demo
 
 > **⚠️ Windows Limitation:** `node-pty` fails to compile on Windows due to native C++ module issues. The scripted demo fallback works on Windows for local development. Live PTY mode requires deployment to Linux (VPS).
 
-- HTTP health: `GET /health` → `200 ok`
-- WebSocket: `GET /ws` → upgrade; streams PTY output and accepts input/resize messages
+## Endpoints
 
-Server environment variables:
+- `GET /health` → `200 ok`
+- `GET /ws` → WebSocket upgrade; streams PTY output and accepts input/resize messages
+- `GET /files?session=<uuid>` → List files in session directory (JSON)
+- `GET /files/<filename>?session=<uuid>` → Download specific file
 
-- `TERMINAL_HOST` (default `127.0.0.1`)
-- `TERMINAL_PORT` (default `4000`)
-- `TERMINAL_SHELL` (default `powershell.exe` on Windows, else `$SHELL` or `bash`)
+## Server Environment Variables
 
-Client feature flags (Next.js):
+| Variable               | Default                | Description                    |
+| ---------------------- | ---------------------- | ------------------------------ |
+| `TERMINAL_HOST`        | `127.0.0.1`            | Bind address                   |
+| `TERMINAL_PORT`        | `4000`                 | HTTP/WebSocket port            |
+| `TERMINAL_OUTPUT_DIR`  | `./data/quarry-output` | Session file storage           |
+| `TERMINAL_DEBUG`       | `false`                | Enable verbose logging         |
+| `TERMINAL_QUARRY_MODE` | `false`                | Spawn quarry instead of shell  |
+| `TERMINAL_QUARRY_PATH` | `quarry`               | Path to quarry binary          |
+| `TERMINAL_AUTO_RUN`    | ``                     | Command to auto-run on connect |
+
+## Client Feature Flags (Next.js)
 
 - `NEXT_PUBLIC_FEATURE_TERMINAL` (`true|false`) — enables the live terminal client wiring
 - `NEXT_PUBLIC_TERMINAL_WS_URL` — WebSocket endpoint, e.g. `ws://127.0.0.1:4001/ws`
 
-Quick start (local):
+## Quick Start (Local)
 
 ```powershell
 # 1) Start the PTY server (4001 avoids conflicts)
@@ -31,20 +41,139 @@ $env:NEXT_PUBLIC_TERMINAL_WS_URL='ws://127.0.0.1:4001/ws'
 npm run dev
 ```
 
-WebSocket protocol (initial):
+## WebSocket Protocol
 
-- Client → Server: `{"type":"input","data":"ls\r"}`
-- Client → Server: `{"type":"resize","cols":120,"rows":32}`
-- Server → Client: raw PTY text frames (UTF-8)
+### Client → Server Messages
 
-Frontend integration and fallback:
+```json
+{"type":"input","data":"ls\r"}
+{"type":"resize","cols":120,"rows":32}
+```
 
-- The UI lives in `components/demo/TerminalDemo.tsx`.
-- When the feature flag is enabled and the WS server is reachable, the client connects to live PTY mode.
-- If `node-pty` is unavailable or the socket closes, the component degrades to a scripted demo with an input buffer and prompt.
-- Demo commands: `help`, `clear`, `replay`.
+### Server → Client Messages
 
-Windows native build workflow (node-pty):
+```json
+{ "type": "session", "id": "550e8400-e29b-41d4-a716-446655440000" }
+```
+
+Plus raw PTY text frames (UTF-8) for terminal output.
+
+## File Download API
+
+### Session Lifecycle
+
+1. **Connect**: WebSocket connection generates UUID session ID
+2. **Directory Created**: `/data/quarry-output/<session-id>/`
+3. **Session Message**: Server sends `{"type":"session","id":"<uuid>"}` to client
+4. **Files Generated**: Quarry writes to session directory
+5. **Disconnect**: Session directory is cleaned up (1 second delay)
+
+### List Files
+
+```
+GET /files?session=<uuid>
+
+Response 200:
+{
+  "files": [
+    {"name": "output.json", "size": 1234, "modified": "2025-12-03T10:00:00.000Z"},
+    {"name": "report.csv", "size": 5678, "modified": "2025-12-03T10:01:00.000Z"}
+  ]
+}
+```
+
+### Download File
+
+```
+GET /files/output.json?session=<uuid>
+
+Response 200:
+Content-Type: application/json
+Content-Disposition: attachment; filename="output.json"
+<file contents>
+```
+
+### Allowed File Types
+
+| Extension | MIME Type          |
+| --------- | ------------------ |
+| `.json`   | `application/json` |
+| `.csv`    | `text/csv`         |
+| `.html`   | `text/html`        |
+| `.txt`    | `text/plain`       |
+| `.md`     | `text/markdown`    |
+
+### Limits
+
+- **Max file size**: 10MB per file
+- **Max session storage**: 50MB per session (enforced, with 80% warning)
+- **Session idle timeout**: 15 minutes of inactivity
+- Files outside session directory are inaccessible
+
+### Security
+
+- Session IDs are UUID v4 (cryptographically random)
+- Filenames are sanitized (alphanumeric, dots, hyphens, underscores only)
+- Path traversal attacks are blocked
+- Files are only accessible with valid session ID
+
+---
+
+## Security Model
+
+The terminal demo runs untrusted user commands in a sandboxed Docker container with multiple layers of defense:
+
+### Container Isolation
+
+| Layer                       | Protection                                                    |
+| --------------------------- | ------------------------------------------------------------- |
+| **Non-root user**           | Container runs as `quarry` (UID 1000), not root               |
+| **Read-only rootfs**        | `read_only: true` prevents filesystem modifications           |
+| **Tmpfs mounts**            | Writable areas are ephemeral RAM disks with size limits       |
+| **Capability dropping**     | `cap_drop: ALL` with minimal add-back (CHOWN, SETUID, SETGID) |
+| **No privilege escalation** | `no-new-privileges: true` security option                     |
+| **Resource limits**         | CPU: 0.5 cores, Memory: 512MB, Tmpfs: 320MB total             |
+| **Network isolation**       | Bridge network, no exposed ports, outbound HTTP only          |
+
+### Session Security
+
+| Control               | Implementation                                   |
+| --------------------- | ------------------------------------------------ |
+| **Session isolation** | Each connection gets unique UUID directory       |
+| **Idle timeout**      | 15 minutes of inactivity triggers disconnect     |
+| **Storage limits**    | 50MB per session, 10MB per file                  |
+| **Auto cleanup**      | Session directory deleted on disconnect          |
+| **Daily reset**       | Container restart at 04:00 clears all tmpfs data |
+
+### File Download Security
+
+| Control                   | Implementation                                       |
+| ------------------------- | ---------------------------------------------------- |
+| **Path traversal**        | `path.resolve()` + prefix check blocks `../` attacks |
+| **Filename sanitization** | Regex allows only `[\w.-]+` characters               |
+| **Extension whitelist**   | Only `.json`, `.csv`, `.html`, `.txt`, `.md`         |
+| **Size limits**           | 10MB per file, 50MB per session                      |
+| **Session binding**       | Files require valid session UUID to access           |
+
+### Attack Surface Analysis
+
+| Vector              | Mitigation                                            |
+| ------------------- | ----------------------------------------------------- |
+| Container escape    | No privileged mode, no docker.sock, no SYS_ADMIN cap  |
+| Resource exhaustion | CPU/memory limits, tmpfs caps, session timeout        |
+| Data exfiltration   | Session isolation, auto-cleanup, no persistence       |
+| Network abuse       | Outbound only, no exposed ports, rate limits at nginx |
+| Path traversal      | Triple validation: sanitize + resolve + prefix check  |
+
+## Frontend Integration
+
+- The UI lives in `components/demo/TerminalDemo.tsx`
+- File downloads via `components/demo/FileDownloader.tsx`
+- When the feature flag is enabled and the WS server is reachable, the client connects to live PTY mode
+- If `node-pty` is unavailable or the socket closes, the component degrades to a scripted demo
+- Demo commands: `help`, `clear`, `replay`
+
+## Windows Native Build (node-pty)
 
 `node-pty` is an optional dependency. Installs succeed even if the native addon fails to build; in that case the server disables itself gracefully. To enable PTY on Windows:
 

@@ -14,6 +14,7 @@ export function HeroContent() {
   // Pause: 700ms (extra beat)
   // Line 3b: ".. and a lot of other things." (29 chars × 50ms = 1450ms) starts at 7350ms
   // Scroll prompt fades in when tagline completes
+  // NOTE: Scroll lock is handled by LoadingScreen component
 
   const speed = 50; // 50ms per character (original fast speed)
 
@@ -58,7 +59,7 @@ export function HeroContent() {
       </h1>
 
       {/* Tagline */}
-      <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mb-8">
+      <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-8">
         <TypewriterText
           text="I make software."
           delay={line3aStart}

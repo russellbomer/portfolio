@@ -89,9 +89,11 @@ export default function LandingPage() {
                 </h3>
                 <ul className="space-y-2 text-muted-foreground">
                   <li>• Full-stack web applications</li>
-                  <li>• APIs and backend services</li>
-                  <li>• Developer tools and CLIs</li>
-                  <li>• Data pipelines and integrations</li>
+                  <li>• Interactive dashboards & data visualization tools</li>
+                  <li>• Robust CLI experiences & developer tooling</li>
+                  <li>• API integrations & backend systems</li>
+                  <li>• AI/LLM application integrations</li>
+                  <li>• Containerized & cloud-native solutions</li>
                 </ul>
               </div>
               <div className="space-y-4">
@@ -108,10 +110,25 @@ export default function LandingPage() {
               <h3 className="font-display text-xl font-medium mb-4">
                 Current Stack
               </h3>
-              <p className="font-mono text-sm text-muted-foreground">
-                TypeScript · React · Next.js · Node.js · PostgreSQL · Redis ·
-                Docker · AWS
-              </p>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "TypeScript",
+                  "React",
+                  "Next.js",
+                  "Node.js",
+                  "PostgreSQL",
+                  "Redis",
+                  "Docker",
+                  "AWS",
+                ].map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-3 py-1 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </ScrollSection>
@@ -134,25 +151,42 @@ export default function LandingPage() {
                   Portfolio Site
                 </h3>
                 <p className="text-muted-foreground mb-2">
-                  This very site—built with Next.js, Tailwind, and Framer
-                  Motion. A playground for design ideas and new techniques.
+                  (This very site.) A Next.js/React application built from
+                  scratch — responsive design, fluid animations, accessible
+                  markup, and a clean component architecture.
                 </p>
-                <span className="font-mono text-xs text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))]">
-                  Next.js · TypeScript · Tailwind
-                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {["Next.js", "TypeScript", "Tailwind"].map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
 
               <div className="group p-4 rounded-lg border border-[hsl(var(--rust)/0.3)] hover:border-[hsl(var(--eucalyptus))] transition-colors">
                 <h3 className="font-display text-xl font-medium mb-1">
-                  CLI Notes
+                  Quarry
                 </h3>
                 <p className="text-muted-foreground mb-2">
-                  A terminal-based note-taking tool for developers who live in
-                  the command line.
+                  A web scraping toolkit designed around simplicity. Foreman
+                  provides a fully guided, batteries-included tutorial. The
+                  wizard offers a customizable step-by-step workflow. Advanced
+                  users can drive the CLI directly with flags for full control.
                 </p>
-                <span className="font-mono text-xs text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))]">
-                  Go · SQLite · Bubble Tea
-                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {["Python", "Typer", "Rich", "Pandas"].map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -184,7 +218,7 @@ export default function LandingPage() {
               href="/connect"
               className="inline-flex items-center gap-2 rounded-md px-6 py-3 text-lg font-medium bg-[hsl(var(--fern))] dark:bg-[hsl(var(--rust))] text-white hover:bg-[hsl(var(--eucalyptus))] dark:hover:bg-[hsl(var(--creamsicle))] transition-colors"
             >
-              Get in Touch
+              Drop me a line
             </Link>
           </div>
         </ScrollSection>

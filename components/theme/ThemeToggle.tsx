@@ -17,18 +17,21 @@ export function ThemeToggle() {
 
   // On mount, read from localStorage or system preference
   useEffect(() => {
-    setMounted(true);
-    const stored = localStorage.getItem("theme") as "light" | "dark" | null;
-    if (stored) {
-      setTheme(stored);
-      document.documentElement.classList.toggle("dark", stored === "dark");
-    } else {
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setTheme(prefersDark ? "dark" : "light");
-      document.documentElement.classList.toggle("dark", prefersDark);
-    }
+    // Use a microtask to avoid synchronous setState warning
+    queueMicrotask(() => {
+      setMounted(true);
+      const stored = localStorage.getItem("theme") as "light" | "dark" | null;
+      if (stored) {
+        setTheme(stored);
+        document.documentElement.classList.toggle("dark", stored === "dark");
+      } else {
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        setTheme(prefersDark ? "dark" : "light");
+        document.documentElement.classList.toggle("dark", prefersDark);
+      }
+    });
   }, []);
 
   const toggleTheme = () => {
