@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 interface TypewriterTextProps {
@@ -28,6 +28,7 @@ export function TypewriterText({
   onComplete,
 }: TypewriterTextProps) {
   // Handle reduced motion - set state synchronously before render
+  const shouldReduceMotion = useReducedMotion();
   const initialComplete = shouldReduceMotion;
   const [displayedText, setDisplayedText] = useState(
     shouldReduceMotion ? text : ""
@@ -40,7 +41,7 @@ export function TypewriterText({
     if (shouldReduceMotion) {
       onComplete?.();
     }
-  }, [onComplete]);
+  }, [onComplete, shouldReduceMotion]);
 
   useEffect(() => {
     if (shouldReduceMotion) {
@@ -52,7 +53,7 @@ export function TypewriterText({
     }, delay);
 
     return () => clearTimeout(startTimeout);
-  }, [delay]);
+  }, [delay, shouldReduceMotion]);
 
   useEffect(() => {
     if (!isTyping || shouldReduceMotion) return;
