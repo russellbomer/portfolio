@@ -484,8 +484,8 @@ wss.on("connection", (ws: WebSocket, req) => {
     }
   });
 
-  proc.onExit(({ exitCode, signal }: { exitCode: number; signal: number }) => {
-    log(`[pty] Process exited with code ${exitCode}, signal ${signal}`);
+  proc.onExit(({ exitCode, signal }: { exitCode: number; signal?: number }) => {
+    log(`[pty] Process exited with code ${exitCode}, signal ${signal ?? 0}`);
     ws.close();
   });
 
