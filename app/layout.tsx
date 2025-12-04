@@ -1,3 +1,4 @@
+import { InitialLoadProvider } from "@/components/providers/InitialLoadProvider";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { CustomCursor } from "@/components/ui/CustomCursor";
@@ -51,20 +52,22 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-[100dvh] bg-background text-foreground font-mono antialiased">
-        <LoadingScreen />
-        {/* Skip to main content link for keyboard users */}
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:outline-none"
-        >
-          Skip to main content
-        </a>
-        {children}
-        <PinwheelBackground />
-        <NoiseTexture />
-        <BackToTop />
-        <ThemeToggle />
-        <CustomCursor />
+        <InitialLoadProvider>
+          <LoadingScreen />
+          {/* Skip to main content link for keyboard users */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:outline-none"
+          >
+            Skip to main content
+          </a>
+          {children}
+          <PinwheelBackground />
+          <NoiseTexture />
+          <BackToTop />
+          <ThemeToggle />
+          <CustomCursor />
+        </InitialLoadProvider>
       </body>
     </html>
   );

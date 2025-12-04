@@ -1,5 +1,6 @@
 "use client";
 
+import { useInitialLoad } from "@/components/providers/InitialLoadProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -18,10 +19,11 @@ const SCROLL_LOCK_DURATION = 10200; // ms
 export function LoadingScreen({ minDuration = 2500 }: LoadingScreenProps) {
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
+  const { isInitialLoad, markLoadComplete } = useInitialLoad();
 
-  // Lock scroll on homepage during loading + hero animation
+  // Lock scroll on homepage during loading + hero animation (only on initial load)
   useEffect(() => {
-    if (pathname !== "/") {
+    if (pathname !== "/" || !isInitialLoad) {
       return;
     }
 
@@ -82,12 +84,12 @@ export function LoadingScreen({ minDuration = 2500 }: LoadingScreenProps) {
       window.scrollTo(0, scrollY);
       document.removeEventListener("touchmove", preventScroll);
     };
-  }, [pathname]);
+  }, [pathname, isInitialLoad]);
 
-  // Show loading on initial mount and when navigating to home
+  // Show loading only on initial load to homepage
   useEffect(() => {
-    // Only show loading screen on homepage
-    if (pathname !== "/") {
+    // Only show loading screen on homepage during initial load
+    if (pathname !== "/" || !isInitialLoad) {
       queueMicrotask(() => setIsLoading(false));
       return;
     }
@@ -97,10 +99,11 @@ export function LoadingScreen({ minDuration = 2500 }: LoadingScreenProps) {
 
     const timer = setTimeout(() => {
       setIsLoading(false);
+      markLoadComplete();
     }, minDuration);
 
     return () => clearTimeout(timer);
-  }, [pathname, minDuration]);
+  }, [pathname, minDuration, isInitialLoad, markLoadComplete]);
 
   return (
     <AnimatePresence>

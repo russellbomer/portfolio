@@ -1,9 +1,12 @@
 "use client";
 
 import { TypewriterText } from "@/components/motion/TypewriterText";
+import { useInitialLoad } from "@/components/providers/InitialLoadProvider";
 import { motion } from "framer-motion";
 
 export function HeroContent() {
+  const { isInitialLoad } = useInitialLoad();
+
   // Timing calculation for typing effect with pauses:
   // Loading screen: ~2500ms display + 1200ms fade = 3700ms
   // Line 1: "Hello, I'm" (10 chars × 50ms = 500ms) starts at 3800ms
@@ -35,6 +38,49 @@ export function HeroContent() {
   const line3bDuration = 29 * slowSpeed; // 2610ms
 
   const scrollPromptStart = (line3bStart + line3bDuration) / 1000; // ~9.96s
+
+  // If not initial load, show content immediately without animation
+  if (!isInitialLoad) {
+    return (
+      <div className="max-w-4xl">
+        {/* Greeting */}
+        <p className="text-muted-foreground font-mono text-sm mb-4">
+          Hello, I&apos;m
+        </p>
+
+        {/* Name */}
+        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight mb-6">
+          Russell Bomer
+        </h1>
+
+        {/* Tagline */}
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-8">
+          I make software... and a lot of other things.
+        </p>
+
+        {/* Scroll prompt */}
+        <button
+          className="text-muted-foreground text-sm font-mono cursor-pointer hover:text-foreground transition-colors"
+          onClick={() => {
+            const element = document.getElementById("about");
+            if (element) {
+              const rect = element.getBoundingClientRect();
+              const scrollTop = window.scrollY;
+              const elementTop = rect.top + scrollTop;
+              const targetScroll = elementTop + window.innerHeight * 0.5;
+
+              window.scrollTo({
+                top: targetScroll,
+                behavior: "smooth",
+              });
+            }
+          }}
+        >
+          <span className="animate-pulse">↓ Scroll for more</span>
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl">
