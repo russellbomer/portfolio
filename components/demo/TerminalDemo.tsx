@@ -34,12 +34,9 @@ export default function TerminalDemo() {
 
   const script = useMemo(
     () => [
-      "git clone https://github.com/nextjs/saas-starter",
-      "npm install",
-      "npm run db:setup",
-      "npm run db:migrate",
-      "npm run db:seed",
-      "npm run dev 🎉",
+      "Thanks for checking out Quarry!",
+      "Source code is available at https://github.com/russellbomer/quarry",
+      "Hope to see you again soon! 😊",
     ],
     []
   );
