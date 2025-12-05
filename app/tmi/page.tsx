@@ -13,7 +13,7 @@ export default function TMIPage() {
     <article id="main-content" className="mx-auto max-w-2xl px-6 py-16">
       <nav className="mb-12">
         <Link
-          href="/"
+          href="/home"
           className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
         >
           <span>←</span>
@@ -154,7 +154,7 @@ export default function TMIPage() {
           </p>
         </section>
 
-        <section className="space-y-4 pt-8 border-t border-border/50">
+        <section className="space-y-4 pt-8 pb-[120px] border-t border-border/50">
           <p className="text-muted-foreground leading-relaxed">
             If you&apos;ve made it this far, we should probably talk.{" "}
             <Link

@@ -3,7 +3,7 @@
 import { useInitialLoad } from "@/components/providers/InitialLoadProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface LoadingScreenProps {
   /** Minimum display time in ms */
@@ -17,13 +17,21 @@ interface LoadingScreenProps {
 const SCROLL_LOCK_DURATION = 10200; // ms
 
 export function LoadingScreen({ minDuration = 2500 }: LoadingScreenProps) {
-  const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
-  const { isInitialLoad, markLoadComplete } = useInitialLoad();
+  const { shouldAnimate } = useInitialLoad();
 
-  // Lock scroll on homepage during loading + hero animation (only on initial load)
+  // Determine if we should show loading screen (only on homepage + initial session)
+  const showLoadingScreen = shouldAnimate && pathname === "/";
+
+  const [isLoading, setIsLoading] = useState(showLoadingScreen);
+  const scrollLockRef = useRef<{
+    cleanup: () => void;
+    timer: NodeJS.Timeout | null;
+  } | null>(null);
+
+  // Lock scroll on homepage during loading + hero animation
   useEffect(() => {
-    if (pathname !== "/" || !isInitialLoad) {
+    if (!showLoadingScreen) {
       return;
     }
 
@@ -54,26 +62,8 @@ export function LoadingScreen({ minDuration = 2500 }: LoadingScreenProps) {
     };
     document.addEventListener("touchmove", preventScroll, { passive: false });
 
-    // Unlock after full animation sequence
-    const scrollTimer = setTimeout(() => {
+    const cleanup = () => {
       // Restore original styles
-      document.body.style.overflow = originalStyle.overflow;
-      document.body.style.position = originalStyle.position;
-      document.body.style.top = originalStyle.top;
-      document.body.style.left = originalStyle.left;
-      document.body.style.right = originalStyle.right;
-      document.body.style.width = originalStyle.width;
-      document.body.style.height = originalStyle.height;
-
-      // Restore scroll position
-      window.scrollTo(0, scrollY);
-
-      // Remove touch listener
-      document.removeEventListener("touchmove", preventScroll);
-    }, SCROLL_LOCK_DURATION);
-
-    return () => {
-      clearTimeout(scrollTimer);
       document.body.style.overflow = originalStyle.overflow;
       document.body.style.position = originalStyle.position;
       document.body.style.top = originalStyle.top;
@@ -84,26 +74,32 @@ export function LoadingScreen({ minDuration = 2500 }: LoadingScreenProps) {
       window.scrollTo(0, scrollY);
       document.removeEventListener("touchmove", preventScroll);
     };
-  }, [pathname, isInitialLoad]);
 
-  // Show loading only on initial load to homepage
+    // Unlock after full animation sequence
+    const scrollTimer = setTimeout(cleanup, SCROLL_LOCK_DURATION);
+
+    // Store ref for early unlock
+    scrollLockRef.current = { cleanup, timer: scrollTimer };
+
+    return () => {
+      clearTimeout(scrollTimer);
+      cleanup();
+      scrollLockRef.current = null;
+    };
+  }, [showLoadingScreen]);
+
+  // Hide loading screen after minimum duration
   useEffect(() => {
-    // Only show loading screen on homepage during initial load
-    if (pathname !== "/" || !isInitialLoad) {
-      queueMicrotask(() => setIsLoading(false));
+    if (!showLoadingScreen) {
       return;
     }
 
-    // Show loading screen - use queueMicrotask to avoid synchronous setState warning
-    queueMicrotask(() => setIsLoading(true));
-
     const timer = setTimeout(() => {
       setIsLoading(false);
-      markLoadComplete();
     }, minDuration);
 
     return () => clearTimeout(timer);
-  }, [pathname, minDuration, isInitialLoad, markLoadComplete]);
+  }, [showLoadingScreen, minDuration]);
 
   return (
     <AnimatePresence>

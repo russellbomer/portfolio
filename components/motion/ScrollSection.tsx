@@ -22,6 +22,7 @@ interface ScrollSectionProps {
 /**
  * A full-viewport section that fades in/out based on scroll position.
  * Content is fixed in the viewport center, only opacity changes.
+ * The first section scrolls upward as it fades out for a parallax effect.
  */
 export function ScrollSection({
   children,
@@ -49,6 +50,7 @@ export function ScrollSection({
   // First section: start fully visible, only fade out
   // Last section: fade in, stay visible (no fade out)
   // Other sections: fade in, stay visible, fade out
+  // Timing is tuned so next section starts fading in as previous fades out
   const getOpacityConfig = () => {
     if (isFirst) {
       return {
@@ -57,19 +59,29 @@ export function ScrollSection({
       };
     }
     if (isLast) {
+      // Start fading in earlier to overlap with previous section's fade out
       return {
-        input: [0.25, 0.4, 0.6, 1],
+        input: [0.15, 0.3, 0.5, 1],
         output: [0, 1, 1, 1],
       };
     }
+    // Middle sections: fade in earlier, stay visible longer, fade out
     return {
-      input: [0.25, 0.4, 0.6, 0.75],
+      input: [0.15, 0.3, 0.6, 0.75],
       output: [0, 1, 1, 0],
     };
   };
 
   const { input, output } = getOpacityConfig();
   const opacity = useTransform(scrollYProgress, input, output);
+
+  // For the first section, add upward movement as it fades out
+  // This creates a parallax effect where content scrolls up faster than the page
+  const y = useTransform(
+    scrollYProgress,
+    [0, 0.5, 0.75], // Start moving when opacity starts to fade
+    [0, 0, -150] // Move up 150px as it fades out
+  );
 
   // Track if section is visible enough to receive pointer events
   const [isInteractive, setIsInteractive] = useState(isFirst);
@@ -98,15 +110,22 @@ export function ScrollSection({
   }
 
   // Desktop: fixed content with scroll-driven opacity
+  // First section also moves upward as it fades for parallax effect
+  // All sections use consistent 110vh for ~1 full mouse scroll rhythm
+  const scrollHeight = "h-[110vh]";
+
   return (
     <>
       {/* Scroll trigger area - invisible spacer */}
-      <div ref={ref} className="h-[200vh]" id={id} />
+      <div ref={ref} className={scrollHeight} id={id} />
 
       {/* Fixed content overlay */}
       <motion.div
         className={`fixed inset-0 flex items-center pointer-events-none ${className}`}
-        style={{ opacity }}
+        style={{
+          opacity,
+          y: isFirst ? y : 0,
+        }}
       >
         <div
           className={`w-full ${

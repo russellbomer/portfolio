@@ -1,7 +1,7 @@
 import Footer from "@/components/layout/Footer";
 import { SidebarNav } from "@/components/layout/SidebarNav";
 import { ScrollSection } from "@/components/motion/ScrollSection";
-import { HeroContent } from "@/components/sections/HeroContent";
+import { StaticHeroContent } from "@/components/sections/StaticHeroContent";
 import { buildMetadata } from "@/lib/seo/meta";
 import Link from "next/link";
 
@@ -9,10 +9,14 @@ export const metadata = buildMetadata({
   title: undefined, // Use site name only for homepage
   description:
     "Full-stack engineer crafting thoughtful software with precision and care.",
-  pathname: "/",
+  pathname: "/home",
 });
 
-export default function LandingPage() {
+/**
+ * Static version of the landing page - no loading screen or typewriter animations.
+ * Used for "Back to home" navigation from other pages.
+ */
+export default function HomePage() {
   return (
     <>
       <SidebarNav />
@@ -23,7 +27,7 @@ export default function LandingPage() {
           className="px-6 md:px-12 lg:pl-32 lg:pr-24"
           isFirst
         >
-          <HeroContent />
+          <StaticHeroContent />
         </ScrollSection>
 
         {/* About Section */}
@@ -65,7 +69,7 @@ export default function LandingPage() {
                 href="/tmi"
                 className="text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
               >
-                (The longer version) →
+                The longer version →
               </Link>
             </div>
           </div>
@@ -154,6 +158,27 @@ export default function LandingPage() {
             <div className="grid gap-4 mb-6">
               <div className="group p-4 rounded-lg border border-[hsl(var(--rust)/0.3)] hover:border-[hsl(var(--eucalyptus))] transition-colors">
                 <h3 className="font-display text-xl font-medium mb-1">
+                  Portfolio Site
+                </h3>
+                <p className="text-muted-foreground mb-2">
+                  (This very site.) A Next.js/React application built from
+                  scratch — responsive design, fluid animations, accessible
+                  markup, and a clean component architecture.
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {["Next.js", "TypeScript", "Tailwind"].map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="group p-4 rounded-lg border border-[hsl(var(--rust)/0.3)] hover:border-[hsl(var(--eucalyptus))] transition-colors">
+                <h3 className="font-display text-xl font-medium mb-1">
                   Quarry
                 </h3>
                 <p className="text-muted-foreground mb-2">
@@ -162,58 +187,15 @@ export default function LandingPage() {
                   wizard offers a customizable step-by-step workflow. Advanced
                   users can drive the CLI directly with flags for full control.
                 </p>
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex flex-wrap gap-1.5">
-                    {["Python", "Typer", "Rich", "Pandas"].map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <Link
-                    href="https://quarry.russellbomer.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm font-mono text-primary hover:text-primary/80 transition-colors shrink-0"
-                  >
-                    Try the demo
-                    <span className="text-xs">↗</span>
-                  </Link>
-                </div>
-              </div>
-
-              <div className="group p-4 rounded-lg border border-[hsl(var(--rust)/0.3)] hover:border-[hsl(var(--eucalyptus))] transition-colors">
-                <h3 className="font-display text-xl font-medium mb-1">
-                  Portfolio Site
-                </h3>
-                <p className="text-muted-foreground mb-2">
-                  (This very site.) A Next.js/React application built from
-                  scratch — responsive design, fluid animations, accessible
-                  markup, and a clean component architecture.
-                </p>
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex flex-wrap gap-1.5">
-                    {["Next.js", "TypeScript", "Tailwind"].map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <Link
-                    href="https://github.com/russellbomer/portfolio"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm font-mono text-primary hover:text-primary/80 transition-colors shrink-0"
-                  >
-                    See the source
-                    <span className="text-xs">↗</span>
-                  </Link>
+                <div className="flex flex-wrap gap-1.5">
+                  {["Python", "Typer", "Rich", "Pandas"].map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
+                    >
+                      {tech}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
@@ -222,7 +204,7 @@ export default function LandingPage() {
               href="/work"
               className="inline-flex items-center gap-2 text-lg font-medium text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
             >
-              Check out more
+              More to explore
               <span className="text-xl">→</span>
             </Link>
           </div>

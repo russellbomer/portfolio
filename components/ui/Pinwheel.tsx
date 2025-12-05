@@ -12,6 +12,8 @@ interface PinwheelProps {
   colors?: [string, string];
   /** Rotation multiplier - higher = more rotation per scroll */
   spinSpeed?: number;
+  /** Initial rotation in degrees (for intro animation) */
+  initialRotation?: number;
 }
 
 export function Pinwheel({
@@ -20,8 +22,9 @@ export function Pinwheel({
   color = "currentColor",
   colors,
   spinSpeed = 1,
+  initialRotation = 0,
 }: PinwheelProps) {
-  const [rotation, setRotation] = useState(0);
+  const [rotation, setRotation] = useState(initialRotation);
 
   // If colors array provided, use alternating; otherwise use single color
   const bladeColors = colors
@@ -30,6 +33,8 @@ export function Pinwheel({
 
   // Track scroll and calculate rotation from initial position
   useEffect(() => {
+    // Start from the initial rotation (which may have been animated)
+    const baseRotation = initialRotation;
     // Capture initial scroll position on mount
     const startY = window.scrollY;
 
@@ -37,13 +42,16 @@ export function Pinwheel({
       // Calculate rotation based on pixels scrolled from initial position
       const scrolled = window.scrollY - startY;
       // Convert scroll pixels to rotation degrees (1 full rotation per 1000px scrolled)
-      const newRotation = (scrolled / 1000) * 360 * spinSpeed;
-      setRotation(newRotation);
+      const scrollRotation = (scrolled / 1000) * 360 * spinSpeed;
+      setRotation(baseRotation + scrollRotation);
     };
+
+    // Call once to set initial rotation based on current scroll position
+    handleScroll();
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [spinSpeed]);
+  }, [spinSpeed, initialRotation]);
 
   return (
     <motion.svg

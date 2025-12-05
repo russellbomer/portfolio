@@ -41,7 +41,7 @@ const projects: Array<{
     status: "live",
     link: {
       href: "https://github.com/russellbomer/portfolio",
-      label: "View source",
+      label: "See the source",
       external: true,
     },
   },
@@ -68,7 +68,7 @@ export default function WorkPage() {
     <article id="main-content" className="mx-auto max-w-3xl px-6 py-16">
       <nav className="mb-12">
         <Link
-          href="/"
+          href="/home"
           className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
         >
           <span>←</span>

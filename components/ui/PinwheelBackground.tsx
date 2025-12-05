@@ -1,5 +1,6 @@
 "use client";
 
+import { useInitialLoad } from "@/components/providers/InitialLoadProvider";
 import { useEffect, useState } from "react";
 import { Pinwheel } from "./Pinwheel";
 
@@ -14,6 +15,14 @@ type LayoutConfig = {
   show: boolean;
   mode: "grid" | "accent"; // grid = tiled background, accent = single decorative pinwheel
 };
+
+// =============================================================================
+// INTRO ANIMATION TIMING
+// Synced with HeroContent typewriter animation
+// =============================================================================
+const INTRO_START = 3800; // When text streaming starts (ms)
+const INTRO_END = 9960; // When text streaming ends (ms)
+const INTRO_DURATION = INTRO_END - INTRO_START; // ~6160ms for one full rotation
 
 // =============================================================================
 // BREAKPOINT CONFIGURATIONS
@@ -116,6 +125,7 @@ function getLayoutConfig(width: number, height: number): LayoutConfig {
 export function PinwheelBackground({
   className = "",
 }: PinwheelBackgroundProps) {
+  const { shouldAnimate } = useInitialLoad();
   const [layout, setLayout] = useState<LayoutConfig>({
     columns: 2,
     tileSize: 200,
@@ -124,6 +134,7 @@ export function PinwheelBackground({
     mode: "grid",
   });
   const [mounted, setMounted] = useState(false);
+  const [introRotation, setIntroRotation] = useState(0);
 
   useEffect(() => {
     queueMicrotask(() => setMounted(true));
@@ -137,6 +148,51 @@ export function PinwheelBackground({
     window.addEventListener("resize", updateLayout);
     return () => window.removeEventListener("resize", updateLayout);
   }, []);
+
+  // Animate one full rotation during the hero text streaming
+  useEffect(() => {
+    if (!shouldAnimate || !mounted) return;
+
+    let animationFrame: number;
+    let startTime: number | null = null;
+
+    const animate = (timestamp: number) => {
+      if (startTime === null) {
+        startTime = timestamp;
+      }
+
+      const elapsed = timestamp - startTime;
+
+      // Wait for intro start, then animate for the duration
+      if (elapsed < INTRO_START) {
+        // Before text starts - no rotation yet
+        setIntroRotation(0);
+      } else if (elapsed < INTRO_END) {
+        // During text streaming - animate from 0 to 360
+        const progress = (elapsed - INTRO_START) / INTRO_DURATION;
+        // Use easeInOut for smooth animation
+        const eased =
+          progress < 0.5
+            ? 2 * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        setIntroRotation(eased * 360);
+      } else {
+        // After text ends - stay at 360 (scroll will add to this)
+        setIntroRotation(360);
+        return; // Stop animation loop
+      }
+
+      animationFrame = requestAnimationFrame(animate);
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
+  }, [shouldAnimate, mounted]);
 
   // Two-color alternating palette
   const fern = "hsl(118 19% 41%)";
@@ -162,7 +218,12 @@ export function PinwheelBackground({
         }}
         aria-hidden="true"
       >
-        <Pinwheel size={tileSize} colors={[fern, ferrum]} spinSpeed={0.3} />
+        <Pinwheel
+          size={tileSize}
+          colors={[fern, ferrum]}
+          spinSpeed={0.3}
+          initialRotation={introRotation}
+        />
       </div>
     );
   }
@@ -204,7 +265,12 @@ export function PinwheelBackground({
             height: tileSize,
           }}
         >
-          <Pinwheel size={tileSize} color={color} spinSpeed={speed} />
+          <Pinwheel
+            size={tileSize}
+            color={color}
+            spinSpeed={speed}
+            initialRotation={introRotation}
+          />
         </div>
       ))}
     </div>

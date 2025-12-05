@@ -5,7 +5,7 @@ import { useInitialLoad } from "@/components/providers/InitialLoadProvider";
 import { motion } from "framer-motion";
 
 export function HeroContent() {
-  const { isInitialLoad } = useInitialLoad();
+  const { shouldAnimate } = useInitialLoad();
 
   // Timing calculation for typing effect with pauses:
   // Loading screen: ~2500ms display + 1200ms fade = 3700ms
@@ -39,8 +39,8 @@ export function HeroContent() {
 
   const scrollPromptStart = (line3bStart + line3bDuration) / 1000; // ~9.96s
 
-  // If not initial load, show content immediately without animation
-  if (!isInitialLoad) {
+  // If not initial session load, show content immediately without animation
+  if (!shouldAnimate) {
     return (
       <div className="max-w-4xl">
         {/* Greeting */}

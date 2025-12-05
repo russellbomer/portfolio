@@ -1,7 +1,6 @@
 "use client";
 
 import { useDemoSession } from "@/components/demo/DemoSessionProvider";
-import { Check, Copy } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "xterm/css/xterm.css";
 
@@ -30,7 +29,6 @@ export default function TerminalDemo() {
   const dataDisposableRef = useRef<{ dispose: () => void } | null>(null);
   const resizeDisposableRef = useRef<{ dispose: () => void } | null>(null);
   const demoBufferRef = useRef<string>("");
-  const [copied, setCopied] = useState(false);
   const [isLive, setIsLive] = useState(false);
   const [wsError, setWsError] = useState<string | null>(null);
 
@@ -152,6 +150,53 @@ export default function TerminalDemo() {
         });
         termRef.current = term;
         term.open(containerRef.current!);
+
+        // Enable clipboard paste with Ctrl+V / Cmd+V
+        term.attachCustomKeyEventHandler((event: KeyboardEvent) => {
+          // Handle Ctrl+V / Cmd+V for paste
+          if (
+            (event.ctrlKey || event.metaKey) &&
+            event.key === "v" &&
+            event.type === "keydown"
+          ) {
+            navigator.clipboard.readText().then((text) => {
+              if (text && termRef.current) {
+                // In live mode, send to websocket
+                if (
+                  liveRef.current &&
+                  wsRef.current &&
+                  wsRef.current.readyState === wsRef.current.OPEN
+                ) {
+                  wsRef.current.send(
+                    JSON.stringify({ type: "input", data: text })
+                  );
+                } else {
+                  // In demo mode, add to buffer and echo
+                  demoBufferRef.current += text;
+                  termRef.current.write(text);
+                }
+              }
+            });
+            return false; // Prevent default handling
+          }
+
+          // Handle Ctrl+C / Cmd+C for copy (when there's a selection)
+          if (
+            (event.ctrlKey || event.metaKey) &&
+            event.key === "c" &&
+            event.type === "keydown"
+          ) {
+            const selection = term.getSelection();
+            if (selection) {
+              navigator.clipboard.writeText(selection);
+              return false; // Prevent default handling
+            }
+            // If no selection, let Ctrl+C pass through (for SIGINT in live mode)
+          }
+
+          return true; // Allow default handling for other keys
+        });
+
         const fitAddon = new FitAddon();
         term.loadAddon(fitAddon);
         // Clean startup - no messages before quarry banner
@@ -392,12 +437,6 @@ export default function TerminalDemo() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(script.join("\n"));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   return (
     <div className="w-full h-full flex flex-col font-mono text-sm relative">
       {!FEATURE_ENABLED && (
@@ -415,7 +454,7 @@ export default function TerminalDemo() {
         )}
         <div className="flex-1 min-h-0 flex flex-col">
           <div ref={containerRef} className="flex-1 min-h-0" />
-          <div className="mt-2 text-[11px] text-white/70 shrink-0 flex items-center justify-between">
+          <div className="mt-2 text-[11px] text-white/70 shrink-0">
             <span>
               Mode:{" "}
               {FEATURE_ENABLED
@@ -425,17 +464,6 @@ export default function TerminalDemo() {
                 : "Demo (feature off)"}
               {FEATURE_ENABLED && <> • WS: {WS_URL}</>}
             </span>
-            <button
-              onClick={copyToClipboard}
-              className="text-white/70 hover:text-white transition-colors"
-              aria-label="Copy to clipboard"
-            >
-              {copied ? (
-                <Check className="h-4 w-4" />
-              ) : (
-                <Copy className="h-4 w-4" />
-              )}
-            </button>
           </div>
           {!loaded && (
             <div className="space-y-2 shrink-0">

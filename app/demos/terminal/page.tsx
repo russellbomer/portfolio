@@ -7,7 +7,6 @@ import {
 } from "@/components/demo/DemoSessionProvider";
 import { FileDownloader } from "@/components/demo/FileDownloader";
 import nextDynamic from "next/dynamic";
-import Link from "next/link";
 
 const TerminalDemo = nextDynamic(
   () => import("@/components/demo/TerminalDemo"),
@@ -54,18 +53,8 @@ export default function TerminalDemoPage() {
   return (
     <article
       id="main-content"
-      className="h-[100dvh] overflow-hidden flex flex-col py-4 pl-6 pr-6 lg:pr-[420px]"
+      className="h-[100dvh] overflow-hidden flex flex-col py-4 px-6 lg:pr-[420px]"
     >
-      <nav className="mb-3 shrink-0">
-        <Link
-          href="/work"
-          className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <span>←</span>
-          <span>Back to projects</span>
-        </Link>
-      </nav>
-
       <div className="rounded-lg border border-border/50 bg-[hsl(var(--thorn))] overflow-hidden flex-1 flex flex-col min-h-0">
         <div className="flex items-center gap-2 px-4 py-2 bg-muted/10 border-b border-border/30 shrink-0">
           <div className="flex gap-1.5">
@@ -83,6 +72,35 @@ export default function TerminalDemoPage() {
               <TerminalWithFileDownloader />
             </DemoSessionProvider>
           </DemoErrorBoundary>
+        </div>
+        <div className="px-4 py-2 border-t border-border/30 text-xs text-white text-center">
+          Powered by{" "}
+          <a
+            href="https://xtermjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[hsl(var(--eucalyptus))] hover:underline"
+          >
+            xterm.js
+          </a>
+          ,{" "}
+          <a
+            href="https://www.docker.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[hsl(var(--eucalyptus))] hover:underline"
+          >
+            Docker
+          </a>
+          , and{" "}
+          <a
+            href="https://github.com/microsoft/node-pty"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[hsl(var(--eucalyptus))] hover:underline"
+          >
+            node-pty
+          </a>
         </div>
       </div>
     </article>

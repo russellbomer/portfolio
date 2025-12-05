@@ -1,56 +1,30 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
+import { usePathname } from "next/navigation";
+import { createContext, useContext, type ReactNode } from "react";
 
 interface InitialLoadContextType {
-  /** True only on the very first page load of this session */
-  isInitialLoad: boolean;
-  /** Mark the initial load as complete (called after animations finish) */
-  markLoadComplete: () => void;
+  /** True when on the root homepage (/) - animations should play */
+  shouldAnimate: boolean;
 }
 
 const InitialLoadContext = createContext<InitialLoadContextType>({
-  isInitialLoad: false,
-  markLoadComplete: () => {},
+  shouldAnimate: false,
 });
 
-const SESSION_KEY = "portfolio_initial_load_complete";
-
+/**
+ * Simple provider that enables animations only on the root homepage (/).
+ * The /home route is used for "Back to home" navigation and shows static content.
+ */
 export function InitialLoadProvider({ children }: { children: ReactNode }) {
-  // Start with false to avoid hydration mismatch
-  const [isInitialLoad, setIsInitialLoad] = useState(false);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const pathname = usePathname();
 
-  useEffect(() => {
-    // Check sessionStorage after hydration
-    const hasLoaded = sessionStorage.getItem(SESSION_KEY) === "true";
-    // Use queueMicrotask to avoid synchronous setState warning
-    queueMicrotask(() => {
-      setIsInitialLoad(!hasLoaded);
-      setIsHydrated(true);
-    });
-  }, []);
+  // Animations play on "/" only
+  // "/home" shows static content for back navigation
+  const shouldAnimate = pathname === "/";
 
-  const markLoadComplete = () => {
-    sessionStorage.setItem(SESSION_KEY, "true");
-    setIsInitialLoad(false);
-  };
-
-  // Don't render children until hydrated to avoid flash
-  // Actually, we should render but just treat as non-initial until hydrated
   return (
-    <InitialLoadContext.Provider
-      value={{
-        isInitialLoad: isHydrated && isInitialLoad,
-        markLoadComplete,
-      }}
-    >
+    <InitialLoadContext.Provider value={{ shouldAnimate }}>
       {children}
     </InitialLoadContext.Provider>
   );

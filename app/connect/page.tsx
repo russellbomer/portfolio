@@ -13,7 +13,7 @@ export default function ConnectPage() {
     <main id="main-content" className="mx-auto max-w-2xl space-y-6 px-6 py-16">
       <nav>
         <Link
-          href="/"
+          href="/home"
           className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
         >
           <span>←</span>

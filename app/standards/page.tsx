@@ -2,10 +2,10 @@ import { buildMetadata } from "@/lib/seo/meta";
 import Link from "next/link";
 
 export const metadata = buildMetadata({
-  title: "Practice",
+  title: "Standards",
   description:
     "Skills, expertise, and approach to building software that matters.",
-  pathname: "/practice",
+  pathname: "/standards",
 });
 
 const skills = {
@@ -27,22 +27,22 @@ const education = [
     degree: "M.S. Software Engineering",
     institution: "Western Governors University",
     status: "In Progress",
-    year: "Expected 2026",
+    year: "Expected 2027",
   },
   {
-    degree: "B.S. Supply Chain Management",
+    degree: "B.S.B.A. Supply Chain Management",
     institution: "Appalachian State University",
     status: "Completed",
     year: "2020",
   },
   {
-    degree: "A.A.S. Culinary Arts",
+    degree: "A.A. Culinary Arts",
     institution: "Central Piedmont Community College",
     status: "Completed",
     year: "2015",
   },
   {
-    degree: "A.A.S. Business Administration",
+    degree: "A.S. Business Administration",
     institution: "Central Piedmont Community College",
     status: "Completed",
     year: "2015",
@@ -77,12 +77,12 @@ const principles = [
   },
 ];
 
-export default function PracticePage() {
+export default function StandardsPage() {
   return (
     <article id="main-content" className="mx-auto max-w-3xl px-6 py-16">
       <nav className="mb-12">
         <Link
-          href="/"
+          href="/home"
           className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
         >
           <span>←</span>
@@ -92,7 +92,7 @@ export default function PracticePage() {
 
       <header className="mb-12">
         <h1 className="font-display text-4xl md:text-5xl font-medium mb-4">
-          The Practice
+          Standards
         </h1>
         <p className="text-lg text-muted-foreground">
           Skills, experience, and the principles that guide how I work.
@@ -207,12 +207,13 @@ export default function PracticePage() {
           <p className="text-muted-foreground">
             I value clear communication, reasonable timelines, and projects
             where I can see the whole shape of the problem—from data modeling to
-            user experience.
+            user experience. Get in touch and we'll figure out how I can make
+            your life a little easier.
           </p>
         </div>
       </section>
 
-      <div className="pt-8 border-t border-border/50">
+      <div className="pt-8 pb-[41px] border-t border-border/50">
         <p className="text-muted-foreground">
           Have a project that fits?{" "}
           <Link

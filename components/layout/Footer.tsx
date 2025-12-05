@@ -88,7 +88,7 @@ export default function Footer() {
   return (
     <footer className="relative z-10 bg-background border-t border-[hsl(var(--rust))]">
       {/* Extra padding-bottom on mobile to make room for BackToTop and ThemeToggle buttons */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-2 pb-20 md:pb-2">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-[50px] pb-20 md:pb-[50px]">
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between items-start">
           {/* Brand */}
           <div className="flex items-center gap-2">
