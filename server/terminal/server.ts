@@ -520,7 +520,12 @@ wss.on("connection", (ws: WebSocket, req) => {
   if (QUARRY_MODE || AUTO_RUN_CMD) {
     const autoCmd = AUTO_RUN_CMD || "quarry";
     setTimeout(() => {
-      proc.write("clear && " + autoCmd.trim() + "\n");
+      proc.write("export PS1='user@quarry-demo> ' && clear && " + autoCmd.trim() + "\n");
+    }, 50);
+  } else {
+    // Set custom prompt even without auto-run
+    setTimeout(() => {
+      proc.write("export PS1='user@quarry-demo> '\n");
     }, 50);
   }
 
