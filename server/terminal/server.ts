@@ -532,11 +532,18 @@ wss.on("connection", (ws: WebSocket, req) => {
         }
 
         // On newline, check the complete command
+        log(`[filter] Checking command: "${inputBuffer.trim()}"`);
         const filterResult = filterCdCommand(inputBuffer.trim(), sessionDir);
+        log(
+          `[filter] Result: allowed=${filterResult.allowed}, message=${
+            filterResult.message ? "yes" : "no"
+          }`
+        );
         inputBuffer = ""; // Clear buffer
 
         if (!filterResult.allowed) {
           // Command blocked - send error message but don't execute
+          log(`[filter] BLOCKING command`);
           if (filterResult.message && ws.readyState === ws.OPEN) {
             ws.send("\r\n" + filterResult.message + "\r\n");
           }
@@ -544,6 +551,7 @@ wss.on("connection", (ws: WebSocket, req) => {
         }
 
         // Command allowed - write newline to execute it
+        log(`[filter] ALLOWING command`);
         proc.write(parsed.data);
         return;
       }
