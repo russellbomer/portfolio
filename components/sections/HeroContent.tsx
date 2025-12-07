@@ -67,10 +67,18 @@ export function HeroContent() {
               const rect = element.getBoundingClientRect();
               const scrollTop = window.scrollY;
               const elementTop = rect.top + scrollTop;
-              const targetScroll = elementTop + window.innerHeight * 0.5;
+              // Scroll to the point where sidebar becomes visible:
+              // Sidebar appears when aboutCenter <= viewportCenter
+              // aboutCenter = elementTop + height/2, viewportCenter = scrollY + vh/2
+              // So we need: elementTop + height/2 = scrollY + vh/2
+              // scrollY = elementTop + height/2 - vh/2
+              const sectionHeight = rect.height;
+              const viewportHeight = window.innerHeight;
+              const targetScroll =
+                elementTop + sectionHeight / 2 - viewportHeight / 2;
 
               window.scrollTo({
-                top: targetScroll,
+                top: Math.max(0, targetScroll),
                 behavior: "smooth",
               });
             }
@@ -128,15 +136,21 @@ export function HeroContent() {
         onClick={() => {
           const element = document.getElementById("about");
           if (element) {
-            // ScrollSection uses a 200vh spacer, and content is fully opaque
-            // at ~40% scroll progress. Scroll to 50% of the spacer to land at full opacity.
+            // Scroll to the point where sidebar becomes visible:
+            // Sidebar appears when aboutCenter <= viewportCenter
+            // aboutCenter = elementTop + height/2, viewportCenter = scrollY + vh/2
+            // So we need: elementTop + height/2 = scrollY + vh/2
+            // scrollY = elementTop + height/2 - vh/2
             const rect = element.getBoundingClientRect();
             const scrollTop = window.scrollY;
             const elementTop = rect.top + scrollTop;
-            const targetScroll = elementTop + window.innerHeight * 0.5;
+            const sectionHeight = rect.height;
+            const viewportHeight = window.innerHeight;
+            const targetScroll =
+              elementTop + sectionHeight / 2 - viewportHeight / 2;
 
             window.scrollTo({
-              top: targetScroll,
+              top: Math.max(0, targetScroll),
               behavior: "smooth",
             });
           }

@@ -147,13 +147,57 @@ The terminal demo runs untrusted user commands in a sandboxed Docker container w
 
 ### File Download Security
 
-| Control                   | Implementation                                       |
-| ------------------------- | ---------------------------------------------------- |
-| **Path traversal**        | `path.resolve()` + prefix check blocks `../` attacks |
-| **Filename sanitization** | Regex allows only `[\w.-]+` characters               |
-| **Extension whitelist**   | Only `.json`, `.csv`, `.html`, `.txt`, `.md`         |
-| **Size limits**           | 10MB per file, 50MB per session                      |
-| **Session binding**       | Files require valid session UUID to access           |
+| Control                   | Implementation                                                          |
+| ------------------------- | ----------------------------------------------------------------------- |
+| **Path traversal**        | `path.resolve()` + prefix check blocks `../` attacks                    |
+| **Filename sanitization** | Regex allows only `[\w.-]+` characters                                  |
+| **Extension whitelist**   | Only `.json`, `.jsonl`, `.csv`, `.html`, `.txt`, `.md`, `.yml`, `.yaml` |
+| **Size limits**           | 10MB per file, 50MB per session                                         |
+| **Session binding**       | Files require valid session UUID to access                              |
+
+### Filesystem Navigation Guardrails
+
+The terminal server implements command-level filtering to prevent casual directory traversal attempts:
+
+| Command Pattern   | Blocked? | Reason                                       |
+| ----------------- | -------- | -------------------------------------------- |
+| `cd ..`           | ✅ Yes   | Parent directory navigation                  |
+| `cd ../..`        | ✅ Yes   | Multi-level parent traversal                 |
+| `cd /`            | ✅ Yes   | Absolute path to root                        |
+| `cd /etc`         | ✅ Yes   | Any absolute path                            |
+| `cd ~/something`  | ✅ Yes   | Home directory reference (could escape)      |
+| `cd subdirectory` | ❌ No    | Relative navigation within session           |
+| `ls /etc`         | ❌ No    | Non-cd commands not filtered (Docker limits) |
+| `mkdir test`      | ❌ No    | File operations within session are allowed   |
+
+**Rationale:**
+
+- Primary security: Docker container isolation (read-only rootfs, non-root user, no caps)
+- Secondary defense: Command filtering prevents casual/accidental escapes
+- Not designed to block adversarial attacks (container isolation handles that)
+- Users stay in their session directory for cleaner UX and privacy between sessions
+
+**Limitations:**
+
+- Only `cd` commands are filtered at PTY input level
+- Symlinks and absolute paths in other commands still work (container prevents actual damage)
+- Advanced users could theoretically browse container filesystem (but can't modify or escape)
+
+**Tested Escape Attempts (Blocked):**
+
+- `cd ..`, `cd ../..`, `cd ../../..`
+- `cd /`, `cd /etc`, `cd /home`
+- `cd /home/quarry` (parent of session directory)
+- `cd ~/` (home directory reference)
+
+**Normal Operations (Allowed):**
+
+- `cd schemas` (relative subdirectory)
+- `cd data/out` (nested relative path)
+- `pwd` (print working directory)
+- File operations within session: `touch`, `mkdir`, `cat`, `ls`, etc.
+
+All blocked attempts are logged server-side for monitoring and debugging.
 
 ### Attack Surface Analysis
 

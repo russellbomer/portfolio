@@ -57,7 +57,16 @@ const AUTO_RUN_CMD = process.env.TERMINAL_AUTO_RUN || "";
 // File download settings
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const MAX_SESSION_STORAGE = 50 * 1024 * 1024; // 50MB per session
-const ALLOWED_EXTENSIONS = [".json", ".csv", ".html", ".txt", ".md"];
+const ALLOWED_EXTENSIONS = [
+  ".json",
+  ".jsonl",
+  ".csv",
+  ".html",
+  ".txt",
+  ".md",
+  ".yml",
+  ".yaml",
+];
 
 // Session timeout (15 minutes of idle = disconnect)
 const SESSION_IDLE_TIMEOUT_MS = 15 * 60 * 1000;
@@ -101,6 +110,51 @@ function sanitizeFilename(filename: string): string | null {
     return null;
   }
   return basename;
+}
+
+/**
+ * Filter dangerous cd commands to prevent directory traversal
+ * Returns: { allowed: boolean, message?: string }
+ */
+function filterCdCommand(
+  input: string,
+  _sessionDir: string
+): { allowed: boolean; message?: string } {
+  const trimmed = input.trim();
+
+  // Check if this is a cd command
+  if (!trimmed.startsWith("cd ") && trimmed !== "cd") {
+    return { allowed: true }; // Not a cd command, allow it
+  }
+
+  // Extract the target path
+  const cdMatch = trimmed.match(/^cd\s+(.+)$/);
+  if (!cdMatch) {
+    return { allowed: true }; // Just "cd" with no args (go to HOME), allow it
+  }
+
+  const target = cdMatch[1].trim();
+
+  // Block dangerous patterns
+  const dangerousPatterns = [
+    /^\.\.\/?/, // Starts with ../
+    /\/\.\.\/?/, // Contains /../
+    /^\//, // Absolute path
+    /^~\//, // Home directory reference (could escape session)
+  ];
+
+  for (const pattern of dangerousPatterns) {
+    if (pattern.test(target)) {
+      log(`[security] Blocked cd command: ${trimmed}`);
+      return {
+        allowed: false,
+        message: `\r\n\u001b[1;31m[security]\u001b[0m Directory navigation restricted to session directory.\r\n`,
+      };
+    }
+  }
+
+  // Allow relative paths within session directory
+  return { allowed: true };
 }
 
 /**
@@ -428,9 +482,11 @@ wss.on("connection", (ws: WebSocket, req) => {
   let outputBuffer = "";
   const QUARRY_BANNER_MARKER = "██████";
 
-  if (AUTO_RUN_CMD) {
+  // Auto-run quarry command on connection (for page-load reset UX)
+  if (QUARRY_MODE || AUTO_RUN_CMD) {
+    const autoCmd = AUTO_RUN_CMD || "quarry";
     setTimeout(() => {
-      proc.write("clear && " + AUTO_RUN_CMD.trim() + "\n");
+      proc.write("clear && " + autoCmd.trim() + "\n");
     }, 50);
   }
 
@@ -465,6 +521,14 @@ wss.on("connection", (ws: WebSocket, req) => {
         parsed.type === "input" &&
         typeof parsed.data === "string"
       ) {
+        // Filter cd commands for security
+        const filterResult = filterCdCommand(parsed.data, sessionDir);
+        if (!filterResult.allowed) {
+          if (filterResult.message && ws.readyState === ws.OPEN) {
+            ws.send(filterResult.message);
+          }
+          return; // Block the command
+        }
         proc.write(parsed.data);
         return;
       }
@@ -477,9 +541,25 @@ wss.on("connection", (ws: WebSocket, req) => {
         proc.resize(parsed.cols, parsed.rows);
         return;
       }
+      // For non-JSON messages, also filter
+      const filterResult = filterCdCommand(text, sessionDir);
+      if (!filterResult.allowed) {
+        if (filterResult.message && ws.readyState === ws.OPEN) {
+          ws.send(filterResult.message);
+        }
+        return;
+      }
       proc.write(text);
     } catch (err) {
       console.error("[ws] failed to parse message as JSON", err);
+      // For non-JSON messages, also filter
+      const filterResult = filterCdCommand(text, sessionDir);
+      if (!filterResult.allowed) {
+        if (filterResult.message && ws.readyState === ws.OPEN) {
+          ws.send(filterResult.message);
+        }
+        return;
+      }
       proc.write(text);
     }
   });
