@@ -164,30 +164,33 @@ export function FileDownloader({ sessionId, baseUrl }: FileDownloaderProps) {
               {/* File list */}
               {files.length > 0 && (
                 <ul className="space-y-2">
-                  {files.map((file) => (
-                    <li
-                      key={file.name}
-                      className="flex items-center justify-between p-3 rounded-lg bg-muted/10 hover:bg-muted/20 transition-colors group"
-                    >
-                      <div className="flex-1 min-w-0 mr-3">
-                        <p className="text-sm text-white font-mono truncate">
-                          {file.name}
-                        </p>
-                        <p className="text-xs text-white/50 mt-0.5">
-                          {formatSize(file.size)}
-                        </p>
-                      </div>
-                      <a
-                        href={getDownloadUrl(file.name)}
-                        download={file.name}
-                        className="p-2 rounded-lg hover:bg-muted/30 transition-colors shrink-0"
-                        aria-label={`Download ${file.name}`}
-                        title={`Download ${file.name}`}
+                  {files.map((file) => {
+                    const displayName = file.name.split('/').pop() || file.name;
+                    return (
+                      <li
+                        key={file.name}
+                        className="flex items-center justify-between p-3 rounded-lg bg-muted/10 hover:bg-muted/20 transition-colors group"
                       >
-                        <Download className="h-4 w-4 text-[hsl(var(--eucalyptus))] group-hover:text-[hsl(var(--eucalyptus))]" />
-                      </a>
-                    </li>
-                  ))}
+                        <div className="flex-1 min-w-0 mr-3">
+                          <p className="text-sm text-white font-mono truncate">
+                            {displayName}
+                          </p>
+                          <p className="text-xs text-white/50 mt-0.5">
+                            {formatSize(file.size)}
+                          </p>
+                        </div>
+                        <a
+                          href={getDownloadUrl(file.name)}
+                          download={displayName}
+                          className="p-2 rounded-lg hover:bg-muted/30 transition-colors shrink-0"
+                          aria-label={`Download ${displayName}`}
+                          title={`Download ${displayName}`}
+                        >
+                          <Download className="h-4 w-4 text-[hsl(var(--eucalyptus))] group-hover:text-[hsl(var(--eucalyptus))]" />
+                        </a>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </div>
