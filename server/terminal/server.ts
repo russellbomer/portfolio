@@ -524,22 +524,26 @@ wss.on("connection", (ws: WebSocket, req) => {
         parsed.type === "input" &&
         typeof parsed.data === "string"
       ) {
-        // Buffer input until we see a newline
-        if (parsed.data === "\r" || parsed.data === "\n") {
-          // Check the complete command before executing
-          const filterResult = filterCdCommand(inputBuffer.trim(), sessionDir);
-          if (!filterResult.allowed) {
-            if (filterResult.message && ws.readyState === ws.OPEN) {
-              ws.send(filterResult.message);
-            }
-            inputBuffer = ""; // Clear buffer
-            return; // Block the command
-          }
-          inputBuffer = ""; // Clear buffer after successful command
-        } else {
-          // Add to buffer
+        // For non-newline characters, write immediately for visual feedback
+        if (parsed.data !== "\r" && parsed.data !== "\n") {
           inputBuffer += parsed.data;
+          proc.write(parsed.data);
+          return;
         }
+
+        // On newline, check the complete command
+        const filterResult = filterCdCommand(inputBuffer.trim(), sessionDir);
+        inputBuffer = ""; // Clear buffer
+
+        if (!filterResult.allowed) {
+          // Command blocked - send error message but don't execute
+          if (filterResult.message && ws.readyState === ws.OPEN) {
+            ws.send("\r\n" + filterResult.message + "\r\n");
+          }
+          return; // Don't write newline to proc
+        }
+
+        // Command allowed - write newline to execute it
         proc.write(parsed.data);
         return;
       }
