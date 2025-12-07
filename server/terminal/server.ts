@@ -464,7 +464,7 @@ wss.on("connection", (ws: WebSocket, req) => {
       name: "xterm-color",
       cols,
       rows,
-      cwd: process.env.HOME || sessionDir, // Start in user's home, not session dir
+      cwd: sessionDir,
       env: ptyEnv,
     });
     if (!proc) {
