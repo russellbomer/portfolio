@@ -438,6 +438,7 @@ wss.on("connection", (ws: WebSocket, req) => {
     ...process.env,
     HOME: sessionDir,
     QUARRY_OUTPUT_DIR: sessionDir,
+    PS1: "user@quarry-demo> ", // Custom prompt
   };
 
   // Determine what to spawn
@@ -463,7 +464,7 @@ wss.on("connection", (ws: WebSocket, req) => {
       name: "xterm-color",
       cols,
       rows,
-      cwd: sessionDir,
+      cwd: process.env.HOME || sessionDir, // Start in user's home, not session dir
       env: ptyEnv,
     });
     if (!proc) {
