@@ -99,17 +99,30 @@ function isValidSessionId(id: string): boolean {
  * Sanitize filename - only allow safe characters
  */
 function sanitizeFilename(filename: string): string | null {
-  const basename = path.basename(filename);
-  // Only allow alphanumeric, dots, hyphens, underscores
-  if (!/^[\w.-]+$/.test(basename)) {
+  // Normalize path and remove any leading slashes or backslashes
+  const normalized = path.normalize(filename).replace(/^[/\\]+/, "");
+
+  // Reject paths with .. to prevent traversal
+  if (normalized.includes("..")) {
     return null;
   }
-  // Check extension
-  const ext = path.extname(basename).toLowerCase();
+
+  // Split into parts and validate each component
+  const parts = normalized.split(path.sep);
+  for (const part of parts) {
+    // Allow alphanumeric, dots, hyphens, underscores for each path component
+    if (!/^[\w.-]+$/.test(part)) {
+      return null;
+    }
+  }
+
+  // Check extension of the final filename
+  const ext = path.extname(normalized).toLowerCase();
   if (!ALLOWED_EXTENSIONS.includes(ext)) {
     return null;
   }
-  return basename;
+
+  return normalized;
 }
 
 /**
@@ -209,22 +222,39 @@ function handleFileList(sessionId: string, res: http.ServerResponse): void {
   }
 
   try {
-    const files = fs
-      .readdirSync(sessionDir)
-      .filter((f) => {
-        const ext = path.extname(f).toLowerCase();
-        return ALLOWED_EXTENSIONS.includes(ext);
-      })
-      .map((f) => {
-        const filePath = path.join(sessionDir, f);
-        const stats = fs.statSync(filePath);
-        return {
-          name: f,
-          size: stats.size,
-          modified: stats.mtime.toISOString(),
-        };
-      });
+    // Recursively find all files in session directory
+    const findFiles = (
+      dir: string,
+      prefix = ""
+    ): Array<{ name: string; size: number; modified: string }> => {
+      const results: Array<{ name: string; size: number; modified: string }> =
+        [];
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
 
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+        const relativePath = prefix ? `${prefix}/${entry.name}` : entry.name;
+
+        if (entry.isDirectory()) {
+          // Recurse into subdirectories
+          results.push(...findFiles(fullPath, relativePath));
+        } else if (entry.isFile()) {
+          const ext = path.extname(entry.name).toLowerCase();
+          if (ALLOWED_EXTENSIONS.includes(ext)) {
+            const stats = fs.statSync(fullPath);
+            results.push({
+              name: relativePath,
+              size: stats.size,
+              modified: stats.mtime.toISOString(),
+            });
+          }
+        }
+      }
+
+      return results;
+    };
+
+    const files = findFiles(sessionDir);
     const totalSize = getSessionStorageSize(sessionId);
     const storageWarning = totalSize > MAX_SESSION_STORAGE * 0.8;
 
