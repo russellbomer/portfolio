@@ -165,7 +165,7 @@ export function FileDownloader({ sessionId, baseUrl }: FileDownloaderProps) {
               {files.length > 0 && (
                 <ul className="space-y-2">
                   {files.map((file) => {
-                    const displayName = file.name.split('/').pop() || file.name;
+                    const displayName = file.name.split("/").pop() || file.name;
                     return (
                       <li
                         key={file.name}

@@ -233,15 +233,19 @@ function handleFileList(sessionId: string, res: http.ServerResponse): void {
 
       for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
-        const relativePath = prefix ? `${prefix}/${entry.name}` : entry.name;
 
         if (entry.isDirectory()) {
-          // Recurse into subdirectories
-          results.push(...findFiles(fullPath, relativePath));
+          // Recurse into subdirectories, building the relative path
+          const newPrefix = prefix ? `${prefix}/${entry.name}` : entry.name;
+          results.push(...findFiles(fullPath, newPrefix));
         } else if (entry.isFile()) {
           const ext = path.extname(entry.name).toLowerCase();
           if (ALLOWED_EXTENSIONS.includes(ext)) {
             const stats = fs.statSync(fullPath);
+            // Build relative path from session directory
+            const relativePath = prefix
+              ? `${prefix}/${entry.name}`
+              : entry.name;
             results.push({
               name: relativePath,
               size: stats.size,
@@ -329,9 +333,12 @@ function handleFileDownload(
     ".md": "text/markdown",
   };
 
+  // Extract just the filename (not the full path) for download
+  const downloadFilename = path.basename(safeName);
+
   res.writeHead(200, {
     "Content-Type": mimeTypes[ext] || "application/octet-stream",
-    "Content-Disposition": `attachment; filename="${safeName}"`,
+    "Content-Disposition": `attachment; filename="${downloadFilename}"`,
     "Content-Length": stats.size,
   });
 
@@ -520,7 +527,9 @@ wss.on("connection", (ws: WebSocket, req) => {
   if (QUARRY_MODE || AUTO_RUN_CMD) {
     const autoCmd = AUTO_RUN_CMD || "quarry";
     setTimeout(() => {
-      proc.write("export PS1='user@quarry-demo> ' && clear && " + autoCmd.trim() + "\n");
+      proc.write(
+        "export PS1='user@quarry-demo> ' && clear && " + autoCmd.trim() + "\n"
+      );
     }, 50);
   } else {
     // Set custom prompt even without auto-run
