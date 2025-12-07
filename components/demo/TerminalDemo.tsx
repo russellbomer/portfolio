@@ -15,7 +15,7 @@ const FEATURE_ENABLED =
 const WS_URL =
   (typeof process !== "undefined" &&
     (process.env.NEXT_PUBLIC_TERMINAL_WS_URL as string)) ||
-  "ws://127.0.0.1:4000/ws";
+  "ws://127.0.0.1:4001/ws";
 
 export default function TerminalDemo() {
   const session = useDemoSession();

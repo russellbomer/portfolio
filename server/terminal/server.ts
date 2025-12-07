@@ -423,7 +423,7 @@ wss.on("connection", (ws: WebSocket, req) => {
       process.platform === "win32"
         ? "powershell.exe"
         : process.env.SHELL || "bash";
-    spawnArgs = [];
+    spawnArgs = process.platform === "win32" ? [] : ["-i"];
     log(`[pty] Shell mode, spawning: ${spawnCmd}`);
   }
 
@@ -566,6 +566,11 @@ wss.on("connection", (ws: WebSocket, req) => {
 
   proc.onExit(({ exitCode, signal }: { exitCode: number; signal?: number }) => {
     log(`[pty] Process exited with code ${exitCode}, signal ${signal ?? 0}`);
+    // Flush any buffered output before closing (shows errors if Quarry failed)
+    if (outputBuffer.length > 0 && ws.readyState === ws.OPEN) {
+      ws.send(outputBuffer);
+      outputBuffer = "";
+    }
     ws.close();
   });
 
