@@ -544,8 +544,10 @@ wss.on("connection", (ws: WebSocket, req) => {
         if (!filterResult.allowed) {
           // Command blocked - send error message but don't execute
           log(`[filter] BLOCKING command`);
+          // Send Ctrl+C to clear bash's input buffer
+          proc.write("\x03");
           if (filterResult.message && ws.readyState === ws.OPEN) {
-            ws.send("\r\n" + filterResult.message + "\r\n");
+            ws.send(filterResult.message);
           }
           return; // Don't write newline to proc
         }
