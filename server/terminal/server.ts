@@ -482,6 +482,9 @@ wss.on("connection", (ws: WebSocket, req) => {
   let outputBuffer = "";
   const QUARRY_BANNER_MARKER = "██████";
 
+  // Input buffering for command filtering
+  let inputBuffer = "";
+
   // Auto-run quarry command on connection (for page-load reset UX)
   if (QUARRY_MODE || AUTO_RUN_CMD) {
     const autoCmd = AUTO_RUN_CMD || "quarry";
@@ -521,13 +524,21 @@ wss.on("connection", (ws: WebSocket, req) => {
         parsed.type === "input" &&
         typeof parsed.data === "string"
       ) {
-        // Filter cd commands for security
-        const filterResult = filterCdCommand(parsed.data, sessionDir);
-        if (!filterResult.allowed) {
-          if (filterResult.message && ws.readyState === ws.OPEN) {
-            ws.send(filterResult.message);
+        // Buffer input until we see a newline
+        if (parsed.data === "\r" || parsed.data === "\n") {
+          // Check the complete command before executing
+          const filterResult = filterCdCommand(inputBuffer.trim(), sessionDir);
+          if (!filterResult.allowed) {
+            if (filterResult.message && ws.readyState === ws.OPEN) {
+              ws.send(filterResult.message);
+            }
+            inputBuffer = ""; // Clear buffer
+            return; // Block the command
           }
-          return; // Block the command
+          inputBuffer = ""; // Clear buffer after successful command
+        } else {
+          // Add to buffer
+          inputBuffer += parsed.data;
         }
         proc.write(parsed.data);
         return;
@@ -541,25 +552,9 @@ wss.on("connection", (ws: WebSocket, req) => {
         proc.resize(parsed.cols, parsed.rows);
         return;
       }
-      // For non-JSON messages, also filter
-      const filterResult = filterCdCommand(text, sessionDir);
-      if (!filterResult.allowed) {
-        if (filterResult.message && ws.readyState === ws.OPEN) {
-          ws.send(filterResult.message);
-        }
-        return;
-      }
       proc.write(text);
     } catch (err) {
       console.error("[ws] failed to parse message as JSON", err);
-      // For non-JSON messages, also filter
-      const filterResult = filterCdCommand(text, sessionDir);
-      if (!filterResult.allowed) {
-        if (filterResult.message && ws.readyState === ws.OPEN) {
-          ws.send(filterResult.message);
-        }
-        return;
-      }
       proc.write(text);
     }
   });
