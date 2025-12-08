@@ -7,15 +7,12 @@ import "xterm/css/xterm.css";
 type XTerm = typeof import("xterm");
 
 const RESET_MS = 2 * 60 * 1000; // 2 minutes inactivity reset
+// Use environment variables directly (Next.js inlines NEXT_PUBLIC_ vars at build time)
 const FEATURE_ENABLED =
-  (typeof process !== "undefined" &&
-    (process.env.NEXT_PUBLIC_FEATURE_TERMINAL === "1" ||
-      process.env.NEXT_PUBLIC_FEATURE_TERMINAL === "true")) ||
-  false;
+  process.env.NEXT_PUBLIC_FEATURE_TERMINAL === "1" ||
+  process.env.NEXT_PUBLIC_FEATURE_TERMINAL === "true";
 const WS_URL =
-  (typeof process !== "undefined" &&
-    (process.env.NEXT_PUBLIC_TERMINAL_WS_URL as string)) ||
-  "ws://127.0.0.1:4001/ws";
+  process.env.NEXT_PUBLIC_TERMINAL_WS_URL || "ws://127.0.0.1:4001/ws";
 
 export default function TerminalDemo() {
   const session = useDemoSession();

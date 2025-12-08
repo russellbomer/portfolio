@@ -25,10 +25,9 @@ const TerminalDemo = nextDynamic(
 export const dynamic = "force-dynamic";
 
 // Derive the file API base URL from the WebSocket URL
+// Use environment variable directly (Next.js inlines NEXT_PUBLIC_ vars at build time)
 const WS_URL =
-  (typeof process !== "undefined" &&
-    (process.env.NEXT_PUBLIC_TERMINAL_WS_URL as string)) ||
-  "ws://127.0.0.1:4000/ws";
+  process.env.NEXT_PUBLIC_TERMINAL_WS_URL || "ws://127.0.0.1:4000/ws";
 
 function getFileApiBaseUrl(): string {
   // Replace protocol first, then remove /ws path
