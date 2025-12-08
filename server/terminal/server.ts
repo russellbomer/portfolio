@@ -243,9 +243,16 @@ function handleFileList(sessionId: string, res: http.ServerResponse): void {
           if (ALLOWED_EXTENSIONS.includes(ext)) {
             const stats = fs.statSync(fullPath);
             // Build relative path from session directory
-            const relativePath = prefix
-              ? `${prefix}/${entry.name}`
-              : entry.name;
+            let relativePath = prefix ? `${prefix}/${entry.name}` : entry.name;
+
+            // Defensive: Strip any accidental nested data/quarry-output/{session}/ prefix
+            relativePath = relativePath.replace(
+              /^data\/quarry-output\/[a-f0-9-]+\//,
+              ""
+            );
+
+            log(`[files] Found file: ${relativePath} (${stats.size} bytes)`);
+
             results.push({
               name: relativePath,
               size: stats.size,
@@ -290,8 +297,16 @@ function handleFileDownload(
 ): void {
   const sessionDir = getSessionDir(sessionId);
 
+  // Defensive: Strip any accidental nested data/quarry-output/{session}/ prefix
+  let normalizedFilename = filename;
+  const doubleNestedPrefix = `data/quarry-output/${sessionId}/`;
+  if (filename.startsWith(doubleNestedPrefix)) {
+    normalizedFilename = filename.substring(doubleNestedPrefix.length);
+    log(`[download] Normalized path: ${filename} -> ${normalizedFilename}`);
+  }
+
   // Sanitize filename
-  const safeName = sanitizeFilename(filename);
+  const safeName = sanitizeFilename(normalizedFilename);
   if (!safeName) {
     res.writeHead(400, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Invalid filename" }));
@@ -299,6 +314,7 @@ function handleFileDownload(
   }
 
   const filePath = path.join(sessionDir, safeName);
+  log(`[download] Resolved file path: ${filePath}`);
 
   // Verify file is within session directory (prevent path traversal)
   const resolvedPath = path.resolve(filePath);
@@ -444,7 +460,7 @@ wss.on("connection", (ws: WebSocket, req) => {
   const ptyEnv = {
     ...process.env,
     HOME: sessionDir,
-    QUARRY_OUTPUT_DIR: ".",
+    QUARRY_OUTPUT_DIR: sessionDir, // Absolute path to prevent double-nesting
     PS1: "user@quarry-demo> ", // Custom prompt
   };
 
