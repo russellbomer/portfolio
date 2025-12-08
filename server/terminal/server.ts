@@ -243,13 +243,9 @@ function handleFileList(sessionId: string, res: http.ServerResponse): void {
           if (ALLOWED_EXTENSIONS.includes(ext)) {
             const stats = fs.statSync(fullPath);
             // Build relative path from session directory
-            let relativePath = prefix ? `${prefix}/${entry.name}` : entry.name;
-
-            // Defensive: Strip any accidental nested data/quarry-output/{session}/ prefix
-            relativePath = relativePath.replace(
-              /^data\/quarry-output\/[a-f0-9-]+\//,
-              ""
-            );
+            const relativePath = prefix
+              ? `${prefix}/${entry.name}`
+              : entry.name;
 
             log(`[files] Found file: ${relativePath} (${stats.size} bytes)`);
 
@@ -297,16 +293,8 @@ function handleFileDownload(
 ): void {
   const sessionDir = getSessionDir(sessionId);
 
-  // Defensive: Strip any accidental nested data/quarry-output/{session}/ prefix
-  let normalizedFilename = filename;
-  const doubleNestedPrefix = `data/quarry-output/${sessionId}/`;
-  if (filename.startsWith(doubleNestedPrefix)) {
-    normalizedFilename = filename.substring(doubleNestedPrefix.length);
-    log(`[download] Normalized path: ${filename} -> ${normalizedFilename}`);
-  }
-
   // Sanitize filename
-  const safeName = sanitizeFilename(normalizedFilename);
+  const safeName = sanitizeFilename(filename);
   if (!safeName) {
     res.writeHead(400, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Invalid filename" }));
@@ -325,33 +313,15 @@ function handleFileDownload(
     return;
   }
 
-  // Check if file exists at expected location
-  let actualFilePath = filePath;
+  // Check if file exists
   if (!fs.existsSync(filePath)) {
-    // Fallback: Check in the double-nested location created by Quarry CLI
-    const nestedPath = path.join(sessionDir, `data/quarry-output/${sessionId}`, safeName);
-    log(`[download] File not found at ${filePath}, trying nested: ${nestedPath}`);
-    
-    if (fs.existsSync(nestedPath)) {
-      const resolvedNestedPath = path.resolve(nestedPath);
-      // Verify nested path is still within session directory
-      if (resolvedNestedPath.startsWith(resolvedSessionDir)) {
-        actualFilePath = nestedPath;
-        log(`[download] Using nested path: ${actualFilePath}`);
-      } else {
-        res.writeHead(403, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Access denied" }));
-        return;
-      }
-    } else {
-      res.writeHead(404, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "File not found" }));
-      return;
-    }
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "File not found" }));
+    return;
   }
 
   // Check file size
-  const stats = fs.statSync(actualFilePath);
+  const stats = fs.statSync(filePath);
   if (stats.size > MAX_FILE_SIZE) {
     res.writeHead(413, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "File too large" }));
@@ -377,7 +347,7 @@ function handleFileDownload(
     "Content-Length": stats.size,
   });
 
-  const stream = fs.createReadStream(actualFilePath);
+  const stream = fs.createReadStream(filePath);
   stream.pipe(res);
 }
 
