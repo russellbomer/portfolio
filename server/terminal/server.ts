@@ -325,14 +325,33 @@ function handleFileDownload(
     return;
   }
 
+  // Check if file exists at expected location
+  let actualFilePath = filePath;
   if (!fs.existsSync(filePath)) {
-    res.writeHead(404, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "File not found" }));
-    return;
+    // Fallback: Check in the double-nested location created by Quarry CLI
+    const nestedPath = path.join(sessionDir, `data/quarry-output/${sessionId}`, safeName);
+    log(`[download] File not found at ${filePath}, trying nested: ${nestedPath}`);
+    
+    if (fs.existsSync(nestedPath)) {
+      const resolvedNestedPath = path.resolve(nestedPath);
+      // Verify nested path is still within session directory
+      if (resolvedNestedPath.startsWith(resolvedSessionDir)) {
+        actualFilePath = nestedPath;
+        log(`[download] Using nested path: ${actualFilePath}`);
+      } else {
+        res.writeHead(403, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Access denied" }));
+        return;
+      }
+    } else {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "File not found" }));
+      return;
+    }
   }
 
   // Check file size
-  const stats = fs.statSync(filePath);
+  const stats = fs.statSync(actualFilePath);
   if (stats.size > MAX_FILE_SIZE) {
     res.writeHead(413, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "File too large" }));
@@ -358,7 +377,7 @@ function handleFileDownload(
     "Content-Length": stats.size,
   });
 
-  const stream = fs.createReadStream(filePath);
+  const stream = fs.createReadStream(actualFilePath);
   stream.pipe(res);
 }
 
