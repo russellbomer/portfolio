@@ -444,7 +444,7 @@ wss.on("connection", (ws: WebSocket, req) => {
   const ptyEnv = {
     ...process.env,
     HOME: sessionDir,
-    QUARRY_OUTPUT_DIR: sessionDir,
+    QUARRY_OUTPUT_DIR: ".",
     PS1: "user@quarry-demo> ", // Custom prompt
   };
 

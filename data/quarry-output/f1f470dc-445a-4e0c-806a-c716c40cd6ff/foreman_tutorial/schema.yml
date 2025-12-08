@@ -1,0 +1,11 @@
+name: hackernews_stories
+url: https://news.ycombinator.com
+item_selector: "tr.athing"
+fields:
+  title:
+    selector: "td.title > span.titleline > a"
+  link:
+    selector: "td.title > span.titleline > a"
+    attribute: "href"
+  rank:
+    selector: "td.title > span.rank"
