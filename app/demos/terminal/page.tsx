@@ -31,9 +31,11 @@ const WS_URL =
   "ws://127.0.0.1:4000/ws";
 
 function getFileApiBaseUrl(): string {
-  return WS_URL.replace("/ws", "")
-    .replace("wss:", "https:")
-    .replace("ws:", "http:");
+  // Replace protocol first, then remove /ws path
+  // Order matters: wss: must be replaced before ws: to avoid matching
+  return WS_URL.replace("wss:", "https:")
+    .replace("ws:", "http:")
+    .replace("/ws", "");
 }
 
 // Inner component that has access to session context
