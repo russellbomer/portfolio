@@ -74,7 +74,7 @@ Example:
 ```bash
 git clone https://github.com/russellbomer/portfolio.git
 cd portfolio
-pnpm install
+npm install
 ```
 
 ## Running Locally
@@ -88,14 +88,14 @@ cp .env.example .env.local
 Set up the database:
 
 ```bash
-pnpm db:setup
-pnpm db:migrate
+npm run db:setup
+npm run db:migrate
 ```
 
 Run the development server:
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
