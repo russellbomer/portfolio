@@ -16,7 +16,6 @@ This repository uses explicit scope and constraints anchors to keep the MVP focu
 - Accept workspace recommendations from `.vscode/extensions.json`.
 - Todo Tree highlights scope tags in the gutter.
 - Settings expose anchors via:
-  - Deprecated: `saasStarter.*` and `project.*` (will be removed)
   - `portfolio.aiAnchorsPath`: `ai/anchors.json`
   - `portfolio.aiGuidelinesPath`: `docs/ai-guidelines.md`
   - `portfolio.scopePath`: `docs/phase-1-initiation-&-planning/1.2.txt`
