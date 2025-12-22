@@ -107,6 +107,12 @@ This project deploys to a DigitalOcean VPS with Nginx reverse proxy and wildcard
 - `deploy/README.md` — Deployment templates and setup instructions
 - `docs/architecture/ADR-0001-subdomain-routing.md` — Subdomain routing architecture
 
+For production builds, copy the environment template:
+
+```bash
+cp .env.production.example .env.production
+```
+
 For Vercel deployment, push to GitHub and connect via the Vercel dashboard. Required environment variables:
 
 - `BASE_URL` — Production domain

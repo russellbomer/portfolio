@@ -26,7 +26,11 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+# Track only .env*.example files; ignore all actual env files
 .env
+.env.*
+!.env.example
+!.env.*.example
 
 # vercel
 .vercel
@@ -38,4 +42,3 @@ next-env.d.ts
 
 # Docker
 postgres_data/
-.env*.local
