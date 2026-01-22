@@ -1,0 +1,53 @@
+# Quarry Session Container
+# Per-session isolated container for terminal demo
+#
+# Security constraints applied at runtime by sandboxRunner:
+# - --network none (no network access)
+# - --read-only (read-only root filesystem)
+# - --cap-drop ALL (drop all capabilities)
+# - --security-opt no-new-privileges (prevent privilege escalation)
+# - --pids-limit 128 (limit process count)
+# - --memory 512m (memory limit)
+# - --cpus 0.5 (CPU limit)
+# - --user 1000:1000 (non-root user)
+# - tmpfs mounts for writable paths
+#
+# Build: docker build -t quarry-session:latest -f Dockerfile.session .
+
+FROM node:20-alpine
+
+# Install minimal dependencies for shell environment
+RUN apk add --no-cache \
+    bash \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root user (uid/gid 1000)
+RUN adduser -D -u 1000 -s /bin/bash quarry
+
+# Create directories with correct ownership
+RUN mkdir -p /home/quarry/output /home/quarry/.local /home/quarry/.cache \
+    && chown -R quarry:quarry /home/quarry
+
+# Install quarry CLI globally
+# Note: Replace with actual package when published to npm
+# For now, we assume quarry will be available via bind mount or pre-installed
+# RUN npm install -g @russellbomer/quarry
+
+# Create a simple quarry placeholder script if real one isn't installed
+# This will be replaced by actual quarry installation in production
+RUN echo '#!/bin/bash\necho "Quarry CLI - Demo Mode"\necho "Type commands to interact with the terminal"\nexec /bin/bash -i' > /usr/local/bin/quarry \
+    && chmod +x /usr/local/bin/quarry
+
+# Set working directory
+WORKDIR /home/quarry/output
+
+# Switch to non-root user
+USER quarry
+
+# Set environment
+ENV HOME=/home/quarry
+ENV TERM=xterm-256color
+ENV PS1="user@quarry-demo> "
+
+# Default command (can be overridden at runtime)
+CMD ["/bin/bash", "-i"]
