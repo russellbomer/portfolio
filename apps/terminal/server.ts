@@ -31,7 +31,7 @@ const DEBUG =
 const log = (...args: unknown[]) => {
   if (DEBUG) console.log(...args);
 };
-if (DEBUG) console.log("BOOTSTRAP: server/terminal/server.ts starting");
+if (DEBUG) console.log("BOOTSTRAP: apps/terminal/server.ts starting");
 
 // node-pty is optional; require at runtime and handle absence gracefully
 let pty: typeof import("node-pty") | null = null;

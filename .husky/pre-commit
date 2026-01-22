@@ -1,8 +1,23 @@
-# Run ESLint on staged files (fallback to all if diff too large)
-STAGED=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E '\.(ts|tsx|js|jsx)$')
-if [ -n "$STAGED" ]; then
-  echo "Linting staged files..."
-  npx eslint --max-warnings=0 $STAGED || exit 1
-else
-  echo "No staged TS/JS files detected; skipping lint."
+# Run ESLint on staged files in each workspace
+# Get repo root
+REPO_ROOT=$(git rev-parse --show-toplevel)
+
+STAGED_PORTFOLIO=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E '^apps/portfolio/.*\.(ts|tsx|js|jsx)$' || true)
+STAGED_TERMINAL=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E '^apps/terminal/.*\.(ts|tsx|js|jsx)$' || true)
+
+if [ -n "$STAGED_PORTFOLIO" ]; then
+  echo "Linting portfolio files..."
+  # Convert full paths to relative paths within workspace
+  FILES=$(echo "$STAGED_PORTFOLIO" | sed 's|^apps/portfolio/||g' | tr '\n' ' ')
+  (cd "$REPO_ROOT/apps/portfolio" && npx eslint --max-warnings=0 $FILES) || exit 1
+fi
+
+if [ -n "$STAGED_TERMINAL" ]; then
+  echo "Linting terminal files..."
+  FILES=$(echo "$STAGED_TERMINAL" | sed 's|^apps/terminal/||g' | tr '\n' ' ')
+  (cd "$REPO_ROOT/apps/terminal" && npx eslint --max-warnings=0 $FILES) || exit 1
+fi
+
+if [ -z "$STAGED_PORTFOLIO" ] && [ -z "$STAGED_TERMINAL" ]; then
+  echo "No staged TS/JS files detected in workspaces; skipping lint."
 fi
