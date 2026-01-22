@@ -5,7 +5,7 @@ Single source of truth for progress. Update this file at the end of every stage.
 ## Current state
 - Branch: main
 - Worktree (optional): ______________________
-- Current stage: Stage 3 (COMPLETED)
+- Current stage: Stage 4A (COMPLETED)
 
 ## Completed stages
 | Stage | Name | Commit | Notes |
@@ -14,7 +14,9 @@ Single source of truth for progress. Update this file at the end of every stage.
 | 1 | Repo hygiene + secret remediation prep | e92e6bc | .env.production untracked; purge script + runbook added; history purge completed |
 | 2 | Monorepo layout | 4334492 | Moved Next.js to apps/portfolio, terminal to apps/terminal; npm workspaces |
 | 3 | Portfolio hardening | a9931af | Pinned next@15.5.9 (removed canary); removed experimental.ppr/clientSegmentCache/nodeMiddleware |
-| 4 | Terminal hardening (no host shell + per-session sandbox) | ________ | |
+| 4A | Terminal hardening (no host shell + per-session sandbox) | c04d8f5 | Removed node-pty; added sandboxRunner with dockerode; per-session containers with --network none, read-only, cap-drop ALL |
+| 4B | Terminal abuse controls (token gating + rate limits) | ________ | |
+| 4C | Terminal host validation | ________ | |
 | 5 | Terminal deploy artifacts (compose/systemd/nginx) | ________ | |
 | 6 | Vercel config | (MANUAL) | |
 | 7 | DO rebuild + DNS | (MANUAL) | |
@@ -36,12 +38,13 @@ Single source of truth for progress. Update this file at the end of every stage.
 - [ ] Is the portfolio truly static (no request-time SSR needed), aside from terminal client integration?
 
 ## Next action (agent-owned)
-- Stage 4: Terminal hardening (no host shell + per-session sandbox)
+- Stage 4B: Terminal abuse controls (token gating + rate limits)
 
 ## Evidence / checks (paste outputs as links or short notes)
 - Stage 2 build check: `apps/portfolio` npm ci && npm run build ✓ (13 pages); `apps/terminal` npm ci && npm run lint ✓
 - Stage 3 checks: npm ci ✓, npm run build ✓ (13 static pages), npm audit (4 moderate in drizzle-kit deps, pre-existing), no canary in lockfile ✓
-- Stage 4 “prove it” grep checks:
-  - NO bash spawn: (output summary)
-  - network none present: (output summary)
-  - no privileged/host/docker.sock: (output summary)
+- Stage 4A "prove it" grep checks:
+  - NO bash spawn: `rg "spawn.*bash|bash -c|exec\(|execSync\("` → no matches ✓
+  - network none present: `rg "NetworkMode.*none"` → sandboxRunner.ts:101 ✓
+  - no privileged/host/docker.sock: `rg "privileged.*true|network_mode.*host|docker\.sock"` → no matches ✓
+  - npm install + lint: 0 vulnerabilities, lint passes ✓
