@@ -5,7 +5,7 @@ Single source of truth for progress. Update this file at the end of every stage.
 ## Current state
 - Branch: main
 - Worktree (optional): ______________________
-- Current stage: Stage 2 (COMPLETED)
+- Current stage: Stage 3 (COMPLETED)
 
 ## Completed stages
 | Stage | Name | Commit | Notes |
@@ -13,7 +13,7 @@ Single source of truth for progress. Update this file at the end of every stage.
 | 0 | Baseline docs + tracking | (skipped) | Docs added directly to main |
 | 1 | Repo hygiene + secret remediation prep | e92e6bc | .env.production untracked; purge script + runbook added; history purge completed |
 | 2 | Monorepo layout | 4334492 | Moved Next.js to apps/portfolio, terminal to apps/terminal; npm workspaces |
-| 3 | Portfolio hardening | ________ | |
+| 3 | Portfolio hardening | a9931af | Pinned next@15.5.9 (removed canary); removed experimental.ppr/clientSegmentCache/nodeMiddleware |
 | 4 | Terminal hardening (no host shell + per-session sandbox) | ________ | |
 | 5 | Terminal deploy artifacts (compose/systemd/nginx) | ________ | |
 | 6 | Vercel config | (MANUAL) | |
@@ -36,10 +36,11 @@ Single source of truth for progress. Update this file at the end of every stage.
 - [ ] Is the portfolio truly static (no request-time SSR needed), aside from terminal client integration?
 
 ## Next action (agent-owned)
-- Stage 3: Portfolio hardening
+- Stage 4: Terminal hardening (no host shell + per-session sandbox)
 
 ## Evidence / checks (paste outputs as links or short notes)
 - Stage 2 build check: `apps/portfolio` npm ci && npm run build ✓ (13 pages); `apps/terminal` npm ci && npm run lint ✓
+- Stage 3 checks: npm ci ✓, npm run build ✓ (13 static pages), npm audit (4 moderate in drizzle-kit deps, pre-existing), no canary in lockfile ✓
 - Stage 4 “prove it” grep checks:
   - NO bash spawn: (output summary)
   - network none present: (output summary)
