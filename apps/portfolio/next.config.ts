@@ -3,11 +3,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    ppr: true,
-    clientSegmentCache: true,
-    nodeMiddleware: true,
-  },
+  // Note: ppr, clientSegmentCache, nodeMiddleware removed - require canary
   eslint: {
     // ESLint 9 has a circular JSON warning with Next.js - ignore during builds
     // Linting still runs in editor and via `npm run lint`
