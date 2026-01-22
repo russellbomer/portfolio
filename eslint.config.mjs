@@ -1,27 +1,8 @@
-import js from "@eslint/js";
-import nextPlugin from "@next/eslint-plugin-next";
-import reactHooksPlugin from "eslint-plugin-react-hooks";
-import tseslint from "typescript-eslint";
-
-export default tseslint.config(
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
+// Root eslint config for monorepo
+// Each workspace (apps/portfolio, apps/terminal) has its own eslint.config.mjs
+// Pre-commit hook runs eslint from within each workspace
+export default [
   {
-    plugins: {
-      "@next/next": nextPlugin,
-      "react-hooks": reactHooksPlugin,
-    },
-    rules: {
-      ...nextPlugin.configs.recommended.rules,
-      ...nextPlugin.configs["core-web-vitals"].rules,
-      ...reactHooksPlugin.configs.recommended.rules,
-      "@typescript-eslint/no-unused-vars": [
-        "error",
-        { argsIgnorePattern: "^_" },
-      ],
-    },
+    ignores: ["**/node_modules/", "**/.next/", "**/dist/", "apps/**"],
   },
-  {
-    ignores: ["node_modules/", ".next/", "out/"],
-  }
-);
+];
