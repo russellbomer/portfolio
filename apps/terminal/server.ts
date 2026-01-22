@@ -1,20 +1,24 @@
 /**
- * Terminal WebSocket Server with Session File Management
+ * Terminal WebSocket Server with Per-Session Container Sandbox
  *
  * Features:
- * - WebSocket terminal connections via node-pty
+ * - WebSocket terminal connections via per-session Docker containers
  * - Session-isolated file storage for quarry outputs
  * - HTTP endpoints for file listing and download
  * - Automatic session cleanup on disconnect
+ *
+ * Security:
+ * - NO host shell spawning - all sessions run in isolated containers
+ * - Containers run with --network none, --read-only, cap-drop ALL, etc.
+ * - User input goes directly to container stdin, never shell-interpreted on host
  *
  * Environment variables:
  * - TERMINAL_PORT (default: 4000)
  * - TERMINAL_HOST (default: 127.0.0.1)
  * - TERMINAL_OUTPUT_DIR (default: ./data/quarry-output)
  * - TERMINAL_DEBUG (default: false)
- * - TERMINAL_QUARRY_MODE (default: false)
- * - TERMINAL_QUARRY_PATH (default: quarry)
- * - TERMINAL_AUTO_RUN (default: "")
+ * - SANDBOX_IMAGE (default: quarry-session:latest)
+ * - TERMINAL_AUTO_RUN (default: "quarry")
  */
 
 import { randomUUID } from "crypto";
@@ -25,34 +29,28 @@ import { URL } from "url";
 import type { WebSocket } from "ws";
 import { WebSocketServer } from "ws";
 
+import {
+  createSandbox,
+  checkDockerReady,
+  cleanupOrphanedContainers,
+  type SandboxSession,
+} from "./src/sandboxRunner.js";
+
 // Debug logging
 const DEBUG =
   process.env.TERMINAL_DEBUG === "1" || process.env.TERMINAL_DEBUG === "true";
 const log = (...args: unknown[]) => {
-  if (DEBUG) console.log(...args);
+  if (DEBUG) console.log("[server]", ...args);
 };
 if (DEBUG) console.log("BOOTSTRAP: apps/terminal/server.ts starting");
-
-// node-pty is optional; require at runtime and handle absence gracefully
-let pty: typeof import("node-pty") | null = null;
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  pty = require("node-pty");
-  log("[init] node-pty loaded");
-} catch (err) {
-  console.error("[init] node-pty failed to load", err);
-  pty = null;
-}
 
 // Configuration
 const PORT = parseInt(process.env.TERMINAL_PORT || "4000", 10);
 const HOST = process.env.TERMINAL_HOST || "127.0.0.1";
 const OUTPUT_DIR = process.env.TERMINAL_OUTPUT_DIR || "./data/quarry-output";
 
-// Quarry-only mode: spawn quarry interactive shell instead of bash
-const QUARRY_MODE = process.env.TERMINAL_QUARRY_MODE === "true";
-const QUARRY_PATH = process.env.TERMINAL_QUARRY_PATH || "quarry";
-const AUTO_RUN_CMD = process.env.TERMINAL_AUTO_RUN || "";
+// Auto-run command when session starts (default: quarry interactive mode)
+const AUTO_RUN_CMD = process.env.TERMINAL_AUTO_RUN || "quarry";
 
 // File download settings
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -68,22 +66,18 @@ const ALLOWED_EXTENSIONS = [
   ".yaml",
 ];
 
-// Session timeout (15 minutes of idle = disconnect)
-const SESSION_IDLE_TIMEOUT_MS = 15 * 60 * 1000;
-
 // Track active sessions for cleanup
 const activeSessions = new Map<
   string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  { ws: WebSocket; proc: any; idleTimer: NodeJS.Timeout | null }
+  { ws: WebSocket; sandbox: SandboxSession }
 >();
 
 // Ensure output directory exists
 try {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-  log(`[init] Output directory ready: ${OUTPUT_DIR}`);
+  log(`Output directory ready: ${OUTPUT_DIR}`);
 } catch (err) {
-  console.error(`[init] Failed to create output directory: ${OUTPUT_DIR}`, err);
+  console.error(`Failed to create output directory: ${OUTPUT_DIR}`, err);
 }
 
 /**
@@ -126,51 +120,6 @@ function sanitizeFilename(filename: string): string | null {
 }
 
 /**
- * Filter dangerous cd commands to prevent directory traversal
- * Returns: { allowed: boolean, message?: string }
- */
-function filterCdCommand(
-  input: string,
-  _sessionDir: string
-): { allowed: boolean; message?: string } {
-  const trimmed = input.trim();
-
-  // Check if this is a cd command
-  if (!trimmed.startsWith("cd ") && trimmed !== "cd") {
-    return { allowed: true }; // Not a cd command, allow it
-  }
-
-  // Extract the target path
-  const cdMatch = trimmed.match(/^cd\s+(.+)$/);
-  if (!cdMatch) {
-    return { allowed: true }; // Just "cd" with no args (go to HOME), allow it
-  }
-
-  const target = cdMatch[1].trim();
-
-  // Block dangerous patterns
-  const dangerousPatterns = [
-    /^\.\.\/?/, // Starts with ../
-    /\/\.\.\/?/, // Contains /../
-    /^\//, // Absolute path
-    /^~\//, // Home directory reference (could escape session)
-  ];
-
-  for (const pattern of dangerousPatterns) {
-    if (pattern.test(target)) {
-      log(`[security] Blocked cd command: ${trimmed}`);
-      return {
-        allowed: false,
-        message: `\r\n\u001b[1;31m[security]\u001b[0m Directory navigation restricted to session directory.\r\n`,
-      };
-    }
-  }
-
-  // Allow relative paths within session directory
-  return { allowed: true };
-}
-
-/**
  * Get session directory path
  */
 function getSessionDir(sessionId: string): string {
@@ -202,10 +151,10 @@ function cleanupSession(sessionId: string): void {
   try {
     if (fs.existsSync(sessionDir)) {
       fs.rmSync(sessionDir, { recursive: true, force: true });
-      log(`[session] Cleaned up: ${sessionId}`);
+      log(`Cleaned up session: ${sessionId}`);
     }
   } catch (err) {
-    console.error(`[session] Cleanup failed for ${sessionId}:`, err);
+    console.error(`Cleanup failed for ${sessionId}:`, err);
   }
 }
 
@@ -247,7 +196,7 @@ function handleFileList(sessionId: string, res: http.ServerResponse): void {
               ? `${prefix}/${entry.name}`
               : entry.name;
 
-            log(`[files] Found file: ${relativePath} (${stats.size} bytes)`);
+            log(`Found file: ${relativePath} (${stats.size} bytes)`);
 
             results.push({
               name: relativePath,
@@ -277,7 +226,7 @@ function handleFileList(sessionId: string, res: http.ServerResponse): void {
       })
     );
   } catch (err) {
-    console.error(`[files] Failed to list files for ${sessionId}:`, err);
+    console.error(`Failed to list files for ${sessionId}:`, err);
     res.writeHead(500, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Failed to list files" }));
   }
@@ -302,7 +251,7 @@ function handleFileDownload(
   }
 
   const filePath = path.join(sessionDir, safeName);
-  log(`[download] Resolved file path: ${filePath}`);
+  log(`Resolved file path: ${filePath}`);
 
   // Verify file is within session directory (prevent path traversal)
   const resolvedPath = path.resolve(filePath);
@@ -332,10 +281,13 @@ function handleFileDownload(
   const ext = path.extname(safeName).toLowerCase();
   const mimeTypes: Record<string, string> = {
     ".json": "application/json",
+    ".jsonl": "application/x-ndjson",
     ".csv": "text/csv",
     ".html": "text/html",
     ".txt": "text/plain",
     ".md": "text/markdown",
+    ".yml": "text/yaml",
+    ".yaml": "text/yaml",
   };
 
   // Extract just the filename (not the full path) for download
@@ -360,10 +312,26 @@ function handleHttpRequest(
 ): void {
   const reqUrl = req.url || "/";
 
+  // Add CORS headers for development
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
   // Health check
   if (reqUrl === "/health") {
-    res.writeHead(200, { "Content-Type": "text/plain" });
-    res.end("ok");
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({
+        status: "ok",
+        activeSessions: activeSessions.size,
+      })
+    );
     return;
   }
 
@@ -394,7 +362,7 @@ function handleHttpRequest(
       }
       return;
     } catch (err) {
-      console.error("[files] Request error:", err);
+      console.error("File request error:", err);
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Internal server error" }));
       return;
@@ -412,286 +380,222 @@ const server = http.createServer(handleHttpRequest);
 // Create WebSocket server
 const wss = new WebSocketServer({ server, path: "/ws" });
 
-wss.on("connection", (ws: WebSocket, req) => {
+wss.on("connection", async (ws: WebSocket, req) => {
   // Generate unique session ID
   const sessionId = randomUUID();
   const sessionDir = getSessionDir(sessionId);
 
-  log(
-    `[ws] Connection from ${req.socket.remoteAddress}, session: ${sessionId}`
-  );
+  log(`Connection from ${req.socket.remoteAddress}, session: ${sessionId}`);
 
   // Create session directory
   try {
     fs.mkdirSync(sessionDir, { recursive: true });
-    log(`[session] Created directory: ${sessionDir}`);
+    log(`Created directory: ${sessionDir}`);
   } catch (err) {
-    console.error(`[session] Failed to create directory: ${sessionDir}`, err);
+    console.error(`Failed to create directory: ${sessionDir}`, err);
+    ws.send(
+      "\x1b[1;31m[server]\x1b[0m Failed to create session directory.\r\n"
+    );
+    ws.close();
+    return;
   }
 
   // Send session ID to client
   ws.send(JSON.stringify({ type: "session", id: sessionId }));
 
-  if (!pty) {
-    console.error("[server] node-pty is unavailable. Terminal disabled.");
+  // Create sandbox container for this session
+  let sandbox: SandboxSession;
+  try {
+    sandbox = await createSandbox({
+      sessionId,
+      sessionDir: path.resolve(sessionDir),
+      cols: 80,
+      rows: 24,
+      autoRunCmd: AUTO_RUN_CMD || undefined,
+    });
+    log(`Sandbox created for session ${sessionId}`);
+  } catch (err) {
+    console.error(`Failed to create sandbox for ${sessionId}:`, err);
     ws.send(
-      "\u001b[1;31m[server]\u001b[0m node-pty is unavailable. Terminal disabled.\r\n"
+      `\x1b[1;31m[server]\x1b[0m Failed to start session container: ${err instanceof Error ? err.message : String(err)}\r\n`
     );
     ws.close();
     cleanupSession(sessionId);
     return;
   }
 
-  const cols = 80;
-  const rows = 24;
+  // Track active session
+  activeSessions.set(sessionId, { ws, sandbox });
 
-  // Set up environment with session directory
-  const ptyEnv = {
-    ...process.env,
-    HOME: sessionDir,
-    QUARRY_OUTPUT_DIR: sessionDir, // Absolute path to prevent double-nesting
-    PS1: "user@quarry-demo> ", // Custom prompt
-  };
+  // Forward container output to WebSocket
+  sandbox.on("data", (data: string) => {
+    if (ws.readyState === ws.OPEN) {
+      ws.send(data);
+    }
+  });
 
-  // Determine what to spawn
-  let spawnCmd: string;
-  let spawnArgs: string[];
-
-  if (QUARRY_MODE) {
-    spawnCmd = QUARRY_PATH;
-    spawnArgs = [];
-    log(`[pty] Quarry mode enabled, spawning: ${spawnCmd}`);
-  } else {
-    spawnCmd =
-      process.platform === "win32"
-        ? "powershell.exe"
-        : process.env.SHELL || "bash";
-    spawnArgs = process.platform === "win32" ? [] : ["-i"];
-    log(`[pty] Shell mode, spawning: ${spawnCmd}`);
-  }
-
-  let proc;
-  try {
-    proc = pty.spawn(spawnCmd, spawnArgs, {
-      name: "xterm-color",
-      cols,
-      rows,
-      cwd: sessionDir,
-      env: ptyEnv,
-    });
-    if (!proc) {
-      console.error("[pty] spawn returned null/undefined");
+  // Handle container exit
+  sandbox.on("exit", ({ exitCode }) => {
+    log(`Container exited with code ${exitCode} for session ${sessionId}`);
+    if (ws.readyState === ws.OPEN) {
       ws.send(
-        `\u001b[1;31m[server]\u001b[0m PTY spawn failed (no process)\r\n`
+        `\r\n\x1b[1;33m[server]\x1b[0m Session ended (exit ${exitCode}).\r\n`
       );
       ws.close();
-      cleanupSession(sessionId);
-      return;
     }
-    log(`[pty] Spawned: ${spawnCmd}, PID: ${proc.pid}`);
-  } catch (err) {
-    console.error(`[pty] Failed to spawn: ${spawnCmd}`, err);
-    ws.send(`\u001b[1;31m[server]\u001b[0m Failed to spawn: ${spawnCmd}\r\n`);
-    ws.close();
-    cleanupSession(sessionId);
-    return;
-  }
+  });
 
-  // Helper to reset idle timeout
-  const resetIdleTimeout = () => {
-    const session = activeSessions.get(sessionId);
-    if (session?.idleTimer) {
-      clearTimeout(session.idleTimer);
-    }
-    const timer = setTimeout(() => {
-      log(`[session] Idle timeout reached for ${sessionId}`);
+  // Handle container errors
+  sandbox.on("error", (err: Error) => {
+    console.error(`Sandbox error for ${sessionId}:`, err);
+    if (ws.readyState === ws.OPEN) {
       ws.send(
-        "\r\n\u001b[1;33m[server]\u001b[0m Session timed out due to inactivity.\r\n"
+        `\r\n\x1b[1;31m[server]\x1b[0m Container error: ${err.message}\r\n`
       );
       ws.close();
-    }, SESSION_IDLE_TIMEOUT_MS);
-    if (session) {
-      session.idleTimer = timer;
     }
-    return timer;
-  };
+  });
 
-  // Track active session with idle timer
-  const idleTimer = resetIdleTimeout();
-  activeSessions.set(sessionId, { ws, proc, idleTimer });
-
-  // For auto-run mode: buffer output until we see the quarry banner
-  let buffering = !!AUTO_RUN_CMD;
-  let outputBuffer = "";
-  const QUARRY_BANNER_MARKER = "██████";
-
-  // Input buffering for command filtering
-  let inputBuffer = "";
-
-  // Auto-run quarry command on connection (for page-load reset UX)
-  if (QUARRY_MODE || AUTO_RUN_CMD) {
-    const autoCmd = AUTO_RUN_CMD || "quarry";
-    setTimeout(() => {
-      proc.write(
-        "export PS1='user@quarry-demo> ' && clear && " + autoCmd.trim() + "\n"
-      );
-    }, 50);
-  } else {
-    // Set custom prompt even without auto-run
-    setTimeout(() => {
-      proc.write("export PS1='user@quarry-demo> '\n");
-    }, 50);
-  }
-
-  const onData = (data: string) => {
-    if (buffering) {
-      outputBuffer += data;
-      if (outputBuffer.includes(QUARRY_BANNER_MARKER)) {
-        buffering = false;
-        const bannerStart = outputBuffer.indexOf("\x1b[");
-        const cleanOutput =
-          bannerStart >= 0 ? outputBuffer.slice(bannerStart) : outputBuffer;
-        if (ws.readyState === ws.OPEN) ws.send(cleanOutput);
-        outputBuffer = "";
-      }
-    } else {
-      if (ws.readyState === ws.OPEN) ws.send(data);
-    }
-    if (data && typeof data === "string" && data.trim()) {
-      log(`[pty] data: ${data.slice(0, 80).replace(/\r|\n/g, " ")}`);
-    }
-  };
-  proc.onData(onData);
-
+  // Handle WebSocket messages
   ws.on("message", (msg: Buffer) => {
     const text = msg.toString();
-    log(`[ws] message: ${text.slice(0, 80)}`);
-    resetIdleTimeout(); // Reset idle timer on any input
+    log(`WS message: ${text.slice(0, 80)}`);
+
     try {
       const parsed = JSON.parse(text);
+
+      // Handle input messages - write directly to container stdin
       if (
         parsed &&
         parsed.type === "input" &&
         typeof parsed.data === "string"
       ) {
-        // For non-newline characters, write immediately for visual feedback
-        if (parsed.data !== "\r" && parsed.data !== "\n") {
-          inputBuffer += parsed.data;
-          proc.write(parsed.data);
-          return;
-        }
-
-        // On newline, check the complete command
-        log(`[filter] Checking command: "${inputBuffer.trim()}"`);
-        const filterResult = filterCdCommand(inputBuffer.trim(), sessionDir);
-        log(
-          `[filter] Result: allowed=${filterResult.allowed}, message=${
-            filterResult.message ? "yes" : "no"
-          }`
-        );
-        inputBuffer = ""; // Clear buffer
-
-        if (!filterResult.allowed) {
-          // Command blocked - send error message but don't execute
-          log(`[filter] BLOCKING command`);
-          // Send Ctrl+C to clear bash's input buffer
-          proc.write("\x03");
-          if (filterResult.message && ws.readyState === ws.OPEN) {
-            ws.send(filterResult.message);
-          }
-          return; // Don't write newline to proc
-        }
-
-        // Command allowed - write newline to execute it
-        log(`[filter] ALLOWING command`);
-        proc.write(parsed.data);
+        sandbox.write(parsed.data);
         return;
       }
+
+      // Handle resize messages
       if (
         parsed &&
         parsed.type === "resize" &&
         typeof parsed.cols === "number" &&
         typeof parsed.rows === "number"
       ) {
-        proc.resize(parsed.cols, parsed.rows);
+        sandbox.resize(parsed.cols, parsed.rows);
         return;
       }
-      proc.write(text);
-    } catch (err) {
-      console.error("[ws] failed to parse message as JSON", err);
-      proc.write(text);
+
+      // Unknown message type, ignore
+      log(`Unknown message type: ${parsed?.type}`);
+    } catch {
+      // Not JSON, write raw to container
+      sandbox.write(text);
     }
   });
 
-  proc.onExit(({ exitCode, signal }: { exitCode: number; signal?: number }) => {
-    log(`[pty] Process exited with code ${exitCode}, signal ${signal ?? 0}`);
-    // Flush any buffered output before closing (shows errors if Quarry failed)
-    if (outputBuffer.length > 0 && ws.readyState === ws.OPEN) {
-      ws.send(outputBuffer);
-      outputBuffer = "";
-    }
-    ws.close();
-  });
+  // Handle WebSocket close
+  ws.on("close", async () => {
+    log(`Client disconnected, session: ${sessionId}`);
+    activeSessions.delete(sessionId);
 
-  proc.on("error", (err: Error) => {
-    console.error("[pty] error:", err);
-    ws.close();
-  });
-
-  ws.on("close", () => {
-    log(`[ws] Client disconnected, session: ${sessionId}`);
-    const session = activeSessions.get(sessionId);
-    if (session?.idleTimer) clearTimeout(session.idleTimer);
     try {
-      proc.kill();
+      await sandbox.kill();
     } catch {
       // Ignore kill errors
     }
-    activeSessions.delete(sessionId);
-    // Clean up session directory after a short delay to allow pending file operations
+
+    // Clean up session directory after a short delay
     setTimeout(() => cleanupSession(sessionId), 1000);
   });
 
-  ws.on("error", (err) => {
-    console.error("[ws] error:", err);
-    const session = activeSessions.get(sessionId);
-    if (session?.idleTimer) clearTimeout(session.idleTimer);
+  // Handle WebSocket errors
+  ws.on("error", async (err) => {
+    console.error(`WebSocket error for ${sessionId}:`, err);
+    activeSessions.delete(sessionId);
+
     try {
-      proc.kill();
+      await sandbox.kill();
     } catch {
       // Ignore kill errors
     }
-    activeSessions.delete(sessionId);
+
     cleanupSession(sessionId);
   });
 });
 
-// Start server
-server.listen(PORT, HOST, () => {
-  console.log(`[terminal] Listening on http://${HOST}:${PORT}`);
-  console.log(`[terminal] Output directory: ${path.resolve(OUTPUT_DIR)}`);
-  console.log(`[terminal] Endpoints:`);
-  console.log(`  - GET /health`);
-  console.log(`  - GET /ws (WebSocket)`);
-  console.log(`  - GET /files?session=<uuid>`);
-  console.log(`  - GET /files/<filename>?session=<uuid>`);
-});
+// Startup sequence
+async function startServer(): Promise<void> {
+  console.log("[terminal] Starting server...");
+
+  // Check Docker availability
+  const dockerCheck = await checkDockerReady();
+  if (!dockerCheck.ready) {
+    console.error(`[terminal] Docker not ready: ${dockerCheck.error}`);
+    console.error(
+      "[terminal] Please ensure Docker is running and the sandbox image is built."
+    );
+    console.error(
+      "[terminal] Build with: docker build -t quarry-session:latest -f deploy/docker/Dockerfile.session ."
+    );
+    process.exit(1);
+  }
+  console.log("[terminal] Docker ready");
+
+  // Clean up any orphaned containers from previous runs
+  const cleaned = await cleanupOrphanedContainers();
+  if (cleaned > 0) {
+    console.log(`[terminal] Cleaned up ${cleaned} orphaned container(s)`);
+  }
+
+  // Start HTTP/WS server
+  server.listen(PORT, HOST, () => {
+    console.log(`[terminal] Listening on http://${HOST}:${PORT}`);
+    console.log(`[terminal] Output directory: ${path.resolve(OUTPUT_DIR)}`);
+    console.log(`[terminal] Endpoints:`);
+    console.log(`  - GET /health`);
+    console.log(`  - GET /ws (WebSocket)`);
+    console.log(`  - GET /files?session=<uuid>`);
+    console.log(`  - GET /files/<filename>?session=<uuid>`);
+  });
+}
 
 // Graceful shutdown
-process.on("SIGTERM", () => {
+process.on("SIGTERM", async () => {
   console.log("[terminal] SIGTERM received, shutting down...");
-  // Clean up all active sessions
-  for (const [sessionId, { proc, idleTimer }] of activeSessions) {
-    if (idleTimer) clearTimeout(idleTimer);
-    try {
-      proc.kill();
-    } catch {
-      // Ignore kill errors during shutdown
-    }
+
+  // Kill all active sessions
+  const killPromises: Promise<void>[] = [];
+  for (const [sessionId, { sandbox }] of activeSessions) {
+    killPromises.push(sandbox.kill().catch(() => {}));
     cleanupSession(sessionId);
   }
+  await Promise.all(killPromises);
+
   server.close(() => {
     console.log("[terminal] Server closed");
     process.exit(0);
   });
+});
+
+process.on("SIGINT", async () => {
+  console.log("[terminal] SIGINT received, shutting down...");
+
+  // Kill all active sessions
+  const killPromises: Promise<void>[] = [];
+  for (const [sessionId, { sandbox }] of activeSessions) {
+    killPromises.push(sandbox.kill().catch(() => {}));
+    cleanupSession(sessionId);
+  }
+  await Promise.all(killPromises);
+
+  server.close(() => {
+    console.log("[terminal] Server closed");
+    process.exit(0);
+  });
+});
+
+// Start the server
+startServer().catch((err) => {
+  console.error("[terminal] Failed to start:", err);
+  process.exit(1);
 });

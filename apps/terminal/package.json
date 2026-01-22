@@ -2,6 +2,7 @@
   "name": "terminal-server",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "npx tsx server.ts",
     "build": "tsc",
@@ -9,10 +10,12 @@
     "start": "node dist/server.js"
   },
   "dependencies": {
+    "dockerode": "^4.0.4",
     "dotenv": "^16.5.0",
     "ws": "^8.18.3"
   },
   "devDependencies": {
+    "@types/dockerode": "^3.3.35",
     "@types/node": "^22.15.18",
     "@types/ws": "^8.18.1",
     "@typescript-eslint/eslint-plugin": "^8.48.0",
@@ -20,8 +23,5 @@
     "eslint": "^9.39.1",
     "tsx": "^4.19.0",
     "typescript": "^5.8.3"
-  },
-  "optionalDependencies": {
-    "node-pty": "^1.0.0"
   }
 }
