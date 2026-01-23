@@ -6,19 +6,18 @@
  * - Session-isolated file storage for quarry outputs
  * - HTTP endpoints for file listing and download
  * - Automatic session cleanup on disconnect
+ * - Token-gated WebSocket connections
+ * - Per-IP rate limiting (concurrent sessions, connection rate, message rate)
  *
  * Security:
  * - NO host shell spawning - all sessions run in isolated containers
  * - Containers run with --network none, --read-only, cap-drop ALL, etc.
  * - User input goes directly to container stdin, never shell-interpreted on host
+ * - Session tokens required for WS connections (short-lived, IP-bound)
  *
  * Environment variables:
- * - TERMINAL_PORT (default: 4000)
- * - TERMINAL_HOST (default: 127.0.0.1)
- * - TERMINAL_OUTPUT_DIR (default: ./data/quarry-output)
- * - TERMINAL_DEBUG (default: false)
- * - SANDBOX_IMAGE (default: quarry-session:latest)
- * - TERMINAL_AUTO_RUN (default: "quarry")
+ * - See src/config.ts for all configuration options
+ * - MANUAL: TOKEN_SECRET must be set on the droplet
  */
 
 import { randomUUID } from "crypto";
@@ -35,41 +34,43 @@ import {
   cleanupOrphanedContainers,
   type SandboxSession,
 } from "./src/sandboxRunner.js";
+import {
+  SERVER_PORT,
+  SERVER_HOST,
+  OUTPUT_DIR,
+  AUTO_RUN_CMD,
+  DEBUG,
+  FILE_SETTINGS,
+  validateConfig,
+} from "./src/config.js";
+import {
+  createSessionToken,
+  validateSessionToken,
+  getTokenStats,
+} from "./src/tokenManager.js";
+import {
+  checkConnectionRate,
+  checkConcurrentSessions,
+  releaseSession,
+  checkMessageRate,
+  getRateLimiterStats,
+} from "./src/rateLimiter.js";
 
-// Debug logging
-const DEBUG =
-  process.env.TERMINAL_DEBUG === "1" || process.env.TERMINAL_DEBUG === "true";
+// Debug logging (uses DEBUG from config)
 const log = (...args: unknown[]) => {
   if (DEBUG) console.log("[server]", ...args);
 };
 if (DEBUG) console.log("BOOTSTRAP: apps/terminal/server.ts starting");
 
-// Configuration
-const PORT = parseInt(process.env.TERMINAL_PORT || "4000", 10);
-const HOST = process.env.TERMINAL_HOST || "127.0.0.1";
-const OUTPUT_DIR = process.env.TERMINAL_OUTPUT_DIR || "./data/quarry-output";
+// Shorthand for file settings
+const MAX_FILE_SIZE = FILE_SETTINGS.maxFileSize;
+const MAX_SESSION_STORAGE = FILE_SETTINGS.maxSessionStorage;
+const ALLOWED_EXTENSIONS = FILE_SETTINGS.allowedExtensions;
 
-// Auto-run command when session starts (default: quarry interactive mode)
-const AUTO_RUN_CMD = process.env.TERMINAL_AUTO_RUN || "quarry";
-
-// File download settings
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const MAX_SESSION_STORAGE = 50 * 1024 * 1024; // 50MB per session
-const ALLOWED_EXTENSIONS = [
-  ".json",
-  ".jsonl",
-  ".csv",
-  ".html",
-  ".txt",
-  ".md",
-  ".yml",
-  ".yaml",
-];
-
-// Track active sessions for cleanup
+// Track active sessions for cleanup (includes IP for rate limiter cleanup)
 const activeSessions = new Map<
   string,
-  { ws: WebSocket; sandbox: SandboxSession }
+  { ws: WebSocket; sandbox: SandboxSession; ip: string }
 >();
 
 // Ensure output directory exists
@@ -304,6 +305,29 @@ function handleFileDownload(
 }
 
 /**
+ * Get client IP address from request
+ */
+function getClientIp(req: http.IncomingMessage): string {
+  // Check X-Forwarded-For header (when behind nginx/proxy)
+  const forwarded = req.headers["x-forwarded-for"];
+  if (forwarded) {
+    const forwardedIp = Array.isArray(forwarded)
+      ? forwarded[0]
+      : forwarded.split(",")[0].trim();
+    if (forwardedIp) return forwardedIp;
+  }
+
+  // Check X-Real-IP header
+  const realIp = req.headers["x-real-ip"];
+  if (realIp) {
+    return Array.isArray(realIp) ? realIp[0] : realIp;
+  }
+
+  // Fall back to socket remote address
+  return req.socket.remoteAddress || "unknown";
+}
+
+/**
  * HTTP request handler
  */
 function handleHttpRequest(
@@ -311,10 +335,11 @@ function handleHttpRequest(
   res: http.ServerResponse
 ): void {
   const reqUrl = req.url || "/";
+  const clientIp = getClientIp(req);
 
   // Add CORS headers for development
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
@@ -323,15 +348,44 @@ function handleHttpRequest(
     return;
   }
 
-  // Health check
+  // Health check (includes rate limiter stats)
   if (reqUrl === "/health") {
+    const tokenStats = getTokenStats();
+    const rateLimiterStats = getRateLimiterStats();
+
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
         status: "ok",
         activeSessions: activeSessions.size,
+        tokens: tokenStats,
+        rateLimiter: rateLimiterStats,
       })
     );
+    return;
+  }
+
+  // POST /session - Issue a session token
+  if (reqUrl === "/session" && req.method === "POST") {
+    // Check connection rate limit
+    const rateCheck = checkConnectionRate(clientIp);
+    if (!rateCheck.allowed) {
+      res.writeHead(429, {
+        "Content-Type": "application/json",
+        "Retry-After": Math.ceil((rateCheck.retryAfterMs || 60000) / 1000).toString(),
+      });
+      res.end(JSON.stringify({ error: rateCheck.reason }));
+      return;
+    }
+
+    // Generate token
+    const userAgent = req.headers["user-agent"] || "";
+    const token = createSessionToken(clientIp, userAgent);
+
+    log(`Issued session token to IP ${clientIp}`);
+
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ token }));
     return;
   }
 
@@ -381,11 +435,38 @@ const server = http.createServer(handleHttpRequest);
 const wss = new WebSocketServer({ server, path: "/ws" });
 
 wss.on("connection", async (ws: WebSocket, req) => {
+  const clientIp = getClientIp(req);
+  const userAgent = req.headers["user-agent"] || "";
+
+  // Extract token from query string
+  const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+  const token = url.searchParams.get("token");
+
+  log(`WS connection attempt from ${clientIp}`);
+
+  // Validate token
+  const tokenResult = validateSessionToken(token || "", clientIp, userAgent);
+  if (!tokenResult.valid) {
+    log(`Token validation failed for ${clientIp}: ${tokenResult.error}`);
+    ws.send(JSON.stringify({ type: "error", error: tokenResult.error }));
+    ws.close(4001, tokenResult.error);
+    return;
+  }
+
   // Generate unique session ID
   const sessionId = randomUUID();
   const sessionDir = getSessionDir(sessionId);
 
-  log(`Connection from ${req.socket.remoteAddress}, session: ${sessionId}`);
+  // Check concurrent session limit
+  const concurrentCheck = checkConcurrentSessions(clientIp, sessionId);
+  if (!concurrentCheck.allowed) {
+    log(`Concurrent session limit for ${clientIp}: ${concurrentCheck.reason}`);
+    ws.send(JSON.stringify({ type: "error", error: concurrentCheck.reason }));
+    ws.close(4002, concurrentCheck.reason);
+    return;
+  }
+
+  log(`Connection from ${clientIp}, session: ${sessionId}`);
 
   // Create session directory
   try {
@@ -397,6 +478,7 @@ wss.on("connection", async (ws: WebSocket, req) => {
       "\x1b[1;31m[server]\x1b[0m Failed to create session directory.\r\n"
     );
     ws.close();
+    releaseSession(clientIp, sessionId);
     return;
   }
 
@@ -421,11 +503,12 @@ wss.on("connection", async (ws: WebSocket, req) => {
     );
     ws.close();
     cleanupSession(sessionId);
+    releaseSession(clientIp, sessionId);
     return;
   }
 
-  // Track active session
-  activeSessions.set(sessionId, { ws, sandbox });
+  // Track active session (with IP for cleanup)
+  activeSessions.set(sessionId, { ws, sandbox, ip: clientIp });
 
   // Forward container output to WebSocket
   sandbox.on("data", (data: string) => {
@@ -456,8 +539,22 @@ wss.on("connection", async (ws: WebSocket, req) => {
     }
   });
 
-  // Handle WebSocket messages
+  // Handle WebSocket messages (with rate limiting)
   ws.on("message", (msg: Buffer) => {
+    // Check message rate limit
+    const rateCheck = checkMessageRate(sessionId);
+    if (!rateCheck.allowed) {
+      log(`Message rate limit exceeded for session ${sessionId}`);
+      ws.send(JSON.stringify({ type: "error", error: rateCheck.reason }));
+      ws.close(4003, "Rate limit exceeded");
+      return;
+    }
+
+    // Warn if approaching limit
+    if (rateCheck.warning) {
+      ws.send(JSON.stringify({ type: "warning", message: "Message rate approaching limit" }));
+    }
+
     const text = msg.toString();
     log(`WS message: ${text.slice(0, 80)}`);
 
@@ -497,6 +594,7 @@ wss.on("connection", async (ws: WebSocket, req) => {
   ws.on("close", async () => {
     log(`Client disconnected, session: ${sessionId}`);
     activeSessions.delete(sessionId);
+    releaseSession(clientIp, sessionId);
 
     try {
       await sandbox.kill();
@@ -512,6 +610,7 @@ wss.on("connection", async (ws: WebSocket, req) => {
   ws.on("error", async (err) => {
     console.error(`WebSocket error for ${sessionId}:`, err);
     activeSessions.delete(sessionId);
+    releaseSession(clientIp, sessionId);
 
     try {
       await sandbox.kill();
@@ -526,6 +625,22 @@ wss.on("connection", async (ws: WebSocket, req) => {
 // Startup sequence
 async function startServer(): Promise<void> {
   console.log("[terminal] Starting server...");
+
+  // Validate configuration
+  const configCheck = validateConfig();
+  if (!configCheck.valid) {
+    console.warn("[terminal] Configuration warnings:");
+    for (const error of configCheck.errors) {
+      console.warn(`  - ${error}`);
+    }
+    // In development, allow starting without TOKEN_SECRET (will fail token validation)
+    // In production, this should be fatal
+    if (process.env.NODE_ENV === "production") {
+      console.error("[terminal] Cannot start in production without valid configuration.");
+      process.exit(1);
+    }
+    console.warn("[terminal] Continuing in development mode (token validation may fail)...");
+  }
 
   // Check Docker availability
   const dockerCheck = await checkDockerReady();
@@ -548,12 +663,13 @@ async function startServer(): Promise<void> {
   }
 
   // Start HTTP/WS server
-  server.listen(PORT, HOST, () => {
-    console.log(`[terminal] Listening on http://${HOST}:${PORT}`);
+  server.listen(SERVER_PORT, SERVER_HOST, () => {
+    console.log(`[terminal] Listening on http://${SERVER_HOST}:${SERVER_PORT}`);
     console.log(`[terminal] Output directory: ${path.resolve(OUTPUT_DIR)}`);
     console.log(`[terminal] Endpoints:`);
     console.log(`  - GET /health`);
-    console.log(`  - GET /ws (WebSocket)`);
+    console.log(`  - POST /session (get token)`);
+    console.log(`  - GET /ws?token=... (WebSocket)`);
     console.log(`  - GET /files?session=<uuid>`);
     console.log(`  - GET /files/<filename>?session=<uuid>`);
   });
@@ -565,8 +681,9 @@ process.on("SIGTERM", async () => {
 
   // Kill all active sessions
   const killPromises: Promise<void>[] = [];
-  for (const [sessionId, { sandbox }] of activeSessions) {
+  for (const [sessionId, { sandbox, ip }] of activeSessions) {
     killPromises.push(sandbox.kill().catch(() => {}));
+    releaseSession(ip, sessionId);
     cleanupSession(sessionId);
   }
   await Promise.all(killPromises);
@@ -582,8 +699,9 @@ process.on("SIGINT", async () => {
 
   // Kill all active sessions
   const killPromises: Promise<void>[] = [];
-  for (const [sessionId, { sandbox }] of activeSessions) {
+  for (const [sessionId, { sandbox, ip }] of activeSessions) {
     killPromises.push(sandbox.kill().catch(() => {}));
+    releaseSession(ip, sessionId);
     cleanupSession(sessionId);
   }
   await Promise.all(killPromises);
