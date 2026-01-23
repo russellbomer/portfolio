@@ -5,7 +5,7 @@ Single source of truth for progress. Update this file at the end of every stage.
 ## Current state
 - Branch: main
 - Worktree (optional): ______________________
-- Current stage: Stage 4A (COMPLETED)
+- Current stage: Stage 4B (COMPLETED)
 
 ## Completed stages
 | Stage | Name | Commit | Notes |
@@ -15,7 +15,7 @@ Single source of truth for progress. Update this file at the end of every stage.
 | 2 | Monorepo layout | 4334492 | Moved Next.js to apps/portfolio, terminal to apps/terminal; npm workspaces |
 | 3 | Portfolio hardening | a9931af | Pinned next@15.5.9 (removed canary); removed experimental.ppr/clientSegmentCache/nodeMiddleware |
 | 4A | Terminal hardening (no host shell + per-session sandbox) | c04d8f5 | Removed node-pty; added sandboxRunner with dockerode; per-session containers with --network none, read-only, cap-drop ALL |
-| 4B | Terminal abuse controls (token gating + rate limits) | ________ | |
+| 4B | Terminal abuse controls (token gating + rate limits) | c9ccb71 | Added POST /session, token-gated WS, per-IP rate limits; MANUAL: set TOKEN_SECRET on droplet |
 | 4C | Terminal host validation | ________ | |
 | 5 | Terminal deploy artifacts (compose/systemd/nginx) | ________ | |
 | 6 | Vercel config | (MANUAL) | |
@@ -31,14 +31,15 @@ Single source of truth for progress. Update this file at the end of every stage.
 - [ ] DNS: apex/www → Vercel; quarry subdomain → new droplet IP
 - [ ] Create new DO droplet + firewall; harden SSH; provision TLS
 - [ ] Destroy compromised droplet; revoke/rotate DO/GitHub tokens
+- [ ] Set TOKEN_SECRET on droplet: `export TOKEN_SECRET=$(openssl rand -hex 32)`
 
 ## Open questions / risks
-- [ ] Was the terminal service ever spawning `bash` on the host (vs container-only)?
+- [x] ~~Was the terminal service ever spawning `bash` on the host (vs container-only)?~~ Resolved: Stage 4A removed all host shell spawning
 - [ ] Will the terminal server require docker.sock access? If yes, decide acceptable risk + mitigation.
 - [ ] Is the portfolio truly static (no request-time SSR needed), aside from terminal client integration?
 
 ## Next action (agent-owned)
-- Stage 4B: Terminal abuse controls (token gating + rate limits)
+- Stage 4C: Terminal host validation
 
 ## Evidence / checks (paste outputs as links or short notes)
 - Stage 2 build check: `apps/portfolio` npm ci && npm run build ✓ (13 pages); `apps/terminal` npm ci && npm run lint ✓
@@ -48,3 +49,10 @@ Single source of truth for progress. Update this file at the end of every stage.
   - network none present: `rg "NetworkMode.*none"` → sandboxRunner.ts:101 ✓
   - no privileged/host/docker.sock: `rg "privileged.*true|network_mode.*host|docker\.sock"` → no matches ✓
   - npm install + lint: 0 vulnerabilities, lint passes ✓
+- Stage 4B checks:
+  - npm ci: 0 vulnerabilities ✓
+  - npm run lint: passes ✓
+  - New files: config.ts, tokenManager.ts, rateLimiter.ts
+  - POST /session endpoint added ✓
+  - WS requires token (?token=...) ✓
+  - Rate limits: per-IP concurrent (2), connections/min (10), msg/sec (30) ✓
