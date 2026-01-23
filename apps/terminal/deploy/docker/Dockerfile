@@ -1,29 +1,45 @@
-# Quarry Sandbox Container
-# Provides isolated environment for terminal demo with quarry CLI
+# Terminal WebSocket Server Dockerfile
+# Node.js server that manages WebSocket connections and spawns session containers
 
 FROM node:20-alpine
 
-# Install minimal dependencies for PTY and shell
+# Install minimal dependencies
 RUN apk add --no-cache \
-    bash \
-    curl \
+    wget \
     && rm -rf /var/cache/apk/*
 
-# Create non-root user for security
-RUN adduser -D -s /bin/bash quarry
+# Create non-root user
+RUN adduser -D -u 1000 terminal
 
-# Create directories for session outputs
-RUN mkdir -p /home/quarry/output && chown -R quarry:quarry /home/quarry
+# Create app directory
+WORKDIR /app
 
-# Install quarry CLI globally
-# TODO: Replace with actual quarry package when published
-# RUN npm install -g @russellbomer/quarry
+# Copy package files first (for layer caching)
+COPY package*.json ./
 
-# Set working directory
-WORKDIR /home/quarry
+# Install production dependencies only
+RUN npm ci --omit=dev
+
+# Copy TypeScript config and source code
+COPY tsconfig.json ./
+COPY server.ts ./
+COPY src/ ./src/
+
+# Build TypeScript
+RUN npm run build
+
+# Create data directory
+RUN mkdir -p /app/data/quarry-output && chown -R terminal:terminal /app/data
 
 # Switch to non-root user
-USER quarry
+USER terminal
 
-# Default shell for interactive sessions
-CMD ["/bin/bash"]
+# Expose port
+EXPOSE 4001
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget -q --spider http://localhost:4001/health || exit 1
+
+# Start server
+CMD ["node", "dist/server.js"]
