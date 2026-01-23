@@ -41,6 +41,7 @@ import {
   AUTO_RUN_CMD,
   DEBUG,
   FILE_SETTINGS,
+  ALLOWED_HOSTS,
   validateConfig,
 } from "./src/config.js";
 import {
@@ -328,6 +329,19 @@ function getClientIp(req: http.IncomingMessage): string {
 }
 
 /**
+ * Validate Host header against allowed hosts
+ * Returns true if host is allowed, false otherwise
+ */
+function isHostAllowed(req: http.IncomingMessage): boolean {
+  const hostHeader = req.headers.host || "";
+  // Extract hostname without port
+  const hostname = hostHeader.split(":")[0].toLowerCase();
+  
+  // Check if hostname matches any allowed host
+  return ALLOWED_HOSTS.includes(hostname);
+}
+
+/**
  * HTTP request handler
  */
 function handleHttpRequest(
@@ -336,6 +350,14 @@ function handleHttpRequest(
 ): void {
   const reqUrl = req.url || "/";
   const clientIp = getClientIp(req);
+
+  // Validate Host header - reject unexpected hosts (security: prevent host header attacks)
+  if (!isHostAllowed(req)) {
+    log(`Rejected request with invalid Host header: ${req.headers.host} from ${clientIp}`);
+    res.writeHead(403, { "Content-Type": "text/plain" });
+    res.end("Forbidden: Invalid Host header");
+    return;
+  }
 
   // Add CORS headers for development
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -438,11 +460,19 @@ wss.on("connection", async (ws: WebSocket, req) => {
   const clientIp = getClientIp(req);
   const userAgent = req.headers["user-agent"] || "";
 
+  log(`WS connection attempt from ${clientIp}`);
+
+  // Validate Host header first - reject unexpected hosts
+  if (!isHostAllowed(req)) {
+    log(`Rejected WS connection with invalid Host header: ${req.headers.host} from ${clientIp}`);
+    ws.send(JSON.stringify({ type: "error", error: "Forbidden: Invalid Host header" }));
+    ws.close(4003, "Forbidden: Invalid Host header");
+    return;
+  }
+
   // Extract token from query string
   const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
   const token = url.searchParams.get("token");
-
-  log(`WS connection attempt from ${clientIp}`);
 
   // Validate token
   const tokenResult = validateSessionToken(token || "", clientIp, userAgent);
@@ -628,10 +658,19 @@ async function startServer(): Promise<void> {
 
   // Validate configuration
   const configCheck = validateConfig();
-  if (!configCheck.valid) {
+  
+  // Log warnings
+  if (configCheck.warnings.length > 0) {
     console.warn("[terminal] Configuration warnings:");
+    for (const warning of configCheck.warnings) {
+      console.warn(`  - ${warning}`);
+    }
+  }
+  
+  if (!configCheck.valid) {
+    console.error("[terminal] Configuration errors:");
     for (const error of configCheck.errors) {
-      console.warn(`  - ${error}`);
+      console.error(`  - ${error}`);
     }
     // In development, allow starting without TOKEN_SECRET (will fail token validation)
     // In production, this should be fatal
@@ -641,6 +680,8 @@ async function startServer(): Promise<void> {
     }
     console.warn("[terminal] Continuing in development mode (token validation may fail)...");
   }
+  
+  console.log(`[terminal] Allowed hosts: ${ALLOWED_HOSTS.join(", ")}`);
 
   // Check Docker availability
   const dockerCheck = await checkDockerReady();
