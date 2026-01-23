@@ -39,10 +39,21 @@ Terminal droplet will need a deploy key for pulling code (read-only).
 
 ## C) Vercel project setup (MANUAL)
 Plan: create Vercel project and set root directory to `apps/portfolio`. :contentReference[oaicite:7]{index=7}
-- [ ] Create Vercel project via GitHub integration.
-- [ ] Set **Root Directory** to `apps/portfolio`.
-- [ ] Configure environment variables (only public ones needed for the portfolio).
-- [ ] Confirm portfolio builds and deploys from Vercel successfully.
+- [ ] Create Vercel project via GitHub integration:
+  1. Go to https://vercel.com/new
+  2. Import the `portfolio` repository from GitHub
+  3. **CRITICAL:** Before clicking "Deploy", expand "Root Directory" under "Configure Project"
+  4. Click "Edit" next to Root Directory
+  5. Enter: `apps/portfolio`
+  6. Vercel will auto-detect Next.js framework
+- [ ] Configure environment variables (if needed):
+  - `NEXT_PUBLIC_TERMINAL_WS_URL` = `wss://quarry.russellbomer.com/ws`
+  - `NEXT_PUBLIC_FEATURE_TERMINAL` = `true`
+  - Any other public config from `.env.production.example`
+- [ ] Click "Deploy" and confirm the build succeeds.
+- [ ] Verify the deployed site works at the Vercel preview URL.
+
+**Note:** The repo includes a `.vercelignore` file that excludes `apps/terminal/**` and other non-portfolio paths from the build context.
 
 ---
 
