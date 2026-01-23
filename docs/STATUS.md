@@ -5,7 +5,7 @@ Single source of truth for progress. Update this file at the end of every stage.
 ## Current state
 - Branch: main
 - Worktree (optional): ______________________
-- Current stage: Stage 5 (COMPLETED)
+- Current stage: Stage 6 (COMPLETED)
 
 ## Completed stages
 | Stage | Name | Commit | Notes |
@@ -18,7 +18,7 @@ Single source of truth for progress. Update this file at the end of every stage.
 | 4B | Terminal abuse controls (token gating + rate limits) | c9ccb71 | Added POST /session, token-gated WS, per-IP rate limits; MANUAL: set TOKEN_SECRET on droplet |
 | 4C | Terminal host validation | bf10e8d | Nginx: server_name=quarry.russellbomer.com, 444 for unknown hosts; App: ALLOWED_HOSTS config + isHostAllowed() validation |
 | 5 | Terminal deploy artifacts (compose/systemd/nginx) | b4bbc20 | docker-compose.yml (terminal+nginx stack), systemd unit, nginx rate limits, RUNBOOK.md with copy/paste bootstrap |
-| 6 | Vercel config | (MANUAL) | |
+| 6 | Vercel config (repo-side prep) | c16b793 | Added .vercelignore (excludes apps/terminal, docs, exports, etc.); updated MANUAL_STEPS.md with detailed Vercel root directory instructions |
 | 7 | DO rebuild + DNS | (MANUAL) | |
 | 8 | Decommission old droplet | (MANUAL) | |
 
@@ -70,3 +70,7 @@ Single source of truth for progress. Update this file at the end of every stage.
   - nginx -t sanity check documented in RUNBOOK.md (Section: Verification → 1. Nginx configuration check) ✓
   - Files created: docker-compose.yml, nginx/nginx.conf (rate limits), systemd/terminal-stack.service, RUNBOOK.md ✓
   - MANUAL steps (TLS issuance, DNS) documented in RUNBOOK.md, not performed ✓
+- Stage 6 checks:
+  - .vercelignore created: excludes apps/terminal/**, docs/**, exports/**, foreman_tutorial/**, scripts/**, .agent/** ✓
+  - Portfolio build: `cd apps/portfolio && npm ci && npm run build` → 13 static pages, build succeeded ✓
+  - MANUAL_STEPS.md updated with detailed Vercel root directory instructions (Section C) ✓
