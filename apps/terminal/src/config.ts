@@ -49,11 +49,20 @@ export const FILE_SETTINGS = {
   allowedExtensions: [".json", ".jsonl", ".csv", ".html", ".txt", ".md", ".yml", ".yaml"],
 } as const;
 
+// Host validation settings
+// Only allow requests from the expected host (quarry.russellbomer.com)
+// Set ALLOWED_HOSTS env to comma-separated list to override (e.g., for local dev: "localhost,127.0.0.1")
+export const ALLOWED_HOSTS = (process.env.ALLOWED_HOSTS || "quarry.russellbomer.com")
+  .split(",")
+  .map((h) => h.trim().toLowerCase())
+  .filter(Boolean);
+
 /**
  * Validate critical configuration at startup
  */
-export function validateConfig(): { valid: boolean; errors: string[] } {
+export function validateConfig(): { valid: boolean; errors: string[]; warnings: string[] } {
   const errors: string[] = [];
+  const warnings: string[] = [];
 
   if (!TOKEN_SECRET) {
     errors.push("TOKEN_SECRET is not set. MANUAL: Set this environment variable on the droplet.");
@@ -63,8 +72,18 @@ export function validateConfig(): { valid: boolean; errors: string[] } {
     errors.push("TOKEN_SECRET should be at least 32 characters for security.");
   }
 
+  if (ALLOWED_HOSTS.length === 0) {
+    errors.push("ALLOWED_HOSTS is empty. Server will reject all requests.");
+  }
+
+  // Warn if localhost is allowed (likely dev mode)
+  if (ALLOWED_HOSTS.some((h) => h === "localhost" || h === "127.0.0.1")) {
+    warnings.push("ALLOWED_HOSTS includes localhost - ensure this is intentional for production.");
+  }
+
   return {
     valid: errors.length === 0,
     errors,
+    warnings,
   };
 }
