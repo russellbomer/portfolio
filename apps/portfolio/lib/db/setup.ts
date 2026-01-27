@@ -115,8 +115,6 @@ async function main() {
   await writeEnvFile({
     POSTGRES_URL,
     BASE_URL,
-    NEXT_PUBLIC_FEATURE_TERMINAL: "false",
-    NEXT_PUBLIC_TERMINAL_WS_URL: "ws://localhost:4001/ws",
   });
 
   console.log("\n🎉 Setup completed successfully!");
