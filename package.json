@@ -2,13 +2,11 @@
   "name": "portfolio-monorepo",
   "private": true,
   "workspaces": [
-    "apps/*"
+    "apps/portfolio"
   ],
   "scripts": {
     "dev": "npm run dev --workspace=portfolio",
-    "dev:terminal": "npm run dev --workspace=terminal-server",
     "build": "npm run build --workspace=portfolio",
-    "build:terminal": "npm run build --workspace=terminal-server",
     "lint": "npm run lint --workspaces --if-present",
     "prepare": "husky || true"
   },
