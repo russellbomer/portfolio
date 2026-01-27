@@ -1,18 +1,8 @@
-# Terminal service (deployed separately on DigitalOcean)
-apps/terminal/**
-
 # Documentation (not needed for build)
 docs/**
 
-# Data exports and tutorials (not needed for portfolio)
-exports/**
-foreman_tutorial/**
-
 # Utility scripts (not needed for build)
 scripts/**
-
-# Agent workspace files
-.agent/**
 
 # Local environment files
 .env*
