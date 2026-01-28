@@ -176,28 +176,6 @@ export default function HomePage() {
                   ))}
                 </div>
               </div>
-
-              <div className="group p-4 rounded-lg border border-[hsl(var(--rust)/0.3)] hover:border-[hsl(var(--eucalyptus))] transition-colors">
-                <h3 className="font-display text-xl font-medium mb-1">
-                  Quarry
-                </h3>
-                <p className="text-muted-foreground mb-2">
-                  A web scraping toolkit designed around simplicity. Foreman
-                  provides a fully guided, batteries-included tutorial. The
-                  wizard offers a customizable step-by-step workflow. Advanced
-                  users can drive the CLI directly with flags for full control.
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {["Python", "Typer", "Rich", "Pandas"].map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
             </div>
 
             <Link

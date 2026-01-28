@@ -18,21 +18,7 @@ const demos: Array<{
     label: string;
     external?: boolean;
   };
-}> = [
-  {
-    slug: "quarry",
-    title: "Quarry",
-    description:
-      "A web scraping toolkit designed around simplicity. Foreman provides a fully guided, batteries-included tutorial. The wizard offers a customizable step-by-step workflow. Advanced users can drive the CLI directly with flags for full control.",
-    tech: ["Python", "Typer", "Rich", "Pandas"],
-    status: "live",
-    link: {
-      href: "https://quarry.russellbomer.com",
-      label: "Try the demo",
-      external: true,
-    },
-  },
-];
+}> = [];
 
 export default function DemosPage() {
   return (
