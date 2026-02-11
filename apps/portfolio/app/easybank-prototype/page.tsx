@@ -35,7 +35,7 @@ export default function EasybankPrototypePage() {
         </p>
       </header>
 
-      <section className="w-full max-w-4xl rounded-2xl border border-border/60 bg-muted/10 p-4 md:p-6">
+      <section className="mx-auto w-fit max-w-full rounded-2xl border border-border/60 bg-muted/10 p-4 md:p-6">
         <div className="rounded-xl border border-border/40 bg-background/70 px-4 py-6 text-center text-sm text-muted-foreground md:hidden md:portrait:block">
           This prototype is best viewed on a desktop, laptop, or a tablet in
           landscape orientation.
