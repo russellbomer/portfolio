@@ -7,7 +7,7 @@ export const metadata = buildMetadata({
 });
 
 const FIGMA_EMBED_URL =
-  "https://embed.figma.com/proto/mmTjKCWHlcRFtLvrUASvnE/Easybank-App-Project?node-id=13-1311&p=f&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&embed-host=share";
+  "https://embed.figma.com/proto/mmTjKCWHlcRFtLvrUASvnE/Easybank-App-Project?node-id=13-1311&p=f&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&embed-host=share";
 
 export default function EasybankFlowchartPage() {
   return (
@@ -21,3 +21,5 @@ export default function EasybankFlowchartPage() {
     </article>
   );
 }
+
+
