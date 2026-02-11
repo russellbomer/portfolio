@@ -14,7 +14,7 @@ export default function EasybankPrototypePage() {
   return (
     <article
       id="main-content"
-      className="h-[100dvh] w-full overflow-hidden px-6 py-10 md:px-12 lg:pl-12 lg:pr-20 xl:pl-32 xl:pr-[24rem] 2xl:pr-[28rem]"
+      className="[--edge-gap:1.5rem] [--pinwheel-space:0rem] md:[--edge-gap:2rem] md:[--pinwheel-space:10rem] lg:[--pinwheel-space:12rem] xl:[--pinwheel-space:22rem] 2xl:[--pinwheel-space:26rem] h-[100dvh] w-full overflow-hidden py-10 pl-[var(--edge-gap)] pr-[calc(var(--pinwheel-space)+var(--edge-gap))]"
     >
       <nav className="mb-8">
         <Link
@@ -35,12 +35,12 @@ export default function EasybankPrototypePage() {
         </p>
       </header>
 
-      <section className="w-full max-w-4xl rounded-2xl border border-border/60 bg-muted/10 p-4 md:p-6">
+      <section className="inline-block max-w-full rounded-2xl border border-border/60 bg-muted/10 p-4 md:p-6">
         <div className="rounded-xl border border-border/40 bg-background/70 px-4 py-6 text-center text-sm text-muted-foreground md:hidden md:portrait:block">
           This prototype is best viewed on a desktop, laptop, or a tablet in
           landscape orientation.
         </div>
-        <div className="mx-auto hidden aspect-video w-full max-w-[min(100%,calc((100dvh-18rem)*16/9))] overflow-hidden rounded-xl border border-border/40 bg-background md:block md:portrait:hidden">
+        <div className="hidden aspect-video w-[min(100%,calc((100dvh-18rem)*16/9))] overflow-hidden rounded-xl border border-border/40 bg-background md:block md:portrait:hidden">
           <iframe
             title="Easybank UI Prototype"
             src={FIGMA_EMBED_URL}
