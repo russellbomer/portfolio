@@ -1,10 +1,6 @@
 import { InitialLoadProvider } from "@/components/providers/InitialLoadProvider";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
-import { BackToTop } from "@/components/ui/BackToTop";
-import { CustomCursor } from "@/components/ui/CustomCursor";
+import { GlobalDecor } from "@/components/layout/GlobalDecor";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
-import { NoiseTexture } from "@/components/ui/NoiseTexture";
-import { PinwheelBackground } from "@/components/ui/PinwheelBackground";
 import type { Metadata, Viewport } from "next";
 import { Courier_Prime, Inter, Syne } from "next/font/google";
 import "./globals.css";
@@ -62,11 +58,7 @@ export default function RootLayout({
             Skip to main content
           </a>
           {children}
-          <PinwheelBackground />
-          <NoiseTexture />
-          <BackToTop />
-          <ThemeToggle />
-          <CustomCursor />
+          <GlobalDecor />
         </InitialLoadProvider>
       </body>
     </html>
