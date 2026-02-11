@@ -12,7 +12,10 @@ const FIGMA_EMBED_URL =
 
 export default function EasybankPrototypePage() {
   return (
-    <article id="main-content" className="mx-auto max-w-5xl px-6 py-16">
+    <article
+      id="main-content"
+      className="w-full px-6 py-16 md:px-12 lg:pl-32 lg:pr-24"
+    >
       <nav className="mb-10">
         <Link
           href="/home"
@@ -33,7 +36,7 @@ export default function EasybankPrototypePage() {
       </header>
 
       <section className="rounded-2xl border border-border/60 bg-muted/10 p-4 md:p-6">
-        <div className="aspect-[16/9] w-full overflow-hidden rounded-xl border border-border/40 bg-background">
+        <div className="aspect-video w-full overflow-hidden rounded-xl border border-border/40 bg-background">
           <iframe
             title="Easybank UI Prototype"
             src={FIGMA_EMBED_URL}
