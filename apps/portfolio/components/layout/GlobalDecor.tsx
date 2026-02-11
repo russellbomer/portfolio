@@ -33,13 +33,14 @@ export function GlobalDecor() {
   const pathname = usePathname();
   const isLandscapeMd = useMediaQuery(LANDSCAPE_QUERY);
 
-  const isPrototypeRoute = pathname === PROTOTYPE_ROUTE;
+  const isPrototypeRoute = pathname?.startsWith(PROTOTYPE_ROUTE);
   const hideDecor = isPrototypeRoute && isLandscapeMd;
+  const hidePinwheel = isPrototypeRoute;
   const disableCursor = isPrototypeRoute;
 
   return (
     <>
-      {!hideDecor && <PinwheelBackground />}
+      {!hideDecor && !hidePinwheel && <PinwheelBackground />}
       {!hideDecor && <NoiseTexture />}
       {!hideDecor && <BackToTop />}
       {!hideDecor && <ThemeToggle />}
