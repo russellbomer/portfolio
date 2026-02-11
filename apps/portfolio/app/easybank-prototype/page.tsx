@@ -14,9 +14,9 @@ export default function EasybankPrototypePage() {
   return (
     <article
       id="main-content"
-      className="w-full px-6 py-16 md:px-12 lg:pl-32 lg:pr-24"
+      className="h-[100dvh] w-full overflow-hidden px-6 py-10 md:px-12 lg:pl-32 lg:pr-24 xl:pr-[24rem] 2xl:pr-[28rem]"
     >
-      <nav className="mb-10">
+      <nav className="mb-8">
         <Link
           href="/home"
           className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
@@ -26,7 +26,7 @@ export default function EasybankPrototypePage() {
         </Link>
       </nav>
 
-      <header className="mb-10 space-y-3">
+      <header className="mb-6 space-y-3">
         <h1 className="font-display text-4xl md:text-5xl font-medium">
           Easybank UI Prototype
         </h1>
@@ -36,7 +36,7 @@ export default function EasybankPrototypePage() {
       </header>
 
       <section className="rounded-2xl border border-border/60 bg-muted/10 p-4 md:p-6">
-        <div className="aspect-video w-full overflow-hidden rounded-xl border border-border/40 bg-background">
+        <div className="aspect-video w-full max-w-[min(100%,calc((100dvh-18rem)*16/9))] overflow-hidden rounded-xl border border-border/40 bg-background">
           <iframe
             title="Easybank UI Prototype"
             src={FIGMA_EMBED_URL}
