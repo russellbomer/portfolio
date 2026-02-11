@@ -18,18 +18,10 @@ function useMediaQuery(query: string) {
       const mediaQuery = window.matchMedia(query);
       const handler = () => onStoreChange();
 
-      if (mediaQuery.addEventListener) {
-        mediaQuery.addEventListener("change", handler);
-      } else {
-        mediaQuery.addListener(handler);
-      }
+      mediaQuery.addEventListener("change", handler);
 
       return () => {
-        if (mediaQuery.addEventListener) {
-          mediaQuery.removeEventListener("change", handler);
-        } else {
-          mediaQuery.removeListener(handler);
-        }
+        mediaQuery.removeEventListener("change", handler);
       };
     },
     () => (typeof window === "undefined" ? false : window.matchMedia(query).matches),
