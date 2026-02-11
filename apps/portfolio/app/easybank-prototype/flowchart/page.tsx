@@ -21,30 +21,29 @@ export default function EasybankFlowchartPage() {
       />
       
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6">
-          <div className="bg-background border border-border rounded-lg max-w-md w-full p-6 shadow-xl">
-            <h2 className="font-display text-xl font-medium mb-3">
-              Viewing Tip
-            </h2>
-            <p className="text-muted-foreground mb-4">
-              To zoom and explore this flowchart in detail, you'll need to open it directly in Figma.
-            </p>
-            <div className="flex gap-3">
-              <a
-                href={FIGMA_DIRECT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md text-sm font-mono transition-colors text-center"
-              >
-                Open in Figma ↗
-              </a>
+        <div className="fixed bottom-6 right-6 z-50 max-w-sm animate-in slide-in-from-bottom-4 fade-in duration-500">
+          <div className="bg-background/95 backdrop-blur border border-border rounded-lg p-4 shadow-lg">
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <p className="text-sm font-medium">💡 Viewing Tip</p>
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 px-4 py-2 bg-muted hover:bg-muted/80 rounded-md text-sm font-mono transition-colors"
+                className="text-muted-foreground hover:text-foreground transition-colors -mt-1"
+                aria-label="Dismiss"
               >
-                View Here
+                ✕
               </button>
             </div>
+            <p className="text-sm text-muted-foreground mb-3">
+              To zoom and explore details, open this in Figma.
+            </p>
+            <a
+              href={FIGMA_DIRECT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-3 py-1.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded text-xs font-mono transition-colors"
+            >
+              Open in Figma ↗
+            </a>
           </div>
         </div>
       )}
