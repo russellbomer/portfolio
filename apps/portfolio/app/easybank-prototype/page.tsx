@@ -36,7 +36,10 @@ export default function EasybankPrototypePage() {
       </header>
 
       <section className="rounded-2xl border border-border/60 bg-muted/10 p-4 md:p-6">
-        <div className="aspect-video w-full max-w-[min(100%,calc((100dvh-18rem)*16/9))] overflow-hidden rounded-xl border border-border/40 bg-background">
+        <div className="rounded-xl border border-border/40 bg-background/70 px-4 py-6 text-center text-sm text-muted-foreground md:hidden">
+          This prototype is best viewed on a desktop, laptop, or tablet.
+        </div>
+        <div className="hidden aspect-video w-full max-w-[min(100%,calc((100dvh-18rem)*16/9))] overflow-hidden rounded-xl border border-border/40 bg-background md:block">
           <iframe
             title="Easybank UI Prototype"
             src={FIGMA_EMBED_URL}
