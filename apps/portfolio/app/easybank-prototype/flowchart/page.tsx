@@ -14,7 +14,7 @@ export default function EasybankFlowchartPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowModal(true);
-    }, 3000);
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, []);
