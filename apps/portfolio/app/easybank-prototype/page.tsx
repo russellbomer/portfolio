@@ -14,7 +14,7 @@ export default function EasybankPrototypePage() {
   return (
     <article
       id="main-content"
-      className="h-[100dvh] w-full overflow-hidden px-6 py-10 md:px-12 lg:pl-20 lg:pr-20 xl:pl-32 xl:pr-[24rem] 2xl:pr-[28rem]"
+      className="h-[100dvh] w-full overflow-hidden px-6 py-10 md:px-12 lg:pl-12 lg:pr-20 xl:pl-32 xl:pr-[24rem] 2xl:pr-[28rem]"
     >
       <nav className="mb-8">
         <Link
@@ -35,7 +35,7 @@ export default function EasybankPrototypePage() {
         </p>
       </header>
 
-      <section className="rounded-2xl border border-border/60 bg-muted/10 p-4 md:p-6">
+      <section className="w-full max-w-4xl rounded-2xl border border-border/60 bg-muted/10 p-4 md:p-6">
         <div className="rounded-xl border border-border/40 bg-background/70 px-4 py-6 text-center text-sm text-muted-foreground md:hidden md:portrait:block">
           This prototype is best viewed on a desktop, laptop, or a tablet in
           landscape orientation.
