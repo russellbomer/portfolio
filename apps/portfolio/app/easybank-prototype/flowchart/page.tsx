@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const FIGMA_EMBED_URL =
   "https://embed.figma.com/proto/mmTjKCWHlcRFtLvrUASvnE/Easybank-App-Project?node-id=13-1311&p=f&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&embed-host=share";
@@ -9,7 +9,15 @@ const FIGMA_DIRECT_URL =
   "https://www.figma.com/design/mmTjKCWHlcRFtLvrUASvnE/Easybank-App-Project?node-id=13-1311&t=flowchart";
 
 export default function EasybankFlowchartPage() {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowModal(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <article id="main-content" className="h-[100dvh] w-full relative">
