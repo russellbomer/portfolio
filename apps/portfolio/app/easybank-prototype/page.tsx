@@ -40,7 +40,7 @@ export default function EasybankPrototypePage() {
           This prototype is best viewed on a desktop, laptop, or a tablet in
           landscape orientation.
         </div>
-        <div className="hidden aspect-video w-full max-w-[min(100%,calc((100dvh-18rem)*16/9))] overflow-hidden rounded-xl border border-border/40 bg-background md:block md:portrait:hidden">
+        <div className="mx-auto hidden aspect-video w-full max-w-[min(100%,calc((100dvh-18rem)*16/9))] overflow-hidden rounded-xl border border-border/40 bg-background md:block md:portrait:hidden">
           <iframe
             title="Easybank UI Prototype"
             src={FIGMA_EMBED_URL}
