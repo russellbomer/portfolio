@@ -34,30 +34,42 @@ export default function LandingPage() {
             </h2>
             <div className="space-y-6 text-md text-muted-foreground">
               <p>
-                I’m a full-stack engineer who believes good software starts with
-                paying attention to the users, their needs, and the small
-                details that make a product feel intuitive rather than
-                frustrating. I’m drawn to making difficult obstacles manageable
-                and complex systems understandable through thoughtful design and
-                careful engineering.
+                Writing a couple paragraphs to sum myself up is a difficult task; 
+                I'm still pretty young but I have a rich and varied professional 
+                history—running kitchens, coordinating supply chains for 
+                large-scale manufacturing, leading enterprise software implementation— 
+                but none of these alone really illustrates the breadth of my 
+                experience or clarifies the common thread underlying my work. 
               </p>
               <p>
-                I work with the belief that engineering and design go hand in
-                hand and harmony between these two ideals is what makes a truly
-                great piece of software. Tools should lighten the load, reduce
-                confusion, and look and feel good during use. This principle
-                guides the problems I choose and how I approach them.
+                If I had to put it simply: I solve problems. To elaborate: I immerse 
+                myself in a situation, identify weaknesses, and find solutions. I 
+                value process, clarity, and continuous refinement; coincidentally, 
+                I value creativity, resourcefulness, and experimentation just as 
+                highly. These traits guide me in work and the rest of my life.
               </p>
               <p>
-                The constants in my life— cooking (lately, a lot of sourdough
-                bread), woodworking, art in all its forms, and the people
-                closest to me— have shaped how I build. They’ve taught me
-                patience, attention to detail, and an appreciation for
-                simplicity and elegance that I carry with me into my work.
+                Recently, I've been working frequently on solution architecture 
+                and engineering, automation, data analysis and visualization, 
+                and AI/ML integrations that run the gamut of my interests. I use 
+                modern web development frameworks and tools— JavaScript/TypeScript, 
+                Python, React, and Docker, for example— but I like to say I'm 
+                stack agnostic. I also enjoy working with Linux-based systems, 
+                shell scripting, the list goes on. The point is that I am adaptable
+                 and choose my tools based on the problem rather than the reverse.
               </p>
               <p>
-                To sum it all up: I like making things that work well and look
-                good, and can't wait to see what we can build together.
+                At home, I do woodworking, DIY projects, and maintain a homelab. I suffer Cleveland Browns 
+                football religiously, take lawn care more seriously than I probably should, and still cook 
+                regularly. There are clear throughlines between my hobbies and work: I like building things 
+                and making systems work better. As for the Browns, the throughline is that no matter how 
+                difficult something is, I am devoted to seeing it through.
+              </p>
+              <p>
+                I'm permanently located in rural western North Carolina with my wife, 2 dogs, and 2 cats 
+                (not to mention a lot of pet fish). I'm in the process of finishing my M.S. in Software 
+                Engineering at WGU. I'm open to work and would love to discuss the ways I can help you 
+                solve a problem, so drop me a line and I'll get back to you promptly!
               </p>
             </div>
             <div className="mt-8">
