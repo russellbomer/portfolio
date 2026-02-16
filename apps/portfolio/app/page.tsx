@@ -72,14 +72,6 @@ export default function LandingPage() {
                 solve a problem, so drop me a line and I'll get back to you promptly!
               </p>
             </div>
-            <div className="mt-8">
-              <Link
-                href="/tmi"
-                className="text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
-              >
-                (The longer version) →
-              </Link>
-            </div>
           </div>
         </ScrollSection>
 
