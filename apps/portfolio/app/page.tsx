@@ -39,7 +39,7 @@ export default function LandingPage() {
                 history—running kitchens, coordinating supply chains for 
                 large-scale manufacturing, leading enterprise software implementation— 
                 but none of these alone really illustrate the breadth of my 
-                experience or clarifies the common thread underlying my work. 
+                experience or clarify the common threads underlying my work. 
               </p>
               <p>
                 If I had to put it simply: I solve problems. To elaborate: I immerse 
