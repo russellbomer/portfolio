@@ -4,78 +4,9 @@ import Link from "next/link";
 export const metadata = buildMetadata({
   title: "Standards",
   description:
-    "Skills, expertise, and approach to building software that matters.",
+    "Skills, experience, and the principles that guide how I work.",
   pathname: "/standards",
 });
-
-const skills = {
-  languages: ["TypeScript", "Python", "JavaScript", "Go", "SQL", "HTML/CSS"],
-  frontend: ["React", "Next.js", "Tailwind CSS", "Framer Motion", "Vue.js"],
-  backend: ["Node.js", "FastAPI", "Express", "Django", "PostgreSQL", "Redis"],
-  tools: ["Docker", "Git", "AWS", "Vercel", "Linux", "Nginx"],
-  practices: [
-    "Test-Driven Development",
-    "CI/CD",
-    "Agile/Scrum",
-    "Code Review",
-    "Documentation",
-  ],
-};
-
-const education = [
-  {
-    degree: "M.S. Software Engineering",
-    institution: "Western Governors University",
-    status: "In Progress",
-    year: "Expected 2027",
-  },
-  {
-    degree: "B.S.B.A. Supply Chain Management",
-    institution: "Appalachian State University",
-    status: "Completed",
-    year: "2020",
-  },
-  {
-    degree: "A.A. Culinary Arts",
-    institution: "Central Piedmont Community College",
-    status: "Completed",
-    year: "2015",
-  },
-  {
-    degree: "A.S. Business Administration",
-    institution: "Central Piedmont Community College",
-    status: "Completed",
-    year: "2015",
-  },
-];
-
-const principles = [
-  {
-    title: "Ship incrementally, validate early",
-    description:
-      "Small, frequent releases over big bang deployments. Get feedback before investing too heavily in any direction.",
-  },
-  {
-    title: "Prefer simple over clever",
-    description:
-      "Code that's easy to read and maintain beats elegant abstractions that only you understand. Optimize for the next person.",
-  },
-  {
-    title: "Document as you go",
-    description:
-      "Future you (and your teammates) will thank present you. Decisions, gotchas, and context matter as much as the code itself.",
-  },
-  {
-    title: "Automate the boring parts",
-    description:
-      "If you do it twice, script it. Free up mental bandwidth for the work that actually requires human judgment.",
-  },
-  {
-    title: "Design for humans first",
-    description:
-      "Technical constraints matter, but the end goal is always to reduce friction for the people using what you build.",
-  },
-];
 
 export default function StandardsPage() {
   return (
@@ -104,40 +35,46 @@ export default function StandardsPage() {
         <h2 className="font-display text-2xl font-medium mb-6">
           Technical Skills
         </h2>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-sm font-mono uppercase tracking-wider text-muted-foreground mb-2">
-                Languages
-              </h3>
-              <p className="text-foreground">{skills.languages.join(" · ")}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-mono uppercase tracking-wider text-muted-foreground mb-2">
-                Frontend
-              </h3>
-              <p className="text-foreground">{skills.frontend.join(" · ")}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-mono uppercase tracking-wider text-muted-foreground mb-2">
-                Backend
-              </h3>
-              <p className="text-foreground">{skills.backend.join(" · ")}</p>
-            </div>
+        <div className="space-y-5 text-muted-foreground">
+          <div>
+            <h3 className="text-foreground font-medium mb-1">
+              Solution Design & Architecture
+            </h3>
+            <p>
+              Requirements analysis · System design · Process automation · Workflow optimization · Technical roadmapping · Stakeholder communication
+            </p>
           </div>
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-sm font-mono uppercase tracking-wider text-muted-foreground mb-2">
-                Tools & Infrastructure
-              </h3>
-              <p className="text-foreground">{skills.tools.join(" · ")}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-mono uppercase tracking-wider text-muted-foreground mb-2">
-                Practices
-              </h3>
-              <p className="text-foreground">{skills.practices.join(" · ")}</p>
-            </div>
+          <div>
+            <h3 className="text-foreground font-medium mb-1">AI/ML Integration</h3>
+            <p>
+              Multi-model orchestration · MCP servers · RAG implementations · LLM-powered applications · Prompt engineering · Agent architectures
+            </p>
+          </div>
+          <div>
+            <h3 className="text-foreground font-medium mb-1">Development</h3>
+            <p>
+              JavaScript/TypeScript · Python · React · Next.js · Node.js · SQL · REST APIs · ETL pipelines
+            </p>
+          </div>
+          <div>
+            <h3 className="text-foreground font-medium mb-1">Data & Automation</h3>
+            <p>
+              Power Query · Power Pivot · VBA · Data modeling · Automated reporting · Dashboard design
+            </p>
+          </div>
+          <div>
+            <h3 className="text-foreground font-medium mb-1">
+              Infrastructure & Systems
+            </h3>
+            <p>
+              Docker · Linux · Git/GitHub · CI/CD · Containerized services · Shell scripting
+            </p>
+          </div>
+          <div>
+            <h3 className="text-foreground font-medium mb-1">Business & Operations</h3>
+            <p>
+              Cross-functional collaboration · Project management · Vendor coordination · P&amp;L analysis · Process improvement
+            </p>
           </div>
         </div>
       </section>
@@ -145,46 +82,74 @@ export default function StandardsPage() {
       {/* Principles Section */}
       <section className="mb-16">
         <h2 className="font-display text-2xl font-medium mb-6">How I Work</h2>
-        <div className="space-y-6">
-          {principles.map((principle, index) => (
-            <div
-              key={index}
-              className="p-4 rounded-lg border border-border/50 bg-muted/10"
-            >
-              <h3 className="font-display text-lg font-medium mb-2">
-                {principle.title}
-              </h3>
-              <p className="text-muted-foreground">{principle.description}</p>
-            </div>
-          ))}
+        <div className="space-y-6 text-muted-foreground">
+          <div>
+            <h3 className="text-foreground font-medium mb-1">
+              Figure out the actual problem first
+            </h3>
+            <p>
+              The requested solution and the needed solution are often different. I ask questions until I understand the real constraints and what success actually looks like.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-foreground font-medium mb-1">
+              Build iteratively but deliberately
+            </h3>
+            <p>
+              Ship working solutions, gather real feedback, improve based on actual usage. Early doesn't mean sloppy—there's a plan, just not a rigid one.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-foreground font-medium mb-1">
+              Write for the next person
+            </h3>
+            <p>
+              Code should be readable. Architectures should be understandable. Documentation should exist. Future me (or future someone else) shouldn't need an archaeology degree to figure out what's happening.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-foreground font-medium mb-1">
+              Use appropriate technology
+            </h3>
+            <p>
+              Sometimes the right answer is React and Docker. Sometimes it's a Python script and a cron job. The goal is solving the problem, not demonstrating knowledge of frameworks.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-foreground font-medium mb-1">
+              Communicate across contexts
+            </h3>
+            <p>
+              I've worked with executives who need clarity, not jargon, and technical teams who need details, not hand-waving. Translation between different kinds of expertise is part of the work.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Education Section */}
       <section className="mb-16">
         <h2 className="font-display text-2xl font-medium mb-6">Education</h2>
-        <div className="space-y-4">
-          {education.map((edu, index) => (
-            <div
-              key={index}
-              className="flex items-start justify-between gap-4 p-4 rounded-lg border border-border/50 bg-muted/10"
-            >
-              <div>
-                <h3 className="font-medium">{edu.degree}</h3>
-                <p className="text-muted-foreground">{edu.institution}</p>
-              </div>
-              <div className="text-right shrink-0">
-                <span className="text-sm font-mono text-muted-foreground">
-                  {edu.year}
-                </span>
-                {edu.status === "In Progress" && (
-                  <span className="block text-xs font-mono text-[hsl(var(--creamsicle))]">
-                    {edu.status}
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
+        <div className="space-y-6 text-muted-foreground">
+          <div>
+            <h3 className="text-foreground font-medium">M.S. Software Engineering</h3>
+            <p>Western Governors University</p>
+            <p className="italic">2025 – Present (In Progress)</p>
+          </div>
+          <div>
+            <h3 className="text-foreground font-medium">B.S. Business Administration</h3>
+            <p>Appalachian State University</p>
+            <p className="italic">
+              Supply Chain Management concentration, Sustainable Development minor
+            </p>
+            <p className="italic">2022 – 2024 | 3.5 GPA</p>
+          </div>
+          <div>
+            <h3 className="text-foreground font-medium">
+              A.S. Business Administration · A.A. Culinary Arts
+            </h3>
+            <p>Central Piedmont Community College</p>
+            <p className="italic">2018 – 2020 | 3.75 GPA</p>
+          </div>
         </div>
       </section>
 
@@ -193,37 +158,32 @@ export default function StandardsPage() {
         <h2 className="font-display text-2xl font-medium mb-6">
           What I'm Looking For
         </h2>
-        <div className="prose prose-neutral dark:prose-invert max-w-none space-y-4">
+        <div className="space-y-4 text-muted-foreground">
           <p className="text-muted-foreground">
-            I'm currently taking on freelance and consulting work while building
-            my own products. I'm especially interested in:
+            I'm open to full-time roles, contract work, and consulting
+            engagements where complex problems need solving. I'm particularly
+            interested in:
           </p>
           <ul className="space-y-2 text-muted-foreground">
-            <li>• Internal tools and operations software</li>
-            <li>• Developer tooling and CLI applications</li>
-            <li>• Data pipelines and integrations</li>
-            <li>• Full-stack web applications with thoughtful UX</li>
+            <li>• Solution architecture and systems design</li>
+            <li>• AI/ML integration and implementation</li>
+            <li>• Internal tools and automation</li>
+            <li>• Data systems and business intelligence</li>
+            <li>• Technical product management</li>
+            <li>• Implementation consulting</li>
           </ul>
           <p className="text-muted-foreground">
-            I value clear communication, reasonable timelines, and projects
-            where I can see the whole shape of the problem—from data modeling to
-            user experience. Get in touch and we'll figure out how I can make
-            your life a little easier.
+            I value clear communication, understanding the business context, and
+            working on problems that don't have predetermined solutions. I'm
+            looking for work where the goal is building software that solves
+            real problems, not following predetermined patterns.
+          </p>
+          <p className="text-muted-foreground">
+            Remote-first positions strongly preferred. Based in Lawndale, North
+            Carolina.
           </p>
         </div>
       </section>
-
-      <div className="pt-8 pb-[41px] border-t border-border/50">
-        <p className="text-muted-foreground">
-          Have a project that fits?{" "}
-          <Link
-            href="/connect"
-            className="text-foreground underline underline-offset-4 hover:text-primary transition-colors"
-          >
-            Let's talk about it.
-          </Link>
-        </p>
-      </div>
     </article>
   );
 }

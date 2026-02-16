@@ -38,7 +38,7 @@ export default function LandingPage() {
                 I'm still pretty young but I have a rich and varied professional 
                 history—running kitchens, coordinating supply chains for 
                 large-scale manufacturing, leading enterprise software implementation— 
-                but none of these alone really illustrates the breadth of my 
+                but none of these alone really illustrate the breadth of my 
                 experience or clarifies the common thread underlying my work. 
               </p>
               <p>
