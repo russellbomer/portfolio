@@ -44,17 +44,17 @@ export function HeroContent() {
     return (
       <div className="max-w-4xl">
         {/* Greeting */}
-        <p className="text-muted-foreground font-mono text-sm mb-4">
+        <p className="text-muted-foreground font-mono text-sm mb-3">
           Hello, I&apos;m
         </p>
 
         {/* Name */}
-        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight mb-6">
+        <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight mb-4">
           Russell Bomer
         </h1>
 
         {/* Tagline */}
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-8">
+        <p className="text-base md:text-lg text-muted-foreground max-w-2xl mb-6">
           I make software... and a lot of other things.
         </p>
 
@@ -93,7 +93,7 @@ export function HeroContent() {
   return (
     <div className="max-w-4xl">
       {/* Greeting */}
-      <p className="text-muted-foreground font-mono text-sm mb-4">
+      <p className="text-muted-foreground font-mono text-sm mb-3">
         <TypewriterText
           text="Hello, I'm"
           delay={line1Start}
@@ -103,7 +103,7 @@ export function HeroContent() {
       </p>
 
       {/* Name */}
-      <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight mb-6">
+      <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight mb-4">
         <TypewriterText
           text="Russell Bomer"
           delay={line2Start}
@@ -113,7 +113,7 @@ export function HeroContent() {
       </h1>
 
       {/* Tagline */}
-      <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-8">
+      <p className="text-base md:text-lg text-muted-foreground max-w-2xl mb-6">
         <TypewriterText
           text="I make software."
           delay={line3aStart}

@@ -2,7 +2,7 @@
 
 import type { Variants } from "framer-motion";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const navItems = [
   { id: "about", label: "About" },
@@ -54,7 +54,7 @@ function TypingLabel({ text, isActive }: TypingLabelProps) {
     return (
       <span
         className={`
-          font-mono text-xs uppercase tracking-widest
+          font-mono text-[10px] uppercase tracking-widest
           ${isActive ? "text-foreground" : "text-muted-foreground"}
         `}
       >
@@ -66,7 +66,7 @@ function TypingLabel({ text, isActive }: TypingLabelProps) {
   return (
     <motion.span
       className={`
-        font-mono text-xs uppercase tracking-widest flex
+        font-mono text-[10px] uppercase tracking-widest flex
         ${isActive ? "text-foreground" : "text-muted-foreground"}
       `}
       variants={containerVariants}
@@ -87,6 +87,7 @@ export function SidebarNav() {
   const [activeSection, setActiveSection] = useState<string>("");
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const isNavigatingRef = useRef(false);
 
   // Scroll to section with offset to align with peak content opacity
   // Each section has 200vh scroll trigger, content at full opacity from 40-60% scroll progress
@@ -94,6 +95,10 @@ export function SidebarNav() {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (!element) return;
+
+    // Lock visibility during navigation to prevent flicker
+    isNavigatingRef.current = true;
+    setIsVisible(true);
 
     const rect = element.getBoundingClientRect();
     const elementTop = rect.top + window.scrollY;
@@ -108,62 +113,71 @@ export function SidebarNav() {
       top: Math.max(0, targetScroll),
       behavior: "smooth",
     });
+
+    // Release lock after smooth scroll completes (typically ~500ms)
+    setTimeout(() => { isNavigatingRef.current = false; }, 800);
   };
 
   useEffect(() => {
-    // Observer for active section tracking
-    // Each section has a 200vh scroll trigger with content at full opacity from 40-60% scroll progress
-    // Peak visibility center is at 50% scroll progress of each section
-    // Using -40% top margin to detect slightly before geometric center
-    // This aligns the nav highlight with when content "feels" most prominent
-    const sectionObserver = new IntersectionObserver(
-      (entries) => {
-        // Find the entry that's currently intersecting with highest ratio
-        const intersecting = entries.filter((e) => e.isIntersecting);
-        if (intersecting.length > 0) {
-          const best = intersecting.reduce((a, b) =>
-            a.intersectionRatio > b.intersectionRatio ? a : b
-          );
-          setActiveSection(best.target.id);
-        }
-      },
-      {
-        // Detection band: 40% from top, 59% from bottom = 1% visible zone at 40% height
-        // This triggers when section is at peak-opacity scroll position
-        rootMargin: "-40% 0px -59% 0px",
-        threshold: [0, 0.25, 0.5, 0.75, 1],
-      }
-    );
+    // Track active section based on scroll position
+    // Uses section element positions directly - more reliable than IntersectionObserver
+    // which can conflict with spring-smoothed opacity animations
+    const updateActiveSection = () => {
+      const viewportCenter = window.scrollY + window.innerHeight / 2;
+      let closestSection = "";
+      let closestDistance = Infinity;
 
-    // Check visibility based on about section position
-    const checkVisibility = () => {
-      const aboutSection = document.getElementById("about");
-      if (aboutSection) {
-        const rect = aboutSection.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-        // Show sidebar when the center of the about section reaches the center of the viewport
-        const aboutCenter = rect.top + rect.height / 2;
-        const viewportCenter = viewportHeight / 2;
-        setIsVisible(aboutCenter <= viewportCenter);
+      navItems.forEach(({ id }) => {
+        const element = document.getElementById(id);
+        if (!element) return;
+
+        const rect = element.getBoundingClientRect();
+        const elementTop = rect.top + window.scrollY;
+        const elementCenter = elementTop + rect.height / 2;
+        const distance = Math.abs(viewportCenter - elementCenter);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestSection = id;
+        }
+      });
+
+      if (closestSection) {
+        setActiveSection(closestSection);
       }
     };
 
+    // Check visibility based on scroll position with hysteresis
+    // Show at 40% viewport, hide only when back to 10%
+    // This prevents flicker during smooth scroll animations
+    const checkVisibility = () => {
+      // Skip visibility changes during navigation to prevent flicker
+      if (isNavigatingRef.current) return;
+      
+      const showThreshold = window.innerHeight * 0.4;
+      const hideThreshold = window.innerHeight * 0.1;
+      
+      if (window.scrollY > showThreshold) {
+        setIsVisible(true);
+      } else if (window.scrollY < hideThreshold) {
+        setIsVisible(false);
+      }
+      // Between hideThreshold and showThreshold: keep current state (hysteresis)
+    };
+
+    const handleScroll = () => {
+      updateActiveSection();
+      checkVisibility();
+    };
+
     // Initial check
-    checkVisibility();
+    handleScroll();
 
     // Listen for scroll
-    window.addEventListener("scroll", checkVisibility, { passive: true });
-
-    navItems.forEach(({ id }) => {
-      const element = document.getElementById(id);
-      if (element) {
-        sectionObserver.observe(element);
-      }
-    });
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
-      sectionObserver.disconnect();
-      window.removeEventListener("scroll", checkVisibility);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -175,7 +189,7 @@ export function SidebarNav() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed left-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4"
+          className="fixed left-3 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4"
           aria-label="Section navigation"
         >
           {navItems.map(({ id, label }) => {

@@ -2,6 +2,7 @@ import Footer from "@/components/layout/Footer";
 import { SidebarNav } from "@/components/layout/SidebarNav";
 import { ScrollSection } from "@/components/motion/ScrollSection";
 import { HeroContent } from "@/components/sections/HeroContent";
+import { ScrollLinkedAbout } from "@/components/sections/ScrollLinkedAbout";
 import { buildMetadata } from "@/lib/seo/meta";
 import Link from "next/link";
 
@@ -20,108 +21,63 @@ export default function LandingPage() {
         {/* Hero Section */}
         <ScrollSection
           id="hero"
-          className="px-6 md:px-12 lg:pl-32 lg:pr-24"
+          className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]"
           isFirst
         >
           <HeroContent />
         </ScrollSection>
 
-        {/* About Section */}
-        <ScrollSection id="about" className="px-6 md:px-12 lg:pl-32 lg:pr-24">
-          <div className="max-w-3xl">
-            <h2 className="font-display text-3xl md:text-4xl font-medium mb-8">
-              About
-            </h2>
-            <div className="space-y-6 text-md text-muted-foreground">
-              <p>
-                Writing a couple paragraphs to sum myself up is a difficult task; 
-                I'm still pretty young but I have a rich and varied professional 
-                history—running kitchens, coordinating supply chains for 
-                large-scale manufacturing, leading enterprise software implementation— 
-                but none of these alone really illustrate the breadth of my 
-                experience or clarify the common threads underlying my work. 
-              </p>
-              <p>
-                If I had to put it simply: I solve problems. To elaborate: I immerse 
-                myself in a situation, identify weaknesses, and find solutions. I 
-                value process, clarity, and continuous refinement; coincidentally, 
-                I value creativity, resourcefulness, and experimentation just as 
-                highly. These traits guide me in work and the rest of my life.
-              </p>
-              <p>
-                Recently, I've been working frequently on solution architecture 
-                and engineering, automation, data analysis and visualization, 
-                and AI/ML integrations that run the gamut of my interests. I use 
-                modern web development frameworks and tools— JavaScript/TypeScript, 
-                Python, React, and Docker, for example— but I like to say I'm 
-                stack agnostic. I also enjoy working with Linux-based systems, 
-                shell scripting, the list goes on. The point is that I am adaptable
-                 and choose my tools based on the problem rather than the reverse.
-              </p>
-              <p>
-                At home, I do woodworking, DIY projects, and maintain a homelab. I suffer Cleveland Browns 
-                football religiously, take lawn care more seriously than I probably should, and still cook 
-                regularly. There are clear throughlines between my hobbies and work: I like building things 
-                and making systems work better. As for the Browns, the throughline is that no matter how 
-                difficult something is, I am devoted to seeing it through.
-              </p>
-              <p>
-                I'm permanently located in rural western North Carolina with my wife, 2 dogs, and 2 cats 
-                (not to mention a lot of pet fish). I'm in the process of finishing my M.S. in Software 
-                Engineering at WGU. I'm open to work and would love to discuss the ways I can help you 
-                solve a problem, so drop me a line and I'll get back to you promptly!
-              </p>
-            </div>
-          </div>
-        </ScrollSection>
+        {/* About Section - scroll-linked content */}
+        <ScrollLinkedAbout className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]" />
 
         {/* Standards Section */}
         <ScrollSection
           id="standards"
-          className="px-6 md:px-12 lg:pl-32 lg:pr-24"
+          className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]"
         >
           <div className="max-w-4xl">
-            <h2 className="font-display text-3xl md:text-4xl font-medium mb-8">
+            <h2 className="font-display text-3xl md:text-4xl font-medium mb-4">
               Standards
             </h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2">
                 <h3 className="font-display text-xl font-medium">
                   What I Build
                 </h3>
-                <ul className="space-y-2 text-muted-foreground">
+                <ul className="space-y-1 text-muted-foreground leading-snug">
+                  <li>• Solution architecture & systems design</li>
+                  <li>• AI/ML integrations & automation</li>
+                  <li>• Internal tools & business intelligence</li>
+                  <li>• Data pipelines & reporting systems</li>
                   <li>• Full-stack web applications</li>
-                  <li>• Interactive dashboards & data visualization tools</li>
-                  <li>• Robust CLI experiences & developer tooling</li>
-                  <li>• API integrations & backend systems</li>
-                  <li>• AI/LLM application integrations</li>
-                  <li>• Containerized & cloud-native solutions</li>
+                  <li>• Infrastructure & deployment systems</li>
                 </ul>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-2">
                 <h3 className="font-display text-xl font-medium">How I Work</h3>
-                <ul className="space-y-2 text-muted-foreground">
-                  <li>• Ship incrementally, validate early</li>
-                  <li>• Document as I go</li>
-                  <li>• Prefer simple over clever</li>
-                  <li>• Automate the boring parts</li>
+                <ul className="space-y-1 text-muted-foreground leading-snug">
+                  <li>• Figure out the actual problem first</li>
+                  <li>• Build iteratively but deliberately</li>
+                  <li>• Write for the next person</li>
+                  <li>• Use appropriate technology</li>
                 </ul>
               </div>
             </div>
-            <div className="mt-12">
-              <h3 className="font-display text-xl font-medium mb-4">
+            <div className="mt-5">
+              <h3 className="font-display text-xl font-medium mb-3">
                 Current Stack
               </h3>
               <div className="flex flex-wrap gap-2">
                 {[
-                  "TypeScript",
+                  "JavaScript/TypeScript",
+                  "Python",
                   "React",
                   "Next.js",
                   "Node.js",
-                  "PostgreSQL",
-                  "Redis",
+                  "SQL",
                   "Docker",
-                  "AWS",
+                  "Linux",
+                  "Power Query",
                 ].map((tech) => (
                   <span
                     key={tech}
@@ -132,7 +88,7 @@ export default function LandingPage() {
                 ))}
               </div>
             </div>
-            <div className="mt-8">
+            <div className="mt-6">
               <Link
                 href="/standards"
                 className="text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
@@ -144,7 +100,7 @@ export default function LandingPage() {
         </ScrollSection>
 
         {/* Work Section */}
-        <ScrollSection id="work" className="px-6 md:px-12 lg:pl-32 lg:pr-24">
+        <ScrollSection id="work" className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]">
           <div className="max-w-4xl w-full">
             <h2 className="font-display text-3xl md:text-4xl font-medium mb-4">
               Work
@@ -202,7 +158,7 @@ export default function LandingPage() {
         {/* Connect Section */}
         <ScrollSection
           id="connect"
-          className="px-6 md:px-12 lg:pl-32 lg:pr-24"
+          className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]"
           isLast
         >
           <div className="max-w-3xl">

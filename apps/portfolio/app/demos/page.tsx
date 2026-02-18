@@ -34,7 +34,7 @@ export default function DemosPage() {
       </nav>
 
       <header className="mb-12">
-        <h1 className="font-display text-4xl md:text-5xl font-medium mb-4">
+        <h1 className="font-display text-3xl md:text-4xl font-medium mb-4">
           Demos
         </h1>
         <p className="text-lg text-muted-foreground">

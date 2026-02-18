@@ -1,6 +1,7 @@
 import Footer from "@/components/layout/Footer";
 import { SidebarNav } from "@/components/layout/SidebarNav";
 import { ScrollSection } from "@/components/motion/ScrollSection";
+import { ScrollLinkedAbout } from "@/components/sections/ScrollLinkedAbout";
 import { StaticHeroContent } from "@/components/sections/StaticHeroContent";
 import { buildMetadata } from "@/lib/seo/meta";
 import Link from "next/link";
@@ -24,104 +25,63 @@ export default function HomePage() {
         {/* Hero Section */}
         <ScrollSection
           id="hero"
-          className="px-6 md:px-12 lg:pl-32 lg:pr-24"
+          className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]"
           isFirst
         >
           <StaticHeroContent />
         </ScrollSection>
 
-        {/* About Section */}
-        <ScrollSection id="about" className="px-6 md:px-12 lg:pl-32 lg:pr-24">
-          <div className="max-w-3xl">
-            <h2 className="font-display text-3xl md:text-4xl font-medium mb-8">
-              About
-            </h2>
-            <div className="space-y-6 text-md text-muted-foreground">
-              <p>
-                I’m a full-stack engineer who believes good software starts with
-                paying attention to the users, their needs, and the small
-                details that make a product feel intuitive rather than
-                frustrating. I’m drawn to making difficult obstacles manageable
-                and complex systems understandable through thoughtful design and
-                careful engineering.
-              </p>
-              <p>
-                I work with the belief that engineering and design go hand in
-                hand and harmony between these two ideals is what makes a truly
-                great piece of software. Tools should lighten the load, reduce
-                confusion, and look and feel good during use. This principle
-                guides the problems I choose and how I approach them.
-              </p>
-              <p>
-                The constants in my life— cooking (lately, a lot of sourdough
-                bread), woodworking, art in all its forms, and the people
-                closest to me— have shaped how I build. They’ve taught me
-                patience, attention to detail, and an appreciation for
-                simplicity and elegance that I carry with me into my work.
-              </p>
-              <p>
-                To sum it all up: I like making things that work well and look
-                good, and can't wait to see what we can build together.
-              </p>
-            </div>
-            <div className="mt-8">
-              <Link
-                href="/tmi"
-                className="text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
-              >
-                The longer version →
-              </Link>
-            </div>
-          </div>
-        </ScrollSection>
+        {/* About Section - scroll-linked content */}
+        <ScrollLinkedAbout className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]" />
 
         {/* Standards Section */}
         <ScrollSection
           id="standards"
-          className="px-6 md:px-12 lg:pl-32 lg:pr-24"
+          className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]"
         >
           <div className="max-w-4xl">
-            <h2 className="font-display text-3xl md:text-4xl font-medium mb-8">
+            <h2 className="font-display text-3xl md:text-4xl font-medium mb-4">
               Standards
             </h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2">
                 <h3 className="font-display text-xl font-medium">
                   What I Build
                 </h3>
-                <ul className="space-y-2 text-muted-foreground">
+                <ul className="space-y-1 text-muted-foreground leading-snug">
+                  <li>• Solution architecture & systems design</li>
+                  <li>• AI/ML integrations & automation</li>
+                  <li>• Internal tools & business intelligence</li>
+                  <li>• Data pipelines & reporting systems</li>
                   <li>• Full-stack web applications</li>
-                  <li>• Interactive dashboards & data visualization tools</li>
-                  <li>• Robust CLI experiences & developer tooling</li>
-                  <li>• API integrations & backend systems</li>
-                  <li>• AI/LLM application integrations</li>
-                  <li>• Containerized & cloud-native solutions</li>
+                  <li>• Infrastructure & deployment systems</li>
                 </ul>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-2">
                 <h3 className="font-display text-xl font-medium">How I Work</h3>
-                <ul className="space-y-2 text-muted-foreground">
-                  <li>• Ship incrementally, validate early</li>
-                  <li>• Document as I go</li>
-                  <li>• Prefer simple over clever</li>
-                  <li>• Automate the boring parts</li>
+                <ul className="space-y-1 text-muted-foreground leading-snug">
+                  <li>• Figure out the actual problem first</li>
+                  <li>• Build iteratively but deliberately</li>
+                  <li>• Write for the next person</li>
+                  <li>• Use appropriate technology</li>
                 </ul>
               </div>
             </div>
-            <div className="mt-12">
-              <h3 className="font-display text-xl font-medium mb-4">
+            <div className="mt-5">
+              <h3 className="font-display text-xl font-medium mb-3">
                 Current Stack
               </h3>
               <div className="flex flex-wrap gap-2">
                 {[
-                  "TypeScript",
+                  "JavaScript/TypeScript",
+                  "Python",
                   "React",
                   "Next.js",
                   "Node.js",
-                  "PostgreSQL",
-                  "Redis",
+                  "SQL",
                   "Docker",
-                  "AWS",
+                  "Linux",
+                  "Power Query",
                 ].map((tech) => (
                   <span
                     key={tech}
@@ -132,7 +92,7 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-            <div className="mt-8">
+            <div className="mt-6">
               <Link
                 href="/standards"
                 className="text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
@@ -144,7 +104,7 @@ export default function HomePage() {
         </ScrollSection>
 
         {/* Work Section */}
-        <ScrollSection id="work" className="px-6 md:px-12 lg:pl-32 lg:pr-24">
+        <ScrollSection id="work" className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]">
           <div className="max-w-4xl w-full">
             <h2 className="font-display text-3xl md:text-4xl font-medium mb-4">
               Work
@@ -191,7 +151,7 @@ export default function HomePage() {
         {/* Connect Section */}
         <ScrollSection
           id="connect"
-          className="px-6 md:px-12 lg:pl-32 lg:pr-24"
+          className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]"
           isLast
         >
           <div className="max-w-3xl">

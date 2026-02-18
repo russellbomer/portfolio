@@ -17,7 +17,7 @@ const posts: Array<{
 
 export default function WritingPage() {
   return (
-    <article id="main-content" className="mx-auto max-w-2xl px-6 py-16">
+    <article id="main-content" className="mx-auto max-w-2xl px-8 py-16 md:pr-[180px] lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px] md:max-w-none md:ml-6 lg:ml-12">
       <nav className="mb-12">
         <Link
           href="/home"
@@ -29,7 +29,7 @@ export default function WritingPage() {
       </nav>
 
       <header className="mb-12">
-        <h1 className="font-display text-4xl md:text-5xl font-medium mb-4">
+        <h1 className="font-display text-3xl md:text-4xl font-medium mb-4">
           Writing
         </h1>
         <p className="text-lg text-muted-foreground">

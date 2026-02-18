@@ -87,38 +87,42 @@ const siteLinks = [
 export default function Footer() {
   return (
     <footer className="relative z-10 bg-background border-t border-[hsl(var(--rust))]">
-      {/* Extra padding-bottom on mobile to make room for BackToTop and ThemeToggle buttons */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-[50px] pb-20 md:pb-[50px]">
-        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between items-start">
-          {/* Brand */}
-          <div className="flex items-center gap-2">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-[50px] pb-[25px] md:pb-[75px]">
+        {/* Mobile: stacked single column | Desktop: row layout */}
+        <div className="flex flex-col gap-3 items-center text-center md:flex-row md:items-center md:justify-between md:text-left">
+          {/* Brand - stacks on mobile */}
+          <div className="flex flex-col items-center gap-1 md:flex-row md:items-center md:gap-2">
             <span className="font-display text-base text-foreground">
               Russell Bomer
             </span>
-            <span className="text-muted-foreground/40">·</span>
+            <span className="hidden md:inline text-muted-foreground/40">·</span>
             <span className="font-mono text-xs text-muted-foreground uppercase tracking-wide">
               Full-Stack Engineer
             </span>
           </div>
 
-          {/* Links */}
-          <div className="flex items-center gap-4 text-sm">
-            {/* Site links */}
-            <div className="flex gap-3">
-              {siteLinks.map(({ label, href }) => (
-                <Link
-                  key={label}
-                  href={href}
-                  className="text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors duration-200"
-                >
-                  {label}
-                </Link>
+          {/* Links - stacks on mobile */}
+          <div className="flex flex-col items-center gap-3 text-sm md:flex-row md:items-center md:gap-4">
+            {/* Site links with separators */}
+            <div className="flex gap-2 items-center">
+              {siteLinks.map(({ label, href }, index) => (
+                <span key={label} className="flex items-center gap-2">
+                  <Link
+                    href={href}
+                    className="text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors duration-200"
+                  >
+                    {label}
+                  </Link>
+                  {index < siteLinks.length - 1 && (
+                    <span className="text-muted-foreground/40 select-none" aria-hidden="true">·</span>
+                  )}
+                </span>
               ))}
             </div>
 
-            {/* Separator */}
+            {/* Separator - hidden on mobile */}
             <span
-              className="text-muted-foreground/40 select-none"
+              className="hidden md:inline text-muted-foreground/40 select-none"
               aria-hidden="true"
             >
               ·

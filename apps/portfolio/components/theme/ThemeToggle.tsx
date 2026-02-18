@@ -44,14 +44,14 @@ export function ThemeToggle() {
   // Prevent flash during SSR
   if (!mounted) {
     return (
-      <div className="fixed bottom-6 right-6 z-50 w-10 h-10 rounded-full bg-muted/50" />
+      <div className="fixed top-6 left-6 md:left-auto md:right-6 z-50 w-10 h-10 rounded-full bg-muted/50" />
     );
   }
 
   return (
     <motion.button
       onClick={toggleTheme}
-      className={`fixed bottom-6 right-6 z-50 w-10 h-10 rounded-full flex items-center justify-center transition-colors shadow-lg ${
+      className={`fixed top-6 left-6 md:left-auto md:right-6 z-50 w-10 h-10 rounded-full flex items-center justify-center transition-colors shadow-lg ${
         theme === "light"
           ? "bg-[hsl(var(--thorn))] border border-[hsl(var(--linen)/0.3)]"
           : "bg-[hsl(var(--linen))] border border-[hsl(var(--thorn)/0.3)]"

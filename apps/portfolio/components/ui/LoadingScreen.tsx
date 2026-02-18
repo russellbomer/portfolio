@@ -56,11 +56,27 @@ export function LoadingScreen({ minDuration = 2500 }: LoadingScreenProps) {
     document.body.style.width = "100%";
     document.body.style.height = "100%";
 
-    // Also prevent touchmove during lock
-    const preventScroll = (e: TouchEvent) => {
+    // Prevent touchmove during lock (mobile)
+    const preventTouch = (e: TouchEvent) => {
       e.preventDefault();
     };
-    document.addEventListener("touchmove", preventScroll, { passive: false });
+    
+    // Prevent wheel events from being queued during lock (desktop)
+    const preventWheel = (e: WheelEvent) => {
+      e.preventDefault();
+    };
+    
+    // Prevent keyboard scrolling (spacebar, arrows, page up/down)
+    const preventKeyScroll = (e: KeyboardEvent) => {
+      const scrollKeys = ['Space', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'];
+      if (scrollKeys.includes(e.code)) {
+        e.preventDefault();
+      }
+    };
+    
+    document.addEventListener("touchmove", preventTouch, { passive: false });
+    document.addEventListener("wheel", preventWheel, { passive: false });
+    document.addEventListener("keydown", preventKeyScroll);
 
     const cleanup = () => {
       // Restore original styles
@@ -71,8 +87,15 @@ export function LoadingScreen({ minDuration = 2500 }: LoadingScreenProps) {
       document.body.style.right = originalStyle.right;
       document.body.style.width = originalStyle.width;
       document.body.style.height = originalStyle.height;
-      window.scrollTo(0, scrollY);
-      document.removeEventListener("touchmove", preventScroll);
+      document.removeEventListener("touchmove", preventTouch);
+      document.removeEventListener("wheel", preventWheel);
+      document.removeEventListener("keydown", preventKeyScroll);
+      
+      // Use requestAnimationFrame to ensure scroll happens after layout settles
+      // On initial load, always restore to top (0) since user hasn't scrolled yet
+      requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+      });
     };
 
     // Unlock after full animation sequence
