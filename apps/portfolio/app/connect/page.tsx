@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
 
 export default function ConnectPage() {
   return (
-    <main id="main-content" className="mx-auto max-w-2xl space-y-6 px-6 py-16">
+    <main id="main-content" className="mx-auto max-w-2xl space-y-6 px-8 py-8 md:py-16 md:pr-[180px] lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px] md:max-w-none md:ml-6 lg:ml-12">
       <nav>
         <Link
           href="/home"

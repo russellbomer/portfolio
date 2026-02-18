@@ -37,22 +37,19 @@ const projects: Array<{
     title: "NFL Analytics Dashboard",
     description:
       "Interactive data visualization for NFL statistics and trends. Deep dives into player performance, team metrics, and historical analysis.",
-    tech: ["Python", "React", "D3.js", "PostgreSQL"],
-    status: "coming-soon",
-  },
-  {
-    slug: "simplytics",
-    title: "Simplytics API",
-    description:
-      "A lightweight analytics API for developers who want insights without the complexity. Simple integration, powerful data.",
-    tech: ["Node.js", "PostgreSQL", "Redis", "Docker"],
-    status: "coming-soon",
+    tech: ["Python", "React", "Recharts", "PostgreSQL"],
+    status: "live",
+    link: {
+      href: "https://nfl-analytics-dashboard.vercel.app/",
+      label: "View live",
+      external: true,
+    },
   },
 ];
 
 export default function WorkPage() {
   return (
-    <article id="main-content" className="mx-auto max-w-3xl px-6 py-16">
+    <article id="main-content" className="mx-auto max-w-3xl px-8 py-16 md:pr-[180px] lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px] md:max-w-none md:ml-6 lg:ml-12">
       <nav className="mb-12">
         <Link
           href="/home"
@@ -64,7 +61,7 @@ export default function WorkPage() {
       </nav>
 
       <header className="mb-12">
-        <h1 className="font-display text-4xl md:text-5xl font-medium mb-4">
+        <h1 className="font-display text-3xl md:text-4xl font-medium mb-4">
           Work
         </h1>
         <p className="text-lg text-muted-foreground">
@@ -73,50 +70,77 @@ export default function WorkPage() {
       </header>
 
       <div className="space-y-6">
-        {projects.map((project) => (
-          <div
-            key={project.slug}
-            className="group p-6 rounded-lg border border-border/50 hover:border-[hsl(var(--eucalyptus))] bg-muted/10 transition-colors"
-          >
-            <div className="flex items-start justify-between gap-4 mb-3">
-              <h2 className="font-display text-xl font-medium">
-                {project.title}
-              </h2>
-              {project.status === "coming-soon" && (
-                <span className="shrink-0 text-xs font-mono uppercase tracking-wider text-muted-foreground/60 px-2 py-1 rounded border border-border/30">
-                  Coming Soon
+        {projects.map((project) =>
+          project.link ? (
+            <Link
+              key={project.slug}
+              href={project.link.href}
+              target={project.link.external ? "_blank" : undefined}
+              rel={project.link.external ? "noopener noreferrer" : undefined}
+              className="group block p-6 rounded-lg border border-border/50 hover:border-[hsl(var(--eucalyptus))] bg-muted/10 transition-colors"
+            >
+              {/* Title and badge - stacked on mobile, row on md+ */}
+              <div className="flex flex-col gap-2 mb-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <h2 className="font-display text-xl font-medium">
+                  {project.title}
+                </h2>
+                {project.status === "coming-soon" && (
+                  <span className="self-start shrink-0 text-xs font-mono uppercase tracking-wider text-muted-foreground/60 px-2 py-1 rounded border border-border/30">
+                    Coming Soon
+                  </span>
+                )}
+                {project.status === "in-progress" && (
+                  <span className="self-start shrink-0 text-xs font-mono uppercase tracking-wider text-[hsl(var(--creamsicle))] px-2 py-1 rounded border border-[hsl(var(--creamsicle)/0.3)]">
+                    In Progress
+                  </span>
+                )}
+              </div>
+
+              <p className="text-muted-foreground mb-4">{project.description}</p>
+
+              <div className="flex items-center justify-between gap-4">
+                <span className="font-mono text-xs text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))]">
+                  {project.tech.join(" · ")}
                 </span>
-              )}
-              {project.status === "in-progress" && (
-                <span className="shrink-0 text-xs font-mono uppercase tracking-wider text-[hsl(var(--creamsicle))] px-2 py-1 rounded border border-[hsl(var(--creamsicle)/0.3)]">
-                  In Progress
-                </span>
-              )}
-            </div>
 
-            <p className="text-muted-foreground mb-4">{project.description}</p>
-
-            <div className="flex items-center justify-between gap-4">
-              <span className="font-mono text-xs text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))]">
-                {project.tech.join(" · ")}
-              </span>
-
-              {project.link && (
-                <Link
-                  href={project.link.href}
-                  target={project.link.external ? "_blank" : undefined}
-                  rel={
-                    project.link.external ? "noopener noreferrer" : undefined
-                  }
-                  className="inline-flex items-center gap-1 text-sm font-mono text-primary hover:text-primary/80 transition-colors"
-                >
+                <span className="inline-flex items-center gap-1 text-sm font-mono text-muted-foreground">
                   {project.link.label}
                   {project.link.external && <span className="text-xs">↗</span>}
-                </Link>
-              )}
+                </span>
+              </div>
+            </Link>
+          ) : (
+            <div
+              key={project.slug}
+              className="group p-6 rounded-lg border border-border/50 hover:border-[hsl(var(--eucalyptus))] bg-muted/10 transition-colors"
+            >
+              {/* Title and badge - stacked on mobile, row on md+ */}
+              <div className="flex flex-col gap-2 mb-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <h2 className="font-display text-xl font-medium">
+                  {project.title}
+                </h2>
+                {project.status === "coming-soon" && (
+                  <span className="self-start shrink-0 text-xs font-mono uppercase tracking-wider text-muted-foreground/60 px-2 py-1 rounded border border-border/30">
+                    Coming Soon
+                  </span>
+                )}
+                {project.status === "in-progress" && (
+                  <span className="self-start shrink-0 text-xs font-mono uppercase tracking-wider text-[hsl(var(--creamsicle))] px-2 py-1 rounded border border-[hsl(var(--creamsicle)/0.3)]">
+                    In Progress
+                  </span>
+                )}
+              </div>
+
+              <p className="text-muted-foreground mb-4">{project.description}</p>
+
+              <div className="flex items-center justify-between gap-4">
+                <span className="font-mono text-xs text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))]">
+                  {project.tech.join(" · ")}
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        )}
       </div>
 
       <div className="mt-12 pt-8 border-t border-border/50">

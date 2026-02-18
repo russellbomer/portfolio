@@ -1,7 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import {
+  motion,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import { useEffect, useRef } from "react";
 
 interface PinwheelProps {
   className?: string;
@@ -24,34 +30,45 @@ export function Pinwheel({
   spinSpeed = 1,
   initialRotation = 0,
 }: PinwheelProps) {
-  const [rotation, setRotation] = useState(initialRotation);
+  const initialScrollRef = useRef<number | null>(null);
+  const baseRotation = useMotionValue(initialRotation);
 
   // If colors array provided, use alternating; otherwise use single color
   const bladeColors = colors
     ? [colors[0], colors[1], colors[0], colors[1]]
     : [color, color, color, color];
 
-  // Track scroll and calculate rotation from initial position
+  // Track global scroll
+  const { scrollY } = useScroll();
+
+  // Capture initial scroll position and update base rotation when initialRotation changes
   useEffect(() => {
-    // Start from the initial rotation (which may have been animated)
-    const baseRotation = initialRotation;
-    // Capture initial scroll position on mount
-    const startY = window.scrollY;
+    if (initialScrollRef.current === null) {
+      initialScrollRef.current = window.scrollY;
+    }
+    baseRotation.set(initialRotation);
+  }, [initialRotation, baseRotation]);
 
-    const handleScroll = () => {
-      // Calculate rotation based on pixels scrolled from initial position
-      const scrolled = window.scrollY - startY;
-      // Convert scroll pixels to rotation degrees (1 full rotation per 1000px scrolled)
-      const scrollRotation = (scrolled / 1000) * 360 * spinSpeed;
-      setRotation(baseRotation + scrollRotation);
-    };
+  // Calculate rotation from scroll position relative to initial
+  const scrollRotation = useTransform(scrollY, (latest) => {
+    const startY = initialScrollRef.current ?? 0;
+    const scrolled = latest - startY;
+    // 1 full rotation per 1000px scrolled
+    return (scrolled / 1000) * 360 * spinSpeed;
+  });
 
-    // Call once to set initial rotation based on current scroll position
-    handleScroll();
+  // Combine base rotation with scroll rotation
+  const totalRotation = useTransform(
+    [baseRotation, scrollRotation],
+    ([base, scroll]) => (base as number) + (scroll as number)
+  );
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [spinSpeed, initialRotation]);
+  // Spring smoothing for buttery rotation
+  const smoothRotation = useSpring(totalRotation, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   return (
     <motion.svg
@@ -60,9 +77,9 @@ export function Pinwheel({
       height={size}
       viewBox="0 0 250 250"
       fill="none"
-      className={className}
+      className={`will-change-transform ${className}`}
       style={{
-        rotate: rotation,
+        rotate: smoothRotation,
         aspectRatio: "1 / 1",
         flexShrink: 0,
       }}

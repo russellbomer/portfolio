@@ -27,24 +27,27 @@ export function TypewriterText({
   hideCursorOnComplete = false,
   onComplete,
 }: TypewriterTextProps) {
-  // Handle reduced motion - set state synchronously before render
+  // Track if component is mounted to avoid hydration mismatch
+  const [mounted, setMounted] = useState(false);
   const shouldReduceMotion = useReducedMotion();
-  const initialComplete = shouldReduceMotion;
-  const [displayedText, setDisplayedText] = useState(
-    shouldReduceMotion ? text : ""
-  );
+  
+  const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [isComplete, setIsComplete] = useState(initialComplete);
+  const [isComplete, setIsComplete] = useState(false);
 
-  // Fire onComplete callback for reduced motion
+  // Set mounted state after hydration
   useEffect(() => {
+    setMounted(true);
+    // If reduced motion, set text immediately after mount
     if (shouldReduceMotion) {
+      setDisplayedText(text);
+      setIsComplete(true);
       onComplete?.();
     }
-  }, [onComplete, shouldReduceMotion]);
+  }, [shouldReduceMotion, text, onComplete]);
 
   useEffect(() => {
-    if (shouldReduceMotion) {
+    if (!mounted || shouldReduceMotion) {
       return;
     }
 
@@ -53,7 +56,7 @@ export function TypewriterText({
     }, delay);
 
     return () => clearTimeout(startTimeout);
-  }, [delay, shouldReduceMotion]);
+  }, [delay, mounted, shouldReduceMotion]);
 
   useEffect(() => {
     if (!isTyping || shouldReduceMotion) return;
