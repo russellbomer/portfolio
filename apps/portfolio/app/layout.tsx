@@ -1,5 +1,6 @@
 import { InitialLoadProvider } from "@/components/providers/InitialLoadProvider";
 import { GlobalDecor } from "@/components/layout/GlobalDecor";
+import { RouteScrollSpring } from "@/components/motion/RouteScrollSpring";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import type { Metadata, Viewport } from "next";
 import { Courier_Prime, Inter, Syne } from "next/font/google";
@@ -44,7 +45,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${syne.variable} ${courierPrime.variable}`}
+      className={`dark ${inter.variable} ${syne.variable} ${courierPrime.variable}`}
       suppressHydrationWarning
     >
       <body className="min-h-[100dvh] bg-background text-foreground font-mono antialiased">
@@ -57,7 +58,7 @@ export default function RootLayout({
           >
             Skip to main content
           </a>
-          {children}
+          <RouteScrollSpring>{children}</RouteScrollSpring>
           <GlobalDecor />
         </InitialLoadProvider>
       </body>

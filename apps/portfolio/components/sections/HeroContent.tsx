@@ -3,9 +3,11 @@
 import { TypewriterText } from "@/components/motion/TypewriterText";
 import { useInitialLoad } from "@/components/providers/InitialLoadProvider";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 export function HeroContent() {
   const { shouldAnimate } = useInitialLoad();
+  const [showScrollPrompt, setShowScrollPrompt] = useState(false);
 
   // Timing calculation for typing effect with pauses:
   // Loading screen: ~2500ms display + 1200ms fade = 3700ms
@@ -13,9 +15,8 @@ export function HeroContent() {
   // Pause: 400ms after line 1 completes
   // Line 2: "Russell Bomer" (13 chars × 50ms = 650ms) starts at 4700ms
   // Pause: 500ms after line 2 completes
-  // Line 3a: "I make software." (16 chars × 50ms = 800ms) starts at 5850ms
-  // Pause: 700ms (extra beat)
-  // Line 3b: ".. and a lot of other things." (29 chars × 50ms = 1450ms) starts at 7350ms
+  // Line 3: "I make software... and a lot of other things."
+  // Each dot in the ellipsis is intentionally slower for a trailing pause effect
   // Scroll prompt fades in when tagline completes
   // NOTE: Scroll lock is handled by LoadingScreen component
 
@@ -29,15 +30,9 @@ export function HeroContent() {
   const line2Duration = 13 * speed; // 650ms
   const pause2 = 500;
 
-  const line3aStart = line2Start + line2Duration + pause2; // 5850ms
-  const line3aDuration = 16 * speed; // 800ms
-  const pause3 = 700; // extra beat
-
-  const slowSpeed = 90; // slower speed for the second part
-  const line3bStart = line3aStart + line3aDuration + pause3; // 7350ms
-  const line3bDuration = 29 * slowSpeed; // 2610ms
-
-  const scrollPromptStart = (line3bStart + line3bDuration) / 1000; // ~9.96s
+  const line3Start = line2Start + line2Duration + pause2; // 5850ms
+  const line3Speed = 50;
+  const line3EllipsisSpeed = 320;
 
   // If not initial session load, show content immediately without animation
   if (!shouldAnimate) {
@@ -115,15 +110,11 @@ export function HeroContent() {
       {/* Tagline */}
       <p className="text-base md:text-lg text-muted-foreground max-w-2xl mb-6">
         <TypewriterText
-          text="I make software."
-          delay={line3aStart}
-          speed={speed}
-          hideCursorOnComplete
-        />
-        <TypewriterText
-          text=".. and a lot of other things."
-          delay={line3bStart}
-          speed={slowSpeed}
+          text="I make software... and a lot of other things."
+          delay={line3Start}
+          speed={line3Speed}
+          ellipsisSpeed={line3EllipsisSpeed}
+          onComplete={() => setShowScrollPrompt(true)}
         />
       </p>
 
@@ -131,8 +122,8 @@ export function HeroContent() {
       <motion.button
         className="text-muted-foreground text-sm font-mono cursor-pointer hover:text-foreground transition-colors"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: scrollPromptStart, duration: 1.5 }}
+        animate={{ opacity: showScrollPrompt ? 1 : 0 }}
+        transition={{ duration: 1.5 }}
         onClick={() => {
           const element = document.getElementById("about");
           if (element) {

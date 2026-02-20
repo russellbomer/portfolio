@@ -70,14 +70,15 @@ export function ScrollLinkedAbout({ className = "" }: ScrollLinkedAboutProps) {
   // Spring config for smooth animations
   const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
 
-  // Extended scroll phases with longer delay before content scrolls:
-  // 0.08 - 0.18: Fade in
-  // 0.18 - 0.42: Full opacity, content stationary (reading time - doubled)
-  // 0.42 - 0.68: Full opacity, content scrolls
-  // 0.68 - 0.82: Fade out
+  // Extended About scroll phases (lengthened transitions throughout):
+  // 0.08 - 0.24: Fade in from intro
+  // 0.24 - 0.50: Full opacity, outer About (pre-inner-content dwell)
+  // 0.50 - 0.74: Full opacity, inner content scrolls
+  // 0.74 - 0.92: Full opacity, back on outer About (post-scroll dwell)
+  // 0.92 - 0.995: Fade out into Standards
   const opacityRaw = useTransform(
     scrollYProgress,
-    [0.08, 0.18, 0.68, 0.82],
+    [0.08, 0.24, 0.92, 0.995],
     [0, 1, 1, 0]
   );
   const opacity = useSpring(opacityRaw, springConfig);
@@ -85,7 +86,7 @@ export function ScrollLinkedAbout({ className = "" }: ScrollLinkedAboutProps) {
   // Content Y position: delayed start at 0.42 (after reading time buffer)
   const contentYRaw = useTransform(
     scrollYProgress,
-    [0.42, 0.68],
+    [0.5, 0.74],
     [0, -contentScrollRange]
   );
 
@@ -95,7 +96,7 @@ export function ScrollLinkedAbout({ className = "" }: ScrollLinkedAboutProps) {
   // Scroll progress indicator (0-100% during content phase)
   const scrollIndicator = useTransform(
     scrollYProgress,
-    [0.42, 0.68],
+    [0.5, 0.74],
     [0, 100]
   );
 
@@ -138,8 +139,8 @@ export function ScrollLinkedAbout({ className = "" }: ScrollLinkedAboutProps) {
   // Desktop: scroll-linked content with extended scroll zone
   return (
     <>
-      {/* Extended scroll trigger - 220vh gives room for fade in/out + content scroll */}
-      <div ref={triggerRef} className="relative h-[220vh]" id="about" />
+      {/* Extended scroll trigger for longer intro/About/content/Standards transitions */}
+      <div ref={triggerRef} className="relative h-[420vh]" id="about" />
 
       {/* Fixed content overlay */}
       <motion.div

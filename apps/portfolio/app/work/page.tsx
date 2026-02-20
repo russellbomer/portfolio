@@ -26,11 +26,6 @@ const projects: Array<{
       "(This very site.) A Next.js/React application built from scratch — responsive design, fluid animations, accessible markup, and a clean component architecture.",
     tech: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
     status: "live",
-    link: {
-      href: "https://github.com/russellbomer/portfolio",
-      label: "See the source",
-      external: true,
-    },
   },
   {
     slug: "nfl-analytics",

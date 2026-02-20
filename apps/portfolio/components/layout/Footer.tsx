@@ -97,7 +97,7 @@ export default function Footer() {
             </span>
             <span className="hidden md:inline text-muted-foreground/40">·</span>
             <span className="font-mono text-xs text-muted-foreground uppercase tracking-wide">
-              Full-Stack Engineer
+              Solutions Developer
             </span>
           </div>
 

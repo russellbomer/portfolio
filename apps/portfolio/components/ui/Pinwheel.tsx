@@ -20,6 +20,12 @@ interface PinwheelProps {
   spinSpeed?: number;
   /** Initial rotation in degrees (for intro animation) */
   initialRotation?: number;
+  /** Scroll anchor points (window.scrollY) where rotation should land plumb */
+  alignScrollAnchors?: number[];
+  /** Plumb alignment step in degrees (90 keeps blades axis-aligned) */
+  alignStepDegrees?: number;
+  /** Blend strength for alignment correction (0-1) */
+  alignStrength?: number;
 }
 
 export function Pinwheel({
@@ -29,6 +35,9 @@ export function Pinwheel({
   colors,
   spinSpeed = 1,
   initialRotation = 0,
+  alignScrollAnchors,
+  alignStepDegrees = 90,
+  alignStrength = 1,
 }: PinwheelProps) {
   const initialScrollRef = useRef<number | null>(null);
   const baseRotation = useMotionValue(initialRotation);
@@ -50,11 +59,47 @@ export function Pinwheel({
   }, [initialRotation, baseRotation]);
 
   // Calculate rotation from scroll position relative to initial
+  // and add smooth section-anchor correction so rotation lands plumb
+  // at key section centers without snapping.
   const scrollRotation = useTransform(scrollY, (latest) => {
     const startY = initialScrollRef.current ?? 0;
     const scrolled = latest - startY;
-    // 1 full rotation per 1000px scrolled
-    return (scrolled / 1000) * 360 * spinSpeed;
+    const baseline = (scrolled / 1000) * 360 * spinSpeed;
+
+    if (!alignScrollAnchors || alignScrollAnchors.length === 0 || alignStrength <= 0) {
+      return baseline;
+    }
+
+    const anchors = [...alignScrollAnchors].sort((a, b) => a - b);
+    const corrections = anchors.map((anchorY) => {
+      const anchorScrolled = anchorY - startY;
+      const baselineAtAnchor = (anchorScrolled / 1000) * 360 * spinSpeed;
+      const totalAtAnchor = initialRotation + baselineAtAnchor;
+      const targetTotal =
+        Math.round(totalAtAnchor / alignStepDegrees) * alignStepDegrees;
+      return targetTotal - totalAtAnchor;
+    });
+
+    let correction = 0;
+
+    if (latest <= anchors[0]) {
+      correction = 0;
+    } else if (latest >= anchors[anchors.length - 1]) {
+      correction = corrections[corrections.length - 1];
+    } else {
+      for (let i = 0; i < anchors.length - 1; i++) {
+        const left = anchors[i];
+        const right = anchors[i + 1];
+        if (latest >= left && latest <= right) {
+          const span = right - left;
+          const t = span === 0 ? 0 : (latest - left) / span;
+          correction = corrections[i] + (corrections[i + 1] - corrections[i]) * t;
+          break;
+        }
+      }
+    }
+
+    return baseline + correction * alignStrength;
   });
 
   // Combine base rotation with scroll rotation

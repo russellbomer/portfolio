@@ -135,6 +135,7 @@ export function PinwheelBackground({
   });
   const [mounted, setMounted] = useState(false);
   const [introRotation, setIntroRotation] = useState(0);
+  const [alignmentAnchors, setAlignmentAnchors] = useState<number[]>([]);
 
   useEffect(() => {
     queueMicrotask(() => setMounted(true));
@@ -194,6 +195,38 @@ export function PinwheelBackground({
     };
   }, [shouldAnimate, mounted]);
 
+  // Compute section-center anchors for smooth rotational alignment
+  useEffect(() => {
+    if (!mounted) return;
+
+    const updateAnchors = () => {
+      const sectionIds = ["about", "standards", "work", "connect"];
+      const anchors = sectionIds
+        .map((id) => {
+          const element = document.getElementById(id);
+          if (!element) return null;
+
+          const rect = element.getBoundingClientRect();
+          const top = rect.top + window.scrollY;
+          const centerAlignedScroll =
+            top + rect.height * 0.5 - window.innerHeight * 0.5;
+
+          return Math.max(0, centerAlignedScroll);
+        })
+        .filter((value): value is number => value !== null)
+        .sort((a, b) => a - b);
+
+      setAlignmentAnchors(anchors);
+    };
+
+    updateAnchors();
+    window.addEventListener("resize", updateAnchors);
+
+    return () => {
+      window.removeEventListener("resize", updateAnchors);
+    };
+  }, [mounted]);
+
   // Two-color alternating palette
   const fern = "hsl(118 19% 41%)";
   const ferrum = "hsl(22 76% 36%)";
@@ -223,6 +256,9 @@ export function PinwheelBackground({
           colors={[fern, ferrum]}
           spinSpeed={0.3}
           initialRotation={introRotation}
+          alignScrollAnchors={alignmentAnchors}
+          alignStepDegrees={90}
+          alignStrength={1}
         />
       </div>
     );
@@ -270,6 +306,9 @@ export function PinwheelBackground({
             color={color}
             spinSpeed={speed}
             initialRotation={introRotation}
+            alignScrollAnchors={alignmentAnchors}
+            alignStepDegrees={90}
+            alignStrength={1}
           />
         </div>
       ))}

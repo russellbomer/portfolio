@@ -96,6 +96,10 @@ export function SidebarNav() {
     const element = document.getElementById(sectionId);
     if (!element) return;
 
+    // Signal other scroll helpers (e.g., center nudge) to stand down
+    // while this explicit navigation scroll is in progress.
+    window.dispatchEvent(new CustomEvent("section-navigation-scroll-start"));
+
     // Lock visibility during navigation to prevent flicker
     isNavigatingRef.current = true;
     setIsVisible(true);
@@ -147,22 +151,37 @@ export function SidebarNav() {
       }
     };
 
-    // Check visibility based on scroll position with hysteresis
-    // Show at 40% viewport, hide only when back to 10%
-    // This prevents flicker during smooth scroll animations
+    // Check visibility based on the exact About-center scroll target with hysteresis.
+    // This matches scrollToSection behavior and prevents early visibility during intro.
     const checkVisibility = () => {
       // Skip visibility changes during navigation to prevent flicker
       if (isNavigatingRef.current) return;
-      
-      const showThreshold = window.innerHeight * 0.4;
-      const hideThreshold = window.innerHeight * 0.1;
-      
-      if (window.scrollY > showThreshold) {
+
+      const aboutElement = document.getElementById("about");
+      if (!aboutElement) {
+        setIsVisible(false);
+        return;
+      }
+
+      const rect = aboutElement.getBoundingClientRect();
+      const aboutTop = rect.top + window.scrollY;
+      const aboutHeight = rect.height;
+
+      if (aboutHeight <= 0) {
+        setIsVisible(false);
+        return;
+      }
+
+      const showAtScrollY =
+        aboutTop + aboutHeight * 0.5 - window.innerHeight * 0.5;
+      const hysteresis = 80;
+
+      if (window.scrollY >= showAtScrollY) {
         setIsVisible(true);
-      } else if (window.scrollY < hideThreshold) {
+      } else if (window.scrollY < showAtScrollY - hysteresis) {
         setIsVisible(false);
       }
-      // Between hideThreshold and showThreshold: keep current state (hysteresis)
+      // Between thresholds: keep current state (hysteresis)
     };
 
     const handleScroll = () => {
@@ -189,45 +208,57 @@ export function SidebarNav() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed left-3 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4"
+          className="fixed left-3 top-1/2 -translate-y-1/2 z-50 hidden lg:block h-56"
           aria-label="Section navigation"
         >
-          {navItems.map(({ id, label }) => {
-            const isActive = activeSection === id;
-            const isHovered = hoveredSection === id;
-            const showLabel = isActive || isHovered;
-
-            return (
-              <button
-                key={id}
-                type="button"
-                onClick={() => scrollToSection(id)}
-                onMouseEnter={() => setHoveredSection(id)}
-                onMouseLeave={() => setHoveredSection(null)}
-                className="group relative flex items-center gap-3 text-left"
-                aria-current={isActive ? "page" : undefined}
-              >
-                {/* Indicator dot */}
-                <motion.span
-                  className="w-2 h-2 rounded-full bg-current"
-                  animate={{
-                    scale: isActive ? 1.5 : 1,
-                    opacity: isActive ? 1 : 0.4,
-                  }}
-                  transition={{ duration: 0.2 }}
-                />
-
-                {/* Typing label with AnimatePresence */}
-                <div className="min-w-[80px] h-4 flex items-center">
-                  <AnimatePresence mode="wait">
-                    {showLabel && (
-                      <TypingLabel key={id} text={label} isActive={isActive} />
-                    )}
-                  </AnimatePresence>
-                </div>
-              </button>
+          {(() => {
+            const activeIndex = navItems.findIndex(
+              (item) => item.id === activeSection
             );
-          })}
+
+            return navItems.map(({ id, label }, index) => {
+              const isActive = activeSection === id;
+              const isHovered = hoveredSection === id;
+              const showLabel = isActive || isHovered;
+              const isCompleted = activeIndex >= 0 && index <= activeIndex;
+              const position =
+                navItems.length > 1
+                  ? (index / (navItems.length - 1)) * 100
+                  : 0;
+
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => scrollToSection(id)}
+                  onMouseEnter={() => setHoveredSection(id)}
+                  onMouseLeave={() => setHoveredSection(null)}
+                  className="group absolute left-0 -translate-y-1/2 flex items-center gap-3 text-left"
+                  style={{ top: `${position}%` }}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  {/* Indicator dot */}
+                  <motion.span
+                    className="w-2 h-2 rounded-full bg-current"
+                    animate={{
+                      scale: isActive ? 1.5 : 1,
+                      opacity: isActive ? 1 : isCompleted ? 0.8 : 0.4,
+                    }}
+                    transition={{ duration: 0.2 }}
+                  />
+
+                  {/* Typing label with AnimatePresence */}
+                  <div className="min-w-[80px] h-4 flex items-center">
+                    <AnimatePresence mode="wait">
+                      {showLabel && (
+                        <TypingLabel key={id} text={label} isActive={isActive} />
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </button>
+              );
+            });
+          })()}
         </motion.nav>
       )}
     </AnimatePresence>
