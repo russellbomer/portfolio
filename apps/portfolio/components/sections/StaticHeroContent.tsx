@@ -29,12 +29,12 @@ export function StaticHeroContent() {
           const element = document.getElementById("about");
           if (element) {
             const rect = element.getBoundingClientRect();
-            const scrollTop = window.scrollY;
-            const elementTop = rect.top + scrollTop;
-            const targetScroll = elementTop + window.innerHeight * 0.5;
+            const elementTop = rect.top + window.scrollY;
+            const targetScroll =
+              elementTop + rect.height / 2 - window.innerHeight / 2;
 
             window.scrollTo({
-              top: targetScroll,
+              top: Math.max(0, targetScroll),
               behavior: "smooth",
             });
           }
