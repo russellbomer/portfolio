@@ -10,6 +10,8 @@ interface TypewriterTextProps {
   delay?: number;
   /** Time per character (ms) */
   speed?: number;
+  /** Time per period when part of an ellipsis (ms) */
+  ellipsisSpeed?: number;
   /** Show blinking cursor */
   showCursor?: boolean;
   /** Hide cursor immediately when complete (no fade) */
@@ -23,6 +25,7 @@ export function TypewriterText({
   className = "",
   delay = 0,
   speed = 50,
+  ellipsisSpeed,
   showCursor = true,
   hideCursorOnComplete = false,
   onComplete,
@@ -62,9 +65,18 @@ export function TypewriterText({
     if (!isTyping || shouldReduceMotion) return;
 
     if (displayedText.length < text.length) {
+      const nextIndex = displayedText.length;
+      const nextChar = text[nextIndex];
+      const prevChar = text[nextIndex - 1];
+      const followingChar = text[nextIndex + 1];
+      const isEllipsisDot =
+        nextChar === "." && (prevChar === "." || followingChar === ".");
+      const nextDelay =
+        isEllipsisDot && ellipsisSpeed !== undefined ? ellipsisSpeed : speed;
+
       const timeout = setTimeout(() => {
         setDisplayedText(text.slice(0, displayedText.length + 1));
-      }, speed);
+      }, nextDelay);
 
       return () => clearTimeout(timeout);
     } else if (!isComplete) {
@@ -75,7 +87,7 @@ export function TypewriterText({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [displayedText, isTyping, text, speed, isComplete]);
+  }, [displayedText, isTyping, text, speed, ellipsisSpeed, isComplete]);
 
   // Split text to attach cursor to last character (prevents cursor from wrapping alone)
   const lastChar = displayedText.slice(-1);

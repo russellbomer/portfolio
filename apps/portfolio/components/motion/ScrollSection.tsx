@@ -135,8 +135,8 @@ export function ScrollSection({
 
   // Desktop: fixed content with scroll-driven opacity
   // First section also moves upward as it fades for parallax effect
-  // Increased to 150vh for longer dwell time at full opacity
-  const scrollHeight = "h-[200vh]";
+  // Middle sections get extended runway; first/last keep their specific behavior
+  const scrollHeight = isFirst || isLast ? "h-[200vh]" : "h-[400vh]";
 
   return (
     <>

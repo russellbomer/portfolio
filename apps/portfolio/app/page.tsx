@@ -1,5 +1,7 @@
 import Footer from "@/components/layout/Footer";
 import { SidebarNav } from "@/components/layout/SidebarNav";
+import { SectionCenterNudge } from "@/components/motion/SectionCenterNudge";
+import { ScrollProgressRail } from "@/components/motion/ScrollProgressRail";
 import { ScrollSection } from "@/components/motion/ScrollSection";
 import { HeroContent } from "@/components/sections/HeroContent";
 import { ScrollLinkedAbout } from "@/components/sections/ScrollLinkedAbout";
@@ -17,6 +19,8 @@ export default function LandingPage() {
   return (
     <>
       <SidebarNav />
+      <ScrollProgressRail />
+      <SectionCenterNudge />
       <main id="main-content">
         {/* Hero Section */}
         <ScrollSection
@@ -42,24 +46,24 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <h3 className="font-display text-xl font-medium">
-                  What I Build
+                  What I Do
                 </h3>
                 <ul className="space-y-1 text-muted-foreground leading-snug">
-                  <li>• Solution architecture & systems design</li>
-                  <li>• AI/ML integrations & automation</li>
-                  <li>• Internal tools & business intelligence</li>
-                  <li>• Data pipelines & reporting systems</li>
+                  <li>• Business systems analysis &amp; process improvement</li>
+                  <li>• Solution architecture &amp; systems design</li>
+                  <li>• Data pipelines &amp; reporting systems</li>
+                  <li>• Internal tools &amp; business intelligence</li>
+                  <li>• AI/ML integration &amp; automation</li>
                   <li>• Full-stack web applications</li>
-                  <li>• Infrastructure & deployment systems</li>
                 </ul>
               </div>
               <div className="space-y-2">
-                <h3 className="font-display text-xl font-medium">How I Work</h3>
+                <h3 className="font-display text-xl font-medium">Approach</h3>
                 <ul className="space-y-1 text-muted-foreground leading-snug">
-                  <li>• Figure out the actual problem first</li>
-                  <li>• Build iteratively but deliberately</li>
-                  <li>• Write for the next person</li>
-                  <li>• Use appropriate technology</li>
+                  <li>• Systems thinking applies everywhere</li>
+                  <li>• The right solution depends on the real constraints</li>
+                  <li>• Adoption is the metric</li>
+                  <li>• Operational fluency is a technical skill</li>
                 </ul>
               </div>
             </div>
@@ -73,11 +77,12 @@ export default function LandingPage() {
                   "Python",
                   "React",
                   "Next.js",
+                  "FastAPI",
                   "Node.js",
                   "SQL",
                   "Docker",
                   "Linux",
-                  "Power Query",
+                  "Power BI",
                 ].map((tech) => (
                   <span
                     key={tech}
@@ -143,15 +148,48 @@ export default function LandingPage() {
                   </Link>
                 </div>
               </div>
+              <Link
+                href="https://nfl-analytics-dashboard.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group p-4 rounded-lg border border-[hsl(var(--rust)/0.3)] hover:border-[hsl(var(--eucalyptus))] transition-colors block"
+              >
+                <h3 className="font-display text-xl font-medium mb-1">
+                  NFL Analytics Dashboard
+                </h3>
+                <p className="text-muted-foreground mb-2">
+                  Interactive data visualization for NFL statistics and trends.
+                  Currently under active development.
+                </p>
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex flex-wrap gap-1.5">
+                    {["Python", "React", "Recharts", "PostgreSQL"].map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <span className="inline-flex items-center gap-1 text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] group-hover:text-[hsl(var(--eucalyptus))] dark:group-hover:text-[hsl(var(--fern))] transition-colors shrink-0">
+                    View live
+                    <span className="text-xs transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+                  </span>
+                </div>
+              </Link>
             </div>
 
-            <Link
-              href="/work"
-              className="inline-flex items-center gap-2 text-lg font-medium text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
-            >
-              Check out more
-              <span className="text-xl">→</span>
-            </Link>
+            <div className="flex justify-end">
+              <a
+                href="/RBomer - Resume (021926 Portfolio).pdf"
+                download
+                className="inline-flex items-center gap-2 rounded-md px-5 py-2.5 text-sm font-medium font-mono bg-[hsl(var(--fern))] dark:bg-[hsl(var(--rust))] text-white hover:bg-[hsl(var(--eucalyptus))] dark:hover:bg-[hsl(var(--creamsicle))] transition-colors"
+              >
+                Download Resume
+                <span className="text-base">↓</span>
+              </a>
+            </div>
           </div>
         </ScrollSection>
 
@@ -179,7 +217,7 @@ export default function LandingPage() {
         </ScrollSection>
 
         {/* Spacer for pinwheel alignment */}
-        <div className="h-[267px]" aria-hidden="true" />
+        <div className="h-[380px]" aria-hidden="true" />
 
         {/* Footer */}
         <Footer />
