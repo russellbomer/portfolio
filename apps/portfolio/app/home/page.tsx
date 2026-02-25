@@ -143,7 +143,15 @@ export default function HomePage() {
                   ))}
                 </div>
               </div>
-              <div className="group p-4 rounded-lg border border-[hsl(var(--rust)/0.3)] hover:border-[hsl(var(--eucalyptus))] transition-colors">
+              <div className="relative group p-4 rounded-lg border border-[hsl(var(--rust)/0.3)] hover:border-[hsl(var(--eucalyptus))] transition-colors">
+                <a
+                  href="https://crud.russellbomer.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute inset-0 rounded-lg"
+                  aria-hidden="true"
+                  tabIndex={-1}
+                />
                 <h3 className="font-display text-xl font-medium mb-1">
                   CRUD (Comprehensive Rankings and Unified Dashboard)
                 </h3>
@@ -155,7 +163,7 @@ export default function HomePage() {
                     href="https://nflverse.nflverse.com/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline underline-offset-2 hover:text-foreground transition-colors"
+                    className="relative z-10 underline underline-offset-2 hover:text-foreground transition-colors"
                   >
                     NFLverse
                   </a>
@@ -171,7 +179,13 @@ export default function HomePage() {
                       </span>
                     ))}
                   </div>
-                  <div className="flex items-center gap-3 shrink-0">
+                  <div className="relative z-10 flex items-center gap-3 shrink-0">
+                    <Link
+                      href="/work/crud"
+                      className="inline-flex items-center gap-1 text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
+                    >
+                      Case study
+                    </Link>
                     <Link
                       href="https://crud.russellbomer.com"
                       target="_blank"
@@ -180,12 +194,6 @@ export default function HomePage() {
                     >
                       View live
                       <span className="text-xs">↗</span>
-                    </Link>
-                    <Link
-                      href="/work/crud"
-                      className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      Case study
                     </Link>
                   </div>
                 </div>

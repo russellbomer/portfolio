@@ -44,7 +44,7 @@ const projects: Array<{
           href="https://nflverse.nflverse.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="underline underline-offset-2 hover:text-foreground transition-colors"
+          className="relative z-10 underline underline-offset-2 hover:text-foreground transition-colors"
         >
           NFLverse
         </a>
@@ -128,8 +128,18 @@ export default function WorkPage() {
           ) : (
             <div
               key={project.slug}
-              className="group p-6 rounded-lg border border-border/50 hover:border-[hsl(var(--eucalyptus))] bg-muted/10 transition-colors"
+              className="relative group p-6 rounded-lg border border-border/50 hover:border-[hsl(var(--eucalyptus))] bg-muted/10 transition-colors"
             >
+              {project.link && (
+                <a
+                  href={project.link.href}
+                  target={project.link.external ? "_blank" : undefined}
+                  rel={project.link.external ? "noopener noreferrer" : undefined}
+                  className="absolute inset-0 rounded-lg"
+                  aria-hidden="true"
+                  tabIndex={-1}
+                />
+              )}
               {/* Title and badge - stacked on mobile, row on md+ */}
               <div className="flex flex-col gap-2 mb-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                 <h2 className="font-display text-xl font-medium">
@@ -154,7 +164,21 @@ export default function WorkPage() {
                   {project.tech.join(" · ")}
                 </span>
                 {(project.link || project.caseStudy) && (
-                  <div className="flex items-center gap-3">
+                  <div className="relative z-10 flex items-center gap-3">
+                    {project.caseStudy && (
+                      project.caseStudy.comingSoon ? (
+                        <span className="text-xs font-mono text-muted-foreground/50">
+                          Case study coming soon
+                        </span>
+                      ) : (
+                        <Link
+                          href={project.caseStudy.href}
+                          className="inline-flex items-center gap-1 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                        >
+                          Case study
+                        </Link>
+                      )
+                    )}
                     {project.link && (
                       <Link
                         href={project.link.href}
@@ -165,20 +189,6 @@ export default function WorkPage() {
                         {project.link.label}
                         {project.link.external && <span className="text-xs">↗</span>}
                       </Link>
-                    )}
-                    {project.caseStudy && (
-                      project.caseStudy.comingSoon ? (
-                        <span className="text-xs font-mono text-muted-foreground/50">
-                          Case study coming soon
-                        </span>
-                      ) : (
-                        <Link
-                          href={project.caseStudy.href}
-                          className="inline-flex items-center gap-1 text-xs font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
-                        >
-                          Case study
-                        </Link>
-                      )
                     )}
                   </div>
                 )}
