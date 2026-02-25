@@ -37,9 +37,9 @@ const projects: Array<{
     title: "CRUD (Comprehensive Rankings and Unified Dashboard)",
     description: (
       <>
-        An NFL analytics dashboard that aggregates advanced metrics like EPA
-        into a sharp interface. Yes, it&apos;s called CRUD on purpose. Data
-        sourced from{" "}
+        An NFL analytics dashboard that aggregates advanced metrics
+        like EPA with a sharp UI and abundant visualizations. Yes,
+        it&apos;s called CRUD on purpose. Data sourced from{" "}
         <a
           href="https://nflverse.nflverse.com/"
           target="_blank"
