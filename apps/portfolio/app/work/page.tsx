@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { buildMetadata } from "@/lib/seo/meta";
 import Link from "next/link";
 
@@ -10,13 +11,17 @@ export const metadata = buildMetadata({
 const projects: Array<{
   slug: string;
   title: string;
-  description: string;
+  description: ReactNode;
   tech: string[];
   status: "live" | "in-progress" | "coming-soon";
   link?: {
     href: string;
     label: string;
     external?: boolean;
+  };
+  caseStudy?: {
+    href: string;
+    comingSoon?: boolean;
   };
 }> = [
   {
@@ -29,15 +34,32 @@ const projects: Array<{
   },
   {
     slug: "nfl-analytics",
-    title: "NFL Analytics Dashboard",
-    description:
-      "Interactive data visualization for NFL statistics and trends. Deep dives into player performance, team metrics, and historical analysis.",
+    title: "CRUD (Comprehensive Rankings and Unified Dashboard)",
+    description: (
+      <>
+        An NFL analytics dashboard that aggregates advanced metrics like EPA
+        into a sharp interface. Yes, it&apos;s called CRUD on purpose. Data
+        sourced from{" "}
+        <a
+          href="https://nflverse.nflverse.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-2 hover:text-foreground transition-colors"
+        >
+          NFLverse
+        </a>
+      </>
+    ),
     tech: ["Python", "React", "Recharts", "PostgreSQL"],
     status: "live",
     link: {
-      href: "https://nfl-analytics-dashboard.vercel.app/",
+      href: "https://crud.russellbomer.com",
       label: "View live",
       external: true,
+    },
+    caseStudy: {
+      href: "/work/crud",
+      comingSoon: true,
     },
   },
 ];
@@ -66,7 +88,7 @@ export default function WorkPage() {
 
       <div className="space-y-6">
         {projects.map((project) =>
-          project.link ? (
+          project.link && !project.caseStudy ? (
             <Link
               key={project.slug}
               href={project.link.href}
@@ -132,6 +154,26 @@ export default function WorkPage() {
                 <span className="font-mono text-xs text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))]">
                   {project.tech.join(" · ")}
                 </span>
+                {(project.link || project.caseStudy) && (
+                  <div className="flex items-center gap-3">
+                    {project.link && (
+                      <Link
+                        href={project.link.href}
+                        target={project.link.external ? "_blank" : undefined}
+                        rel={project.link.external ? "noopener noreferrer" : undefined}
+                        className="inline-flex items-center gap-1 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                      >
+                        {project.link.label}
+                        {project.link.external && <span className="text-xs">↗</span>}
+                      </Link>
+                    )}
+                    {project.caseStudy?.comingSoon && (
+                      <span className="text-xs font-mono text-muted-foreground/50">
+                        Case study coming soon
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )

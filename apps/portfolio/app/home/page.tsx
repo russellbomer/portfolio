@@ -143,18 +143,22 @@ export default function HomePage() {
                   ))}
                 </div>
               </div>
-              <Link
-                href="https://nfl-analytics-dashboard.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group p-4 rounded-lg border border-[hsl(var(--rust)/0.3)] hover:border-[hsl(var(--eucalyptus))] transition-colors block"
-              >
+              <div className="group p-4 rounded-lg border border-[hsl(var(--rust)/0.3)] hover:border-[hsl(var(--eucalyptus))] transition-colors">
                 <h3 className="font-display text-xl font-medium mb-1">
-                  NFL Analytics Dashboard
+                  CRUD (Comprehensive Rankings and Unified Dashboard)
                 </h3>
                 <p className="text-muted-foreground mb-2">
-                  Interactive data visualization for NFL statistics and trends.
-                  MVP live but currently under active development.
+                  An NFL analytics dashboard that aggregates advanced metrics
+                  like EPA into a sharp interface. Yes, it&apos;s called CRUD
+                  on purpose. Data sourced from{" "}
+                  <a
+                    href="https://nflverse.nflverse.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2 hover:text-foreground transition-colors"
+                  >
+                    NFLverse
+                  </a>
                 </p>
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex flex-wrap gap-1.5">
@@ -167,12 +171,22 @@ export default function HomePage() {
                       </span>
                     ))}
                   </div>
-                  <span className="inline-flex items-center gap-1 text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] group-hover:text-[hsl(var(--eucalyptus))] dark:group-hover:text-[hsl(var(--fern))] transition-colors shrink-0">
-                    View live
-                    <span className="text-xs transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
-                  </span>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <Link
+                      href="https://crud.russellbomer.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
+                    >
+                      View live
+                      <span className="text-xs">↗</span>
+                    </Link>
+                    <span className="text-xs font-mono text-muted-foreground/50">
+                      Case study coming soon
+                    </span>
+                  </div>
                 </div>
-              </Link>
+              </div>
             </div>
 
             <div className="flex justify-end">
