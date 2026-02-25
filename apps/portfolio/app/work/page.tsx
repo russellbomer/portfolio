@@ -68,7 +68,7 @@ export default function WorkPage() {
     <article id="main-content" className="mx-auto max-w-3xl px-8 py-16 md:pr-[180px] lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px] md:max-w-none md:ml-6 lg:ml-12">
       <nav className="mb-12">
         <Link
-          href="/home"
+          href="/home#work"
           className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
         >
           <span>←</span>
