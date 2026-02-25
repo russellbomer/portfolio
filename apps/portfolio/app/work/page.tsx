@@ -59,7 +59,6 @@ const projects: Array<{
     },
     caseStudy: {
       href: "/work/crud",
-      comingSoon: true,
     },
   },
 ];
@@ -167,10 +166,19 @@ export default function WorkPage() {
                         {project.link.external && <span className="text-xs">↗</span>}
                       </Link>
                     )}
-                    {project.caseStudy?.comingSoon && (
-                      <span className="text-xs font-mono text-muted-foreground/50">
-                        Case study coming soon
-                      </span>
+                    {project.caseStudy && (
+                      project.caseStudy.comingSoon ? (
+                        <span className="text-xs font-mono text-muted-foreground/50">
+                          Case study coming soon
+                        </span>
+                      ) : (
+                        <Link
+                          href={project.caseStudy.href}
+                          className="inline-flex items-center gap-1 text-xs font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                        >
+                          Case study
+                        </Link>
+                      )
                     )}
                   </div>
                 )}

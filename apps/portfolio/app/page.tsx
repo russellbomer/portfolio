@@ -154,8 +154,8 @@ export default function LandingPage() {
                 </h3>
                 <p className="text-muted-foreground mb-2">
                   An NFL analytics dashboard that aggregates advanced metrics
-                  like EPA into a sharp interface. Yes, it&apos;s called CRUD
-                  on purpose. Data sourced from{" "}
+                  like EPA with a sharp UI and abundant visualizations. Yes,
+                  it&apos;s called CRUD on purpose. Data sourced from{" "}
                   <a
                     href="https://nflverse.nflverse.com/"
                     target="_blank"
@@ -186,9 +186,12 @@ export default function LandingPage() {
                       View live
                       <span className="text-xs">↗</span>
                     </Link>
-                    <span className="text-xs font-mono text-muted-foreground/50">
-                      Case study coming soon
-                    </span>
+                    <Link
+                      href="/work/crud"
+                      className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      Case study
+                    </Link>
                   </div>
                 </div>
               </div>
