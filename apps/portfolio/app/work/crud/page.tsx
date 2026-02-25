@@ -29,10 +29,6 @@ export default function CrudCaseStudyPage() {
         <h1 className="font-display text-3xl md:text-4xl font-medium mb-4">
           CRUD: Building a Full-Stack NFL Analytics Dashboard
         </h1>
-        <p className="text-lg text-muted-foreground">
-          A diehard Browns fan builds the advanced metrics dashboard he always
-          wanted — and learns more about scope control than data pipelines.
-        </p>
         <div className="mt-6 flex flex-wrap gap-1.5">
           {[
             "Python",
