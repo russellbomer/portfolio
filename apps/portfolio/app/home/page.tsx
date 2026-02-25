@@ -181,9 +181,12 @@ export default function HomePage() {
                       View live
                       <span className="text-xs">↗</span>
                     </Link>
-                    <span className="text-xs font-mono text-muted-foreground/50">
-                      Case study coming soon
-                    </span>
+                    <Link
+                      href="/work/crud"
+                      className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      Case study
+                    </Link>
                   </div>
                 </div>
               </div>
