@@ -50,7 +50,7 @@ const projects: Array<{
         </a>
       </>
     ),
-    tech: ["Python", "React", "Recharts", "PostgreSQL"],
+    tech: ["Python", "FastAPI", "Next.js", "PostgreSQL", "Recharts", "Neon", "Vercel", "Render"],
     status: "live",
     link: {
       href: "https://crud.russellbomer.com",
