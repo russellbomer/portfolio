@@ -176,8 +176,12 @@ export default function WorkPage() {
                           className="inline-flex items-center gap-1 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
                         >
                           Case study
+                          <span className="text-xs">↗</span>
                         </Link>
                       )
+                    )}
+                    {project.caseStudy && !project.caseStudy.comingSoon && project.link && (
+                      <span className="text-muted-foreground/40 text-xs select-none">|</span>
                     )}
                     {project.link && (
                       <Link

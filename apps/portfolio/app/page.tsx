@@ -190,7 +190,9 @@ export default function LandingPage() {
                       className="inline-flex items-center gap-1 text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
                     >
                       Case study
+                      <span className="text-xs">↗</span>
                     </Link>
+                    <span className="text-muted-foreground/40 text-xs select-none">|</span>
                     <Link
                       href="https://crud.russellbomer.com"
                       target="_blank"

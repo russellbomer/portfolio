@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { buildMetadata } from "@/lib/seo/meta";
 import Link from "next/link";
 
@@ -149,7 +150,7 @@ export default function CrudCaseStudyPage() {
               by season (2015–present), season type (regular/postseason), and an
               optional opponent-strength adjustment:
             </p>
-            <div className="space-y-5">
+            <div className="space-y-8">
               <div>
                 <h3 className="text-foreground font-medium mb-1">
                   League Overview
@@ -163,6 +164,20 @@ export default function CrudCaseStudyPage() {
                   detail page. Below the chart, a sortable league table with
                   color-coded EPA values provides a tabular alternative.
                 </p>
+                <Image
+                  src="/images/projects/crud/1.png"
+                  alt="League Overview scatterplot with team logos as data points"
+                  width={1600}
+                  height={900}
+                  className="w-full h-auto rounded-lg border border-border/50 mt-4"
+                />
+                <Image
+                  src="/images/projects/crud/2.png"
+                  alt="League table with sortable, color-coded EPA values"
+                  width={1600}
+                  height={900}
+                  className="w-full h-auto rounded-lg border border-border/50 mt-3"
+                />
               </div>
               <div>
                 <h3 className="text-foreground font-medium mb-1">
@@ -175,6 +190,20 @@ export default function CrudCaseStudyPage() {
                   roster breakdown showing position-appropriate stats for QBs,
                   RBs, WRs, and TEs.
                 </p>
+                <Image
+                  src="/images/projects/crud/3.png"
+                  alt="Team Detail — overview tab with league rank badges"
+                  width={1600}
+                  height={900}
+                  className="w-full h-auto rounded-lg border border-border/50 mt-4"
+                />
+                <Image
+                  src="/images/projects/crud/4.png"
+                  alt="Team Detail — weekly trends tab with rolling average chart"
+                  width={1600}
+                  height={900}
+                  className="w-full h-auto rounded-lg border border-border/50 mt-3"
+                />
               </div>
               <div>
                 <h3 className="text-foreground font-medium mb-1">
@@ -186,6 +215,13 @@ export default function CrudCaseStudyPage() {
                   the position group, Next Gen Stats, snap counts, week-by-week
                   performance, and field heatmaps for pass/run tendencies.
                 </p>
+                <Image
+                  src="/images/projects/crud/5.png"
+                  alt="Player rankings table with position-aware columns"
+                  width={1600}
+                  height={900}
+                  className="w-full h-auto rounded-lg border border-border/50 mt-4"
+                />
               </div>
               <div>
                 <h3 className="text-foreground font-medium mb-1">
@@ -197,6 +233,13 @@ export default function CrudCaseStudyPage() {
                   in an accordion layout, and the five highest-leverage plays
                   highlighted as cards.
                 </p>
+                <Image
+                  src="/images/projects/crud/6.png"
+                  alt="Game Detail — win probability chart tracing play-by-play flow"
+                  width={1600}
+                  height={900}
+                  className="w-full h-auto rounded-lg border border-border/50 mt-4"
+                />
               </div>
               <div>
                 <h3 className="text-foreground font-medium mb-1">
