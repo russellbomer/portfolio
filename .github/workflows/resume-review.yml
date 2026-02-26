@@ -17,7 +17,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Disable resume download button
-        run: printf '{\n  "enabled": false\n}\n' > apps/portfolio/config/resume.json
+        run: |
+          node -e "require('fs').writeFileSync('apps/portfolio/config/resume.json', JSON.stringify({ enabled: false }, null, 2) + '\n')"
 
       - name: Commit and push
         run: |
