@@ -1,3 +1,4 @@
+import resumeConfig from "@/config/resume.json";
 import Footer from "@/components/layout/Footer";
 import { SidebarNav } from "@/components/layout/SidebarNav";
 import { HashScrollHandler } from "@/components/motion/HashScrollHandler";
@@ -202,16 +203,18 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex justify-end">
-              <a
-                href="/RBomer - Resume (021926 Portfolio).pdf"
-                download
-                className="inline-flex items-center gap-2 rounded-md px-5 py-2.5 text-sm font-medium font-mono bg-[hsl(var(--fern))] dark:bg-[hsl(var(--rust))] text-white hover:bg-[hsl(var(--eucalyptus))] dark:hover:bg-[hsl(var(--creamsicle))] transition-colors"
-              >
-                Download Resume
-                <span className="text-base">↓</span>
-              </a>
-            </div>
+            {resumeConfig.enabled && (
+              <div className="flex justify-end">
+                <a
+                  href="/resume.pdf"
+                  download
+                  className="inline-flex items-center gap-2 rounded-md px-5 py-2.5 text-sm font-medium font-mono bg-[hsl(var(--fern))] dark:bg-[hsl(var(--rust))] text-white hover:bg-[hsl(var(--eucalyptus))] dark:hover:bg-[hsl(var(--creamsicle))] transition-colors"
+                >
+                  Download Resume
+                  <span className="text-base">↓</span>
+                </a>
+              </div>
+            )}
           </div>
         </ScrollSection>
 

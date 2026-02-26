@@ -1,0 +1,57 @@
+name: Resume Review Reminder
+
+on:
+  schedule:
+    # 9am UTC on January 1st and July 1st
+    - cron: "0 9 1 1,7 *"
+  workflow_dispatch: # Allow manual trigger for testing
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Disable resume download button
+        run: printf '{\n  "enabled": false\n}\n' > apps/portfolio/config/resume.json
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add apps/portfolio/config/resume.json
+          if git diff --staged --quiet; then
+            echo "Resume already disabled, skipping commit"
+          else
+            git commit -m "chore: disable resume download button — review reminder"
+            git push
+          fi
+
+      - name: Send email reminder
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: russellbomer@gmail.com
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          subject: "Resume update reminder — portfolio download disabled"
+          to: russellbomer@gmail.com
+          from: russellbomer@gmail.com
+          body: |
+            Hey Russell,
+
+            Your resume download button has been automatically disabled on your portfolio. Time to refresh it.
+
+            To re-enable:
+            1. Drop your updated resume into apps/portfolio/public/resume.pdf (overwrite the existing file)
+            2. Set "enabled": true in apps/portfolio/config/resume.json
+            3. Commit and push — Vercel will redeploy and the button will reappear
+
+            Repo: https://github.com/russellbomer/portfolio
+
+            — GitHub Actions
