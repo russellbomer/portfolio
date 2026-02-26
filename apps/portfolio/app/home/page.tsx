@@ -170,7 +170,7 @@ export default function HomePage() {
                 </p>
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex flex-wrap gap-1.5">
-                    {["Python", "React", "Recharts", "PostgreSQL"].map((tech) => (
+                    {["Python", "FastAPI", "Next.js", "PostgreSQL", "Recharts", "Neon", "Vercel", "Render"].map((tech) => (
                       <span
                         key={tech}
                         className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
