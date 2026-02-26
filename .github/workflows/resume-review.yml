@@ -49,9 +49,10 @@ jobs:
             Your resume download button has been automatically disabled on your portfolio. Time to refresh it.
 
             To re-enable:
-            1. Drop your updated resume into apps/portfolio/public/resume.pdf (overwrite the existing file)
-            2. Set "enabled": true in apps/portfolio/config/resume.json
-            3. Commit and push — Vercel will redeploy and the button will reappear
+            1. git pull (the workflow committed a change to the repo)
+            2. Drop your updated resume into apps/portfolio/public/resume.pdf (overwrite the existing file)
+            3. Set "enabled": true in apps/portfolio/config/resume.json
+            4. Commit and push — Vercel will redeploy and the button will reappear
 
             Repo: https://github.com/russellbomer/portfolio
 
