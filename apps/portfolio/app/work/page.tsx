@@ -61,6 +61,14 @@ const projects: Array<{
       href: "/work/crud",
     },
   },
+  {
+    slug: "sbfcc",
+    title: "Small Business Financial Command Center",
+    description:
+      "Excel/VBA financial management tool with dynamic dashboard, KPI tracking, cash flow waterfall, budget vs actual with sparklines, anomaly detection, 12-month forecasting, and automated PDF reporting.",
+    tech: ["Excel", "VBA", "Data Visualization", "Financial Modeling", "Dashboard Design"],
+    status: "live",
+  },
 ];
 
 export default function WorkPage() {

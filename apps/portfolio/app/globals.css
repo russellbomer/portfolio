@@ -290,6 +290,11 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* Reset browser/library default link color */
+a {
+  color: inherit;
+}
+
 /* Custom scrollbar styling */
 .scrollbar-thin {
   scrollbar-width: thin;

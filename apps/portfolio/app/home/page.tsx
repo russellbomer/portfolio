@@ -203,8 +203,14 @@ export default function HomePage() {
               </div>
             </div>
 
-            {resumeConfig.enabled && (
-              <div className="flex justify-end">
+            <div className="flex items-center justify-between">
+              <Link
+                href="/work"
+                className="text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
+              >
+                See More Work →
+              </Link>
+              {resumeConfig.enabled && (
                 <a
                   href="/resume.pdf"
                   download
@@ -213,8 +219,8 @@ export default function HomePage() {
                   Download Resume
                   <span className="text-base">↓</span>
                 </a>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </ScrollSection>
 
