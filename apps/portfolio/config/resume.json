@@ -1,3 +1,5 @@
 {
-  "enabled": true
+  "enabled": true,
+  "nextReminderDate": "2026-08-26"
 }
+

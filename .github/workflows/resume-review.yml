@@ -2,8 +2,8 @@ name: Resume Review Reminder
 
 on:
   schedule:
-    # 9am UTC on January 1st and July 1st
-    - cron: "0 9 1 1,7 *"
+    # Run daily at 9am UTC — actual reminder fires only when nextReminderDate is reached
+    - cron: "0 9 * * *"
   workflow_dispatch: # Allow manual trigger for testing
 
 jobs:
@@ -16,23 +16,46 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Disable resume download button
+      - name: Check if reminder is due
+        id: check
         run: |
-          node -e "require('fs').writeFileSync('apps/portfolio/config/resume.json', JSON.stringify({ enabled: false }, null, 2) + '\n')"
+          TODAY=$(date -u +%Y-%m-%d)
+          NEXT=$(node -e "const c = require('./apps/portfolio/config/resume.json'); console.log(c.nextReminderDate || '1970-01-01')")
+          echo "Today: $TODAY, Next reminder: $NEXT"
+          if [[ "$TODAY" >= "$NEXT" ]]; then
+            echo "due=true" >> $GITHUB_OUTPUT
+          else
+            echo "due=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Disable resume and schedule next reminder
+        if: steps.check.outputs.due == 'true'
+        run: |
+          node -e "
+            const fs = require('fs');
+            const config = JSON.parse(fs.readFileSync('apps/portfolio/config/resume.json', 'utf8'));
+            const next = new Date();
+            next.setMonth(next.getMonth() + 6);
+            config.enabled = false;
+            config.nextReminderDate = next.toISOString().slice(0, 10);
+            fs.writeFileSync('apps/portfolio/config/resume.json', JSON.stringify(config, null, 2) + '\n');
+          "
 
       - name: Commit and push
+        if: steps.check.outputs.due == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add apps/portfolio/config/resume.json
           if git diff --staged --quiet; then
-            echo "Resume already disabled, skipping commit"
+            echo "No changes to commit"
           else
             git commit -m "chore: disable resume download button — review reminder"
             git push
           fi
 
       - name: Send email reminder
+        if: steps.check.outputs.due == 'true'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
