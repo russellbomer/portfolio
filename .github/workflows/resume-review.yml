@@ -22,7 +22,7 @@ jobs:
           TODAY=$(date -u +%Y-%m-%d)
           NEXT=$(node -e "const c = require('./apps/portfolio/config/resume.json'); console.log(c.nextReminderDate || '1970-01-01')")
           echo "Today: $TODAY, Next reminder: $NEXT"
-          if [[ "$TODAY" >= "$NEXT" ]]; then
+          if [[ "$TODAY" > "$NEXT" || "$TODAY" == "$NEXT" ]]; then
             echo "due=true" >> $GITHUB_OUTPUT
           else
             echo "due=false" >> $GITHUB_OUTPUT
