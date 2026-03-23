@@ -21,7 +21,12 @@ interface RouteScrollSpringProps {
 export function RouteScrollSpring({ children }: RouteScrollSpringProps) {
   const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
-  const skipAnimation = pathname === "/" || pathname === "/home" || shouldReduceMotion;
+  const skipAnimation =
+    pathname === "/" ||
+    pathname === "/home" ||
+    pathname === "/demos/sbfcc_pbi" ||
+    pathname === "/work/sbfcc_pbi" ||
+    shouldReduceMotion;
 
   const { scrollYProgress } = useScroll();
 

@@ -130,7 +130,7 @@ export function ContactForm() {
       <Button
         type="submit"
         disabled={status === "submitting"}
-        className="w-full"
+        className="w-full dark:bg-[hsl(var(--rust))] dark:text-white dark:hover:bg-[hsl(var(--creamsicle))]"
       >
         {status === "submitting" ? "Sending..." : "Send Message"}
       </Button>
