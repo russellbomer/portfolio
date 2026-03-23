@@ -53,6 +53,19 @@ const demos: Array<{
       href: "/work/crud",
     },
   },
+  {
+    slug: "sbfcc-pbi",
+    title: "Small Business Financial Command Center — Power BI",
+    description:
+      "Power BI recreation of the SBFCC Excel workbook. Data sourced directly from the Excel model — same KPIs, same cash flow waterfall, same budget vs actual logic — rebuilt with interactive cross-filtering, drill-through analysis, custom tooltips, and DAX time intelligence.",
+    tech: ["Power BI", "DAX", "Data Visualization", "Financial Modeling"],
+    status: "live",
+    link: {
+      href: "/demos/sbfcc_pbi",
+      label: "View live",
+      external: true,
+    },
+  },
 ];
 
 export default function DemosPage() {

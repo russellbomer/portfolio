@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import { useSyncExternalStore } from "react";
 
 const PROTOTYPE_ROUTE = "/easybank-prototype";
+const BARE_ROUTES = ["/demos/sbfcc_pbi", "/work/sbfcc_pbi"];
 const LANDSCAPE_QUERY = "(min-width: 768px) and (orientation: landscape)";
 
 function useMediaQuery(query: string) {
@@ -33,10 +34,11 @@ export function GlobalDecor() {
   const pathname = usePathname();
   const isLandscapeMd = useMediaQuery(LANDSCAPE_QUERY);
 
+  const isBareRoute = BARE_ROUTES.some((r) => pathname?.startsWith(r));
   const isPrototypeRoute = pathname?.startsWith(PROTOTYPE_ROUTE);
-  const hideDecor = isPrototypeRoute && isLandscapeMd;
-  const hidePinwheel = isPrototypeRoute;
-  const disableCursor = isPrototypeRoute;
+  const hideDecor = isBareRoute || (isPrototypeRoute && isLandscapeMd);
+  const hidePinwheel = isBareRoute || isPrototypeRoute;
+  const disableCursor = isBareRoute || isPrototypeRoute;
 
   return (
     <>

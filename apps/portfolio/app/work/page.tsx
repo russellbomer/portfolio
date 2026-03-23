@@ -23,6 +23,10 @@ const projects: Array<{
     href: string;
     comingSoon?: boolean;
   };
+  demo?: {
+    href: string;
+    label: string;
+  };
 }> = [
   {
     slug: "portfolio",
@@ -65,9 +69,18 @@ const projects: Array<{
     slug: "sbfcc",
     title: "Small Business Financial Command Center",
     description:
-      "Excel/VBA financial management tool with dynamic dashboard, KPI tracking, cash flow waterfall, budget vs actual with sparklines, anomaly detection, 12-month forecasting, and automated PDF reporting.",
-    tech: ["Excel", "VBA", "Data Visualization", "Financial Modeling", "Dashboard Design"],
+      "Excel/VBA financial management tool with dynamic dashboard, KPI tracking, cash flow waterfall, budget vs actual with sparklines, anomaly detection, 12-month forecasting, and automated PDF reporting. Power BI version adds interactive cross-filtering, drill-through analysis, custom tooltips, DAX time intelligence, and embeddable web publishing.",
+    tech: ["Excel", "VBA", "Power BI", "DAX", "Data Visualization", "Financial Modeling"],
     status: "live",
+    demo: {
+      href: "/work/sbfcc_pbi",
+      label: "View live",
+    },
+    link: {
+      href: "https://russellbomer.gumroad.com/l/SBFCC",
+      label: "Available on Gumroad",
+      external: true,
+    },
   },
 ];
 
@@ -95,7 +108,7 @@ export default function WorkPage() {
 
       <div className="space-y-6">
         {projects.map((project) =>
-          project.link && !project.caseStudy ? (
+          project.link && !project.caseStudy && !project.demo ? (
             <Link
               key={project.slug}
               href={project.link.href}
@@ -171,8 +184,24 @@ export default function WorkPage() {
                 <span className="font-mono text-xs text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))]">
                   {project.tech.join(" · ")}
                 </span>
-                {(project.link || project.caseStudy) && (
+                {(project.link || project.caseStudy || project.demo) && (
                   <div className="relative z-10 flex items-center gap-3">
+                    {project.demo && (
+                      <>
+                        <Link
+                          href={project.demo.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                        >
+                          {project.demo.label}
+                          <span className="text-xs">↗</span>
+                        </Link>
+                        {(project.caseStudy || project.link) && (
+                          <span className="text-muted-foreground/40 text-xs select-none">|</span>
+                        )}
+                      </>
+                    )}
                     {project.caseStudy && (
                       project.caseStudy.comingSoon ? (
                         <span className="text-xs font-mono text-muted-foreground/50">
