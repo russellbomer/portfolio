@@ -301,8 +301,10 @@ a {
   position: static. Adding position: relative is layout-neutral (no offset)
   but satisfies the check and suppresses the false-positive warning.
 */
-html {
+html,
+body {
   position: relative;
+  overflow-x: hidden;
 }
 
 /* Custom scrollbar styling */

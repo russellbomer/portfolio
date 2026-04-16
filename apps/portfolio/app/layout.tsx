@@ -1,5 +1,6 @@
 import { InitialLoadProvider } from "@/components/providers/InitialLoadProvider";
 import { GlobalDecor } from "@/components/layout/GlobalDecor";
+import { LockPortrait } from "@/components/motion/LockPortrait";
 import { RouteScrollSpring } from "@/components/motion/RouteScrollSpring";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import type { Metadata, Viewport } from "next";
@@ -58,6 +59,7 @@ export default function RootLayout({
           >
             Skip to main content
           </a>
+          <LockPortrait />
           <RouteScrollSpring>{children}</RouteScrollSpring>
           <GlobalDecor />
         </InitialLoadProvider>
