@@ -123,7 +123,7 @@ export function ScrollLinkedAbout({ className = "" }: ScrollLinkedAboutProps) {
         className={`py-[25px] border-t border-[hsl(var(--rust)/0.2)] ${className}`}
       >
         <div className="max-w-3xl">
-          <h2 className="font-display text-2xl md:text-3xl font-medium mb-3">
+          <h2 className="font-display text-xl md:text-2xl font-medium mb-3 text-center md:text-left">
             About
           </h2>
           <div className="space-y-4 text-xs leading-relaxed text-muted-foreground">
@@ -153,7 +153,7 @@ export function ScrollLinkedAbout({ className = "" }: ScrollLinkedAboutProps) {
           }`}
         >
           <div className="max-w-3xl">
-            <h2 className="font-display text-2xl md:text-3xl lg:text-4xl font-medium mb-2 md:mb-3 lg:mb-6">
+            <h2 className="font-display text-xl md:text-2xl lg:text-4xl font-medium mb-2 md:mb-3 lg:mb-6 text-center md:text-left">
               About
             </h2>
 

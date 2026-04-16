@@ -17,11 +17,11 @@ const posts: Array<{
 
 export default function WritingPage() {
   return (
-    <article id="main-content" className="mx-auto max-w-2xl px-8 py-16 md:pr-[180px] lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px] md:max-w-none md:ml-6 lg:ml-12">
+    <article id="main-content" className="mx-auto max-w-2xl px-4 py-16 md:pr-[180px] lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px] md:max-w-none md:ml-6 lg:ml-12">
       <nav className="mb-12">
         <Link
           href="/home"
-          className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
+          className="inline-flex items-center gap-2 text-xs md:text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
         >
           <span>←</span>
           <span>Back to home</span>
@@ -29,10 +29,10 @@ export default function WritingPage() {
       </nav>
 
       <header className="mb-12">
-        <h1 className="font-display text-3xl md:text-4xl font-medium mb-4">
+        <h1 className="font-display text-2xl md:text-4xl font-medium mb-4 text-center md:text-left">
           Writing
         </h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-xs md:text-lg text-muted-foreground">
           Thoughts on my work, my life, and the occasional tangent.
         </p>
       </header>
@@ -59,11 +59,11 @@ export default function WritingPage() {
       ) : (
         <div className="space-y-6">
           <div className="p-8 rounded-lg border border-border/50 bg-muted/20">
-            <p className="text-muted-foreground text-center">
+            <p className="text-xs md:text-base text-muted-foreground text-center">
               Posts are in the works. Check back soon.
             </p>
           </div>
-          <p className="text-sm text-muted-foreground text-center">
+          <p className="text-xs md:text-sm text-muted-foreground text-center">
             In the meantime, you can find me on{" "}
             <a
               href="https://github.com/russellbomer"

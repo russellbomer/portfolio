@@ -295,6 +295,16 @@ a {
   color: inherit;
 }
 
+/*
+  Framer Motion useScroll({ target }) uses document.documentElement as the
+  default scroll container. It warns in dev when that container has
+  position: static. Adding position: relative is layout-neutral (no offset)
+  but satisfies the check and suppresses the false-positive warning.
+*/
+html {
+  position: relative;
+}
+
 /* Custom scrollbar styling */
 .scrollbar-thin {
   scrollbar-width: thin;

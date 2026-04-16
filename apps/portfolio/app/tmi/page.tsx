@@ -10,11 +10,11 @@ export const metadata = buildMetadata({
 
 export default function TMIPage() {
   return (
-    <article id="main-content" className="mx-auto max-w-2xl px-6 py-16">
+    <article id="main-content" className="mx-auto max-w-2xl px-4 py-16">
       <nav className="mb-12">
         <Link
           href="/home"
-          className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
+          className="inline-flex items-center gap-2 text-xs md:text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
         >
           <span>←</span>
           <span>Back to home</span>
@@ -22,21 +22,21 @@ export default function TMIPage() {
       </nav>
 
       <header className="mb-12">
-        <h1 className="font-display text-3xl md:text-4xl font-medium mb-4">
+        <h1 className="font-display text-2xl md:text-4xl font-medium mb-4 text-center md:text-left">
           The Longer Version...
         </h1>
       </header>
 
       <div className="prose prose-neutral dark:prose-invert max-w-none space-y-8">
         <section className="space-y-4">
-          <p className="text-muted-foreground leading-relaxed">
+          <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
             I was born in Ohio, grew up in North Carolina, and now live in a
             rural area west of Charlotte with my wife, Serra, two dogs (Güstav
             and Georgia), and two cats (Daryl and Nori). I&apos;m a full-stack
             engineer who likes untangling systems end-to-end: data, interfaces,
             infrastructure, and the humans trying to get something done.
           </p>
-          <p className="text-muted-foreground leading-relaxed">
+          <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
             I care about building tools that reduce friction, make hard things
             feel manageable, and hold up over time. I work mostly with Python,
             Javascript, and a variety of front- and back-end frameworks, but I
@@ -47,12 +47,12 @@ export default function TMIPage() {
         </section>
 
         <section className="space-y-4">
-          <h2 className="font-display text-2xl font-medium">The Beginnings</h2>
-          <p className="text-muted-foreground leading-relaxed">
+          <h2 className="font-display text-xl md:text-2xl font-medium text-center md:text-left">The Beginnings</h2>
+          <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
             I didn&apos;t aim for software development initially. I started out
             trying to be a musician.
           </p>
-          <p className="text-muted-foreground leading-relaxed">
+          <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
             Kitchen work was originally a way to make that possible. It was a
             job that could flex around the demands of a DIY rock band. We wrote
             and composed our own original music, booked our own shows, and did
@@ -60,13 +60,13 @@ export default function TMIPage() {
             Maintaining that DIY ethos was essential to me and those I played
             with, and it&apos;s something I continue to carry with me.
           </p>
-          <p className="text-muted-foreground leading-relaxed">
+          <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
             Over time, the balance shifted. I don&apos;t play music as much
             these days, but I still love it and carry visceral memories of what
             it feels like to play live and to build something from nothing with
             other people.
           </p>
-          <p className="text-muted-foreground leading-relaxed">
+          <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
             Cooking stopped being just a means to an end and became the primary
             end itself. I worked my way up from part-time dishwasher all the way
             to a couple executive chef positions. I picked up associate&apos;s
@@ -80,15 +80,15 @@ export default function TMIPage() {
         </section>
 
         <section className="space-y-4">
-          <h2 className="font-display text-2xl font-medium">The Pivot(s)</h2>
-          <p className="text-muted-foreground leading-relaxed">
+          <h2 className="font-display text-xl md:text-2xl font-medium text-center md:text-left">The Pivot(s)</h2>
+          <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
             As my kitchen career grew, my life did too. I met Serra, and the
             reality of restaurant hours started to clash with the kind of life
             we wanted to build. I began transitioning out of the kitchen into
             more technical and administrative roles, looking for a better
             balance and a different way to apply the same instincts.
           </p>
-          <p className="text-muted-foreground leading-relaxed">
+          <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
             That led me into a procurement position with the Grand Bohemian
             Hotel Charlotte. At the hotel, I spearheaded the full implementation
             of the Birchstreet P2P/ERP system. That project pulled back the
@@ -101,7 +101,7 @@ export default function TMIPage() {
             chain laid the groundwork for my interest in bespoke software
             solutions.
           </p>
-          <p className="text-muted-foreground leading-relaxed">
+          <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
             Next, I accepted a position in food manufacturing with Dole Fresh
             Vegetables, and that curiosity deepened. I spent much of my time
             developing in-house tooling and software solutions, leaning on lean
@@ -114,8 +114,8 @@ export default function TMIPage() {
         </section>
 
         <section className="space-y-4">
-          <h2 className="font-display text-2xl font-medium">Recently/Now</h2>
-          <p className="text-muted-foreground leading-relaxed">
+          <h2 className="font-display text-xl md:text-2xl font-medium text-center md:text-left">Recently/Now</h2>
+          <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
             In October 2024, I was laid off from Dole unexpectedly. The job
             search that followed was long and, frankly, rough. At some point, it
             became clear that instead of waiting for the &quot;right&quot; role
@@ -123,7 +123,7 @@ export default function TMIPage() {
             to: designing and building systems that make complex problems more
             manageable.
           </p>
-          <p className="text-muted-foreground leading-relaxed">
+          <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
             So now I&apos;m pursuing an independent path in freelance and
             consulting work while developing my own products. I am also enrolled
             in the Master&apos;s program in Software Engineering at Western
@@ -138,7 +138,7 @@ export default function TMIPage() {
             and intuitive UX/UI and making applications that are a pleasure to
             use.
           </p>
-          <p className="text-muted-foreground leading-relaxed">
+          <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
             Outside of work, my life is modest but fulfilling. I like to cook,
             obviously (most recently, lots of sourdough bread), specifically for
             my family and friends. I like spending time in my wood shop making
@@ -155,7 +155,7 @@ export default function TMIPage() {
         </section>
 
         <section className="space-y-4 pt-8 pb-[120px] border-t border-border/50">
-          <p className="text-muted-foreground leading-relaxed">
+          <p className="text-xs md:text-base text-muted-foreground leading-relaxed">
             If you&apos;ve made it this far, we should probably talk.{" "}
             <Link
               href="/connect"

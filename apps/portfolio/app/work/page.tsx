@@ -66,6 +66,17 @@ const projects: Array<{
     },
   },
   {
+    slug: "pegasus",
+    title: "Manufacturing Quality Dashboards",
+    description:
+      "Automated daily quality metrics for a truck parts manufacturer — Power Automate flows detect the OEM's daily defect emails, convert and stage the files, and trigger Power BI refreshes. Conditional Power Query logic switches between preliminary and verified data automatically as the team works through their daily verification process.",
+    tech: ["Power BI", "Power Automate", "DAX", "Power Query", "SharePoint", "Office Scripts"],
+    status: "live",
+    caseStudy: {
+      href: "/work/pegasus",
+    },
+  },
+  {
     slug: "sbfcc",
     title: "Small Business Financial Command Center",
     description:
@@ -86,11 +97,11 @@ const projects: Array<{
 
 export default function WorkPage() {
   return (
-    <article id="main-content" className="mx-auto max-w-3xl px-8 py-16 md:pr-[180px] lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px] md:max-w-none md:ml-6 lg:ml-12">
+    <article id="main-content" className="mx-auto max-w-3xl px-4 py-16 md:pr-[180px] lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px] md:max-w-none md:ml-6 lg:ml-12">
       <nav className="mb-12">
         <Link
           href="/home#work"
-          className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
+          className="inline-flex items-center gap-2 text-xs md:text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
         >
           <span>←</span>
           <span>Back to home</span>
@@ -98,10 +109,10 @@ export default function WorkPage() {
       </nav>
 
       <header className="mb-12">
-        <h1 className="font-display text-3xl md:text-4xl font-medium mb-4">
+        <h1 className="font-display text-2xl md:text-4xl font-medium mb-4 text-center md:text-left">
           Work
         </h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-xs md:text-lg text-muted-foreground">
           Selected projects for your perusal, including live demos where noted.
         </p>
       </header>
@@ -118,7 +129,7 @@ export default function WorkPage() {
             >
               {/* Title and badge - stacked on mobile, row on md+ */}
               <div className="flex flex-col gap-2 mb-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-                <h2 className="font-display text-xl font-medium">
+                <h2 className="font-display text-lg md:text-xl font-medium">
                   {project.title}
                 </h2>
                 {project.status === "coming-soon" && (
@@ -133,14 +144,14 @@ export default function WorkPage() {
                 )}
               </div>
 
-              <p className="text-muted-foreground mb-4">{project.description}</p>
+              <p className="text-xs md:text-sm text-muted-foreground mb-4">{project.description}</p>
 
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                 <span className="font-mono text-xs text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))]">
                   {project.tech.join(" · ")}
                 </span>
 
-                <span className="inline-flex items-center gap-1 text-sm font-mono text-muted-foreground">
+                <span className="inline-flex items-center gap-1 text-xs md:text-sm font-mono text-muted-foreground">
                   {project.link.label}
                   {project.link.external && <span className="text-xs">↗</span>}
                 </span>
@@ -163,7 +174,7 @@ export default function WorkPage() {
               )}
               {/* Title and badge - stacked on mobile, row on md+ */}
               <div className="flex flex-col gap-2 mb-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-                <h2 className="font-display text-xl font-medium">
+                <h2 className="font-display text-lg md:text-xl font-medium">
                   {project.title}
                 </h2>
                 {project.status === "coming-soon" && (
@@ -178,21 +189,21 @@ export default function WorkPage() {
                 )}
               </div>
 
-              <p className="text-muted-foreground mb-4">{project.description}</p>
+              <p className="text-xs md:text-sm text-muted-foreground mb-4">{project.description}</p>
 
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                 <span className="font-mono text-xs text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))]">
                   {project.tech.join(" · ")}
                 </span>
                 {(project.link || project.caseStudy || project.demo) && (
-                  <div className="relative z-10 flex items-center gap-3">
+                  <div className="relative z-10 flex flex-wrap items-center gap-3">
                     {project.demo && (
                       <>
                         <Link
                           href={project.demo.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                          className="inline-flex items-center gap-1 text-xs md:text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
                         >
                           {project.demo.label}
                           <span className="text-xs">↗</span>
@@ -210,7 +221,7 @@ export default function WorkPage() {
                       ) : (
                         <Link
                           href={project.caseStudy.href}
-                          className="inline-flex items-center gap-1 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                          className="inline-flex items-center gap-1 text-xs md:text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
                         >
                           Case study
                           <span className="text-xs">↗</span>
@@ -225,7 +236,7 @@ export default function WorkPage() {
                         href={project.link.href}
                         target={project.link.external ? "_blank" : undefined}
                         rel={project.link.external ? "noopener noreferrer" : undefined}
-                        className="inline-flex items-center gap-1 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                        className="inline-flex items-center gap-1 text-xs md:text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
                       >
                         {project.link.label}
                         {project.link.external && <span className="text-xs">↗</span>}
@@ -240,7 +251,7 @@ export default function WorkPage() {
       </div>
 
       <div className="mt-12 pt-8 border-t border-border/50">
-        <p className="text-muted-foreground">
+        <p className="text-xs md:text-base text-muted-foreground">
           Interested in working together?{" "}
           <Link
             href="/connect"

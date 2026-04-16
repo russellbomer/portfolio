@@ -13,12 +13,12 @@ export default function CrudCaseStudyPage() {
   return (
     <article
       id="main-content"
-      className="mx-auto max-w-3xl px-8 py-16 md:pr-[180px] lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px] md:max-w-none md:ml-6 lg:ml-12"
+      className="mx-auto max-w-3xl px-4 py-16 md:pr-[180px] lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px] md:max-w-none md:ml-6 lg:ml-12"
     >
       <nav className="mb-12">
         <Link
           href="/work"
-          className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
+          className="inline-flex items-center gap-2 text-xs md:text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
         >
           <span>←</span>
           <span>Back to work</span>
@@ -26,8 +26,8 @@ export default function CrudCaseStudyPage() {
       </nav>
 
       <header className="mb-12">
-        <p className="text-sm font-mono text-muted-foreground mb-3">Case Study</p>
-        <h1 className="font-display text-3xl md:text-4xl font-medium mb-4">
+        <p className="text-xs md:text-sm font-mono text-muted-foreground mb-3">Case Study</p>
+        <h1 className="font-display text-2xl md:text-4xl font-medium mb-4 text-center md:text-left">
           CRUD: Building a Full-Stack NFL Analytics Dashboard
         </h1>
         <div className="mt-6 flex flex-wrap gap-1.5">
@@ -51,9 +51,9 @@ export default function CrudCaseStudyPage() {
         </div>
       </header>
 
-      <div className="space-y-14 text-muted-foreground">
+      <div className="space-y-14 text-xs md:text-base text-muted-foreground">
         <section>
-          <h2 className="font-display text-2xl font-medium text-foreground mb-5">
+          <h2 className="font-display text-xl md:text-2xl font-medium text-foreground mb-5 text-center md:text-left">
             The Idea
           </h2>
           <p>
@@ -71,7 +71,7 @@ export default function CrudCaseStudyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-2xl font-medium text-foreground mb-5">
+          <h2 className="font-display text-xl md:text-2xl font-medium text-foreground mb-5 text-center md:text-left">
             Tech Stack &amp; Architecture
           </h2>
           <div className="space-y-4">
@@ -141,7 +141,7 @@ export default function CrudCaseStudyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-2xl font-medium text-foreground mb-5">
+          <h2 className="font-display text-xl md:text-2xl font-medium text-foreground mb-5 text-center md:text-left">
             What It Does
           </h2>
           <div className="space-y-4">
@@ -152,7 +152,7 @@ export default function CrudCaseStudyPage() {
             </p>
             <div className="space-y-8">
               <div>
-                <h3 className="text-foreground font-medium mb-1">
+                <h3 className="text-sm md:text-base text-foreground font-medium mb-1 text-center md:text-left">
                   League Overview
                 </h3>
                 <p>
@@ -180,7 +180,7 @@ export default function CrudCaseStudyPage() {
                 />
               </div>
               <div>
-                <h3 className="text-foreground font-medium mb-1">
+                <h3 className="text-sm md:text-base text-foreground font-medium mb-1 text-center md:text-left">
                   Team Detail
                 </h3>
                 <p>
@@ -206,7 +206,7 @@ export default function CrudCaseStudyPage() {
                 />
               </div>
               <div>
-                <h3 className="text-foreground font-medium mb-1">
+                <h3 className="text-sm md:text-base text-foreground font-medium mb-1 text-center md:text-left">
                   Player Rankings &amp; Detail
                 </h3>
                 <p>
@@ -224,7 +224,7 @@ export default function CrudCaseStudyPage() {
                 />
               </div>
               <div>
-                <h3 className="text-foreground font-medium mb-1">
+                <h3 className="text-sm md:text-base text-foreground font-medium mb-1 text-center md:text-left">
                   Game Detail
                 </h3>
                 <p>
@@ -242,7 +242,7 @@ export default function CrudCaseStudyPage() {
                 />
               </div>
               <div>
-                <h3 className="text-foreground font-medium mb-1">
+                <h3 className="text-sm md:text-base text-foreground font-medium mb-1 text-center md:text-left">
                   Team Comparison
                 </h3>
                 <p>
@@ -255,7 +255,7 @@ export default function CrudCaseStudyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-2xl font-medium text-foreground mb-5">
+          <h2 className="font-display text-xl md:text-2xl font-medium text-foreground mb-5 text-center md:text-left">
             The Real Challenge: Scope Control
           </h2>
           <div className="space-y-4">
@@ -294,7 +294,7 @@ export default function CrudCaseStudyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-2xl font-medium text-foreground mb-5">
+          <h2 className="font-display text-xl md:text-2xl font-medium text-foreground mb-5 text-center md:text-left">
             Development Timeline
           </h2>
           <div className="space-y-4">
@@ -329,12 +329,12 @@ export default function CrudCaseStudyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-2xl font-medium text-foreground mb-5">
+          <h2 className="font-display text-xl md:text-2xl font-medium text-foreground mb-5 text-center md:text-left">
             Technical Highlights
           </h2>
           <div className="space-y-5">
             <div>
-              <h3 className="text-foreground font-medium mb-1">
+              <h3 className="text-sm md:text-base text-foreground font-medium mb-1 text-center md:text-left">
                 Player aggregation via CTE unions
               </h3>
               <p>
@@ -347,7 +347,7 @@ export default function CrudCaseStudyPage() {
               </p>
             </div>
             <div>
-              <h3 className="text-foreground font-medium mb-1">
+              <h3 className="text-sm md:text-base text-foreground font-medium mb-1 text-center md:text-left">
                 ETag middleware for client caching
               </h3>
               <p>
@@ -364,7 +364,7 @@ export default function CrudCaseStudyPage() {
               </p>
             </div>
             <div>
-              <h3 className="text-foreground font-medium mb-1">
+              <h3 className="text-sm md:text-base text-foreground font-medium mb-1 text-center md:text-left">
                 Team logos as scatter plot data points
               </h3>
               <p>
@@ -379,7 +379,7 @@ export default function CrudCaseStudyPage() {
               </p>
             </div>
             <div>
-              <h3 className="text-foreground font-medium mb-1">
+              <h3 className="text-sm md:text-base text-foreground font-medium mb-1 text-center md:text-left">
                 Keep-alive workflow
               </h3>
               <p>
@@ -396,7 +396,7 @@ export default function CrudCaseStudyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-2xl font-medium text-foreground mb-5">
+          <h2 className="font-display text-xl md:text-2xl font-medium text-foreground mb-5 text-center md:text-left">
             Deployment
           </h2>
           <p>
@@ -418,7 +418,7 @@ export default function CrudCaseStudyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-2xl font-medium text-foreground mb-5">
+          <h2 className="font-display text-xl md:text-2xl font-medium text-foreground mb-5 text-center md:text-left">
             Reflection
           </h2>
           <div className="space-y-4">
@@ -448,13 +448,13 @@ export default function CrudCaseStudyPage() {
           href="https://crud.russellbomer.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-sm font-mono text-foreground hover:text-primary transition-colors"
+          className="inline-flex items-center gap-1 text-xs md:text-sm font-mono text-foreground hover:text-primary transition-colors"
         >
           View live ↗
         </a>
         <Link
           href="/work"
-          className="text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
+          className="text-xs md:text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
         >
           ← Back to work
         </Link>

@@ -70,11 +70,11 @@ const demos: Array<{
 
 export default function DemosPage() {
   return (
-    <article id="main-content" className="mx-auto max-w-3xl px-8 py-16 md:pr-[180px] lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px] md:max-w-none md:ml-6 lg:ml-12">
+    <article id="main-content" className="mx-auto max-w-3xl px-4 py-16 md:pr-[180px] lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px] md:max-w-none md:ml-6 lg:ml-12">
       <nav className="mb-12">
         <Link
           href="/home"
-          className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
+          className="inline-flex items-center gap-2 text-xs md:text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
         >
           <span>←</span>
           <span>Back to home</span>
@@ -82,10 +82,10 @@ export default function DemosPage() {
       </nav>
 
       <header className="mb-12">
-        <h1 className="font-display text-3xl md:text-4xl font-medium mb-4">
+        <h1 className="font-display text-2xl md:text-4xl font-medium mb-4 text-center md:text-left">
           Demos
         </h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-xs md:text-lg text-muted-foreground">
           Projects with live demos for your perusal.
         </p>
       </header>
@@ -107,7 +107,7 @@ export default function DemosPage() {
               />
             )}
             <div className="flex items-start justify-between gap-4 mb-3">
-              <h2 className="font-display text-xl font-medium">{demo.title}</h2>
+              <h2 className="font-display text-lg md:text-xl font-medium">{demo.title}</h2>
               {demo.status === "coming-soon" && (
                 <span className="shrink-0 text-xs font-mono uppercase tracking-wider text-muted-foreground/60 px-2 py-1 rounded border border-border/30">
                   Coming Soon
@@ -115,9 +115,9 @@ export default function DemosPage() {
               )}
             </div>
 
-            <p className="text-muted-foreground mb-4">{demo.description}</p>
+            <p className="text-xs md:text-sm text-muted-foreground mb-4">{demo.description}</p>
 
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
               <div className="flex flex-wrap gap-1.5">
                 {demo.tech.map((tech) => (
                   <span
@@ -130,7 +130,7 @@ export default function DemosPage() {
               </div>
 
               {(demo.link || demo.caseStudy) && (
-                <div className="relative z-10 flex items-center gap-3">
+                <div className="relative z-10 flex flex-wrap items-center gap-3">
                   {demo.caseStudy && (
                     demo.caseStudy.comingSoon ? (
                       <span className="text-xs font-mono text-muted-foreground/50">
@@ -139,7 +139,7 @@ export default function DemosPage() {
                     ) : (
                       <Link
                         href={demo.caseStudy.href}
-                        className="inline-flex items-center gap-1 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                        className="inline-flex items-center gap-1 text-xs md:text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
                       >
                         Case study
                         <span className="text-xs">↗</span>
@@ -154,7 +154,7 @@ export default function DemosPage() {
                       href={demo.link.href}
                       target={demo.link.external ? "_blank" : undefined}
                       rel={demo.link.external ? "noopener noreferrer" : undefined}
-                      className="inline-flex items-center gap-1 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                      className="inline-flex items-center gap-1 text-xs md:text-sm font-mono text-muted-foreground hover:text-foreground transition-colors shrink-0"
                     >
                       {demo.link.label}
                       {demo.link.external && <span className="text-xs">↗</span>}

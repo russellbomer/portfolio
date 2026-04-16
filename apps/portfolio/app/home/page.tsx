@@ -28,34 +28,34 @@ export default function HomePage() {
       <ScrollProgressRail />
       <SectionCenterNudge />
       <HashScrollHandler />
-      <main id="main-content">
+      <main id="main-content" className="relative">
         {/* Hero Section */}
         <ScrollSection
           id="hero"
-          className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]"
+          className="px-4 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]"
           isFirst
         >
           <StaticHeroContent />
         </ScrollSection>
 
         {/* About Section - scroll-linked content */}
-        <ScrollLinkedAbout className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]" />
+        <ScrollLinkedAbout className="px-4 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]" />
 
         {/* Standards Section */}
         <ScrollSection
           id="standards"
-          className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]"
+          className="px-4 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]"
         >
           <div className="max-w-4xl">
-            <h2 className="font-display text-3xl md:text-4xl font-medium mb-4">
+            <h2 className="font-display text-2xl md:text-3xl font-medium mb-4 text-center md:text-left">
               Standards
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <h3 className="font-display text-xl font-medium">
+                <h3 className="font-display text-lg font-medium text-center md:text-left">
                   What I Do
                 </h3>
-                <ul className="space-y-1 text-muted-foreground leading-snug">
+                <ul className="space-y-1 text-xs md:text-sm text-muted-foreground leading-snug">
                   <li>• Business systems analysis &amp; process improvement</li>
                   <li>• Solution architecture &amp; systems design</li>
                   <li>• Data pipelines &amp; reporting systems</li>
@@ -65,8 +65,8 @@ export default function HomePage() {
                 </ul>
               </div>
               <div className="space-y-2">
-                <h3 className="font-display text-xl font-medium">Approach</h3>
-                <ul className="space-y-1 text-muted-foreground leading-snug">
+                <h3 className="font-display text-lg font-medium text-center md:text-left">Approach</h3>
+                <ul className="space-y-1 text-xs md:text-sm text-muted-foreground leading-snug">
                   <li>• Systems thinking applies everywhere</li>
                   <li>• The right solution depends on the real constraints</li>
                   <li>• Adoption is the metric</li>
@@ -75,10 +75,10 @@ export default function HomePage() {
               </div>
             </div>
             <div className="mt-5">
-              <h3 className="font-display text-xl font-medium mb-3">
+              <h3 className="font-display text-lg font-medium mb-3 text-center md:text-left">
                 Current Stack
               </h3>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 justify-start">
                 {[
                   "JavaScript/TypeScript",
                   "Python",
@@ -100,10 +100,10 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-            <div className="mt-6">
+            <div className="mt-6 text-center md:text-left">
               <Link
                 href="/standards"
-                className="text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
+                className="text-xs font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
               >
                 The full picture →
               </Link>
@@ -112,12 +112,12 @@ export default function HomePage() {
         </ScrollSection>
 
         {/* Work Section */}
-        <ScrollSection id="work" className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]">
+        <ScrollSection id="work" className="px-4 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]">
           <div className="max-w-4xl w-full">
-            <h2 className="font-display text-3xl md:text-4xl font-medium mb-4">
+            <h2 className="font-display text-2xl md:text-3xl font-medium mb-4 text-center md:text-left">
               Work
             </h2>
-            <p className="text-lg text-muted-foreground mb-6">
+            <p className="text-xs md:text-base text-muted-foreground mb-6">
               A selection of projects and experiments. Some shipped, some in
               progress, all built with care.
             </p>
@@ -125,15 +125,15 @@ export default function HomePage() {
             {/* Featured Projects */}
             <div className="grid gap-4 mb-6">
               <div className="group p-4 rounded-lg border border-[hsl(var(--rust)/0.3)] hover:border-[hsl(var(--eucalyptus))] transition-colors">
-                <h3 className="font-display text-xl font-medium mb-1">
+                <h3 className="font-display text-lg font-medium mb-1">
                   Portfolio Site
                 </h3>
-                <p className="text-muted-foreground mb-2">
+                <p className="text-xs md:text-sm text-muted-foreground mb-2">
                   (This very site.) A Next.js/React application built from
                   scratch — responsive design, fluid animations, accessible
                   markup, and a clean component architecture.
                 </p>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1.5 justify-start">
                   {["Next.js", "TypeScript", "Tailwind"].map((tech) => (
                     <span
                       key={tech}
@@ -153,10 +153,10 @@ export default function HomePage() {
                   aria-hidden="true"
                   tabIndex={-1}
                 />
-                <h3 className="font-display text-xl font-medium mb-1">
+                <h3 className="font-display text-lg font-medium mb-1">
                   CRUD (Comprehensive Rankings and Unified Dashboard)
                 </h3>
-                <p className="text-muted-foreground mb-2">
+                <p className="text-xs md:text-sm text-muted-foreground mb-2">
                   An NFL analytics dashboard that aggregates advanced metrics
                   like EPA with a sharp UI and abundant visualizations. Yes,
                   it&apos;s called CRUD on purpose. Data sourced from{" "}
@@ -169,8 +169,8 @@ export default function HomePage() {
                     NFLverse
                   </a>
                 </p>
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-col gap-3 items-start sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                  <div className="flex flex-wrap gap-1.5 justify-start">
                     {["Python", "FastAPI", "Next.js", "PostgreSQL", "Recharts", "Neon", "Vercel", "Render"].map((tech) => (
                       <span
                         key={tech}
@@ -180,10 +180,10 @@ export default function HomePage() {
                       </span>
                     ))}
                   </div>
-                  <div className="relative z-10 flex items-center gap-3 shrink-0">
+                  <div className="relative z-10 flex items-center gap-3">
                     <Link
                       href="/work/crud"
-                      className="inline-flex items-center gap-1 text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
+                      className="inline-flex items-center gap-1 text-xs font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
                     >
                       Case study
                       <span className="text-xs">↗</span>
@@ -193,7 +193,7 @@ export default function HomePage() {
                       href="https://crud.russellbomer.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
+                      className="inline-flex items-center gap-1 text-xs font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
                     >
                       View live
                       <span className="text-xs">↗</span>
@@ -203,10 +203,10 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <Link
                 href="/work"
-                className="text-sm font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
+                className="block text-center sm:text-left text-xs font-mono text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors"
               >
                 See More Work →
               </Link>
@@ -214,10 +214,10 @@ export default function HomePage() {
                 <a
                   href="/resume.pdf"
                   download
-                  className="inline-flex items-center gap-2 rounded-md px-5 py-2.5 text-sm font-medium font-mono bg-[hsl(var(--fern))] dark:bg-[hsl(var(--rust))] text-white hover:bg-[hsl(var(--eucalyptus))] dark:hover:bg-[hsl(var(--creamsicle))] transition-colors"
+                  className="inline-flex items-center justify-center gap-2 rounded-md w-full sm:w-auto px-5 pb-1.5 pt-[9px] text-xs font-medium font-mono bg-[hsl(var(--fern))] dark:bg-[hsl(var(--rust))] text-white hover:bg-[hsl(var(--eucalyptus))] dark:hover:bg-[hsl(var(--creamsicle))] transition-colors"
                 >
                   Download Resume
-                  <span className="text-base">↓</span>
+                  <span className="text-xs">↓</span>
                 </a>
               )}
             </div>
@@ -227,20 +227,20 @@ export default function HomePage() {
         {/* Connect Section */}
         <ScrollSection
           id="connect"
-          className="px-8 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]"
+          className="px-4 md:px-12 md:pr-[180px] lg:pl-24 lg:pr-[220px] xl:pr-[400px] 2xl:pr-[480px]"
           isLast
         >
           <div className="max-w-3xl">
-            <h2 className="font-display text-4xl md:text-5xl font-medium mb-8">
+            <h2 className="font-display text-3xl md:text-4xl font-medium mb-8 text-center md:text-left">
               Let's Build Something
             </h2>
-            <p className="text-lg text-muted-foreground mb-8">
+            <p className="text-xs md:text-base text-muted-foreground mb-8">
               Have a project in mind? Looking for a collaborator? I'm always
               interested in hearing about interesting problems worth solving.
             </p>
             <Link
               href="/connect"
-              className="inline-flex items-center gap-2 rounded-md px-6 py-3 text-lg font-medium bg-[hsl(var(--fern))] dark:bg-[hsl(var(--rust))] text-white hover:bg-[hsl(var(--eucalyptus))] dark:hover:bg-[hsl(var(--creamsicle))] transition-colors"
+              className="inline-flex items-center justify-center gap-2 rounded-md w-full sm:w-auto px-5 pb-1.5 pt-[9px] text-xs font-medium font-mono bg-[hsl(var(--fern))] dark:bg-[hsl(var(--rust))] text-white hover:bg-[hsl(var(--eucalyptus))] dark:hover:bg-[hsl(var(--creamsicle))] transition-colors"
             >
               Drop me a line
             </Link>
@@ -248,7 +248,7 @@ export default function HomePage() {
         </ScrollSection>
 
         {/* Spacer for pinwheel alignment */}
-        <div className="h-[378px]" aria-hidden="true" />
+        <div className="hidden md:block md:h-[378px]" aria-hidden="true" />
 
         {/* Footer */}
         <Footer />
