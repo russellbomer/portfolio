@@ -1,149 +1,137 @@
-# Claude Code Instructions (binding)
+# CLAUDE.md — Portfolio Site
 
-## Project
+## Current Task: BFB Homepage Mockup
 
-This is a Next.js portfolio site deployed on Vercel.
-
-- App code lives in `apps/portfolio/`.
-- Root workspace: `npm run dev`, `npm run build`, `npm run lint`.
-
-## Execution rules
-
-- Do NOT run commands without asking for approval. When asking, include the exact command(s) and why.
-- Do not commit secrets or `.env*` files (only `.env*.example`).
-
-## Hard stops (must be manual)
-
-- Any credentials/secrets/keys/token rotation or handling
-- Vercel/GitHub settings changes
-- DNS changes
-- Any destructive git ops: history rewrite or force push
+All work in this session is scoped to building a visual replica of the Browns Film Breakdown Substack homepage as a route within this portfolio site. See `app/demos/bfb/BFB_HOMEPAGE_WBS.md` for the full layout analysis, design tokens, and phased work breakdown. Read that file before writing any code.
 
 ---
 
-## Architecture overview
+## Project: BFB Homepage Replica
 
-### Stack
+### What This Is
 
-- **Next.js 15** (App Router, Turbopack) · **React 19** · **TypeScript**
-- **Tailwind v4** (CSS-first config via `@theme` in `globals.css`)
-- **Framer Motion v12** — all animation primitives
-- **Drizzle ORM + Postgres** — contact form / connect page persistence
-- **shadcn/ui** conventions — `components.json` present, Radix UI primitives
+A high-fidelity interactive replica of https://www.brownsfilmbreakdown.com, built at the route `/demos/bfb`. The purpose is a proof-of-concept to show the BFB team on a discovery call. The goal is pixel-level visual fidelity at desktop width.
 
-### App routes (`apps/portfolio/app/`)
+### Route Group (Non-Negotiable)
 
-| Route | Notes |
-|---|---|
-| `/` | Entry point — animated loading screen + typewriter hero |
-| `/home` | Static clone of `/` — no typewriter/loading; used for "back" navigation |
-| `/work` | Projects/case studies |
-| `/connect` | Contact form (DB-backed) |
-| `/standards` | Philosophy and working style |
-| `/writing` | Writing index |
-| `/tmi` | Extended bio |
-| `/demos` | Demos |
-| `/_archive` | Archived/hidden pages |
+The BFB page must use a route group with its own root layout to completely bypass this portfolio site's root layout. The portfolio root layout applies dark mode, a 22px base font size, Craftsman Palette color variables, and provider components (InitialLoadProvider, LoadingScreen, GlobalDecor, LockPortrait, RouteScrollSpring, SidebarNav) that will break the BFB replica.
 
-`/` and `/home` are intentionally near-identical. `/` is the public entry point — it runs the loading screen, scroll lock, and typewriter intro on first visit (gated by `InitialLoadProvider`). `/home` is the internal "back to home" target linked from all subdirectory pages; it skips the intro entirely (`StaticHeroContent`, no scroll lock) so visitors don't sit through the animation again when navigating back.
+Create the structure as `app/(bfb)/demos/bfb/layout.tsx` with a standalone root layout that:
 
-### Component map (`apps/portfolio/components/`)
+- Renders its own `<html>` and `<body>` tags
+- Does NOT inherit the portfolio's `dark` class, Craftsman Palette, or providers
+- Sets `html { font-size: 16px }` (the portfolio uses 22px)
+- Defines BFB color variables extracted from their Substack CSS
+- Loads Inter as the primary font
 
-#### `motion/` — animation primitives
+Delete the existing files at `app/demos/bfb/` (page.tsx, layout.tsx, data.ts, README.md) from a prior attempt. They are not usable. Keep the CLAUDE.md and BFB_HOMEPAGE_WBS.md files.
 
-- **`ScrollSection`** — Core building block. On desktop: an invisible scroll-spacer div (`h-[200vh]` for first/last, `h-[400vh]` for middle) paired with a `position:fixed` content overlay. Scroll progress drives opacity via `useScroll` + `useSpring`. First section also translates upward (parallax). On mobile: natural layout with `whileInView` fade-in.
-- **`ScrollLinkedAbout`** — Like `ScrollSection` but with `h-[420vh]` spacer and inner content that itself scrolls (text box whose `y` is driven by scroll progress 0.5→0.74).
-- **`RouteScrollSpring`** — Root layout wrapper. Skips animation on `/` and `/home`. On all other routes: `initial={{ opacity:0, y:8 }}` entry + subtle exit spring at page bottom.
-- **`ScrollProgressRail`** — Fixed vertical progress bar (left edge, desktop only). Anchors map to section center-scroll positions; spring-smoothed fill.
-- **`SectionCenterNudge`** — RAF-based scroll snapping. Detects slow scrolls near section boundaries and nudges to the section center target. Custom thresholds for hero→about (0.68) and about→standards (0.93). Suppressed during sidebar nav clicks via `section-navigation-scroll-start` custom event.
-- **`TypewriterText`** — Character-by-character text reveal with cursor blink. Supports `delay`, `speed`, `ellipsisSpeed`, and `onComplete` callback.
-- **`AnimatedSection`, `FadeIn`, `StaggerContainer`** — General-purpose Framer Motion wrappers.
+### Design Tokens
 
-#### `sections/` — page content
+Extracted from BFB's actual Substack CSS. Use these exact values.
 
-- **`HeroContent`** — Three-line typewriter sequence gated by `shouldAnimate` from `InitialLoadProvider`. Calculates scroll target to the point where the sidebar becomes visible.
-- **`StaticHeroContent`** — Same layout but instant, used on `/home`.
-- **`ScrollLinkedAbout`** — About section (also holds the `aboutContent` copy array).
+#### Colors
 
-#### `layout/` — chrome
+```
+--bfb-accent: #ff3300            /* Orange-red. CTAs, active nav, borders */
+--bfb-accent-dark: #e62e00       /* Hover/pressed state */
+--bfb-accent-20: rgba(255, 51, 0, 0.2)
+--bfb-bg: #ffffff                /* Page background */
+--bfb-bg-contrast-1: #f0f0f0    /* Light gray sections */
+--bfb-bg-contrast-2: #dddddd
+--bfb-bg-elevated: #ffffff       /* Card backgrounds */
+--bfb-text-primary: #363737      /* Headings, titles */
+--bfb-text-secondary: #757575    /* Meta text, dates, authors */
+--bfb-text-tertiary: #b6b6b6    /* Lowest contrast */
+--bfb-border: #e6e6e6            /* Borders, dividers */
+--bfb-print-on-accent: #ffffff   /* Text on accent backgrounds */
+```
 
-- **`SidebarNav`** — Fixed left nav (desktop, `lg:block`). Appears when scrolled to the About section center. Tracks active section by viewport center proximity. Clicking a section scrolls to `elementTop + height * 0.5 - vh * 0.5` (the peak-opacity position). Uses `TypingLabel` sub-component for character-staggered labels.
-- **`GlobalDecor`** — Mounts `PinwheelBackground`.
-- **`Footer`** — Site footer.
+#### Typography
 
-#### `ui/` — primitives
+```
+Font: Inter (SF Pro Display in Substack's stack, falls through to Inter on non-Apple)
+Headings weight: 700
+Body weight: 400
+Base size: 16px
+Meta text: 11px, uppercase, medium weight
+```
 
-- **`Pinwheel`** — SVG pinwheel (4 blades). Scroll-driven rotation via `useScroll` + `useTransform`. Supports `initialRotation` (for intro animation handoff), `alignScrollAnchors` (plumb alignment at section centers), and alternating `colors`.
-- **`PinwheelBackground`** — Responsive pinwheel grid. `accent` mode (mobile): single pinwheel, top-right. `grid` mode (desktop): 1–2 column tiled strip along the right edge. Six breakpoints defined as `BREAKPOINTS` constants. Synced to intro animation timing constants (`INTRO_START = 3800ms`, `INTRO_END = 9960ms`).
-- **`LoadingScreen`** — Blocks scroll during initial load; fades out before typewriter starts.
-- **`CustomCursor`, `NoiseTexture`, `BackToTop`** — Decorative/UX helpers.
+#### Key Dimensions
 
-#### `providers/`
+```
+Top bar: 87px height, 20px horizontal padding, 12px gap
+Section nav: 48px height
+Fixed header spacer: 138px
+Logo icon: 40x40px
+Wordmark: 36px height
+Avatar: 40x40px circle
+Thumbnails: 3:2 aspect ratio
+Card border-radius: ~4px
+Nav icons: 20x20px
+Post interaction icons: 14x14px
+```
 
-- **`InitialLoadProvider`** — Context that tracks whether the current browser session has already loaded the site. `shouldAnimate = true` only on the first visit (session-scoped). Controls typewriter and loading screen.
+### Layout (Top to Bottom)
 
-### Design system
+1. **Top bar** (fixed) — B icon left, wordmark center, search/chat/bell + orange CTA + avatar right
+2. **Section nav** (fixed below top bar) — Home, Podcast, Film, News, Chat, Shop, Leaderboard, About
+3. **Hero** ("magazine-5") — 3-column grid: 2 small stacked cards | 1 large featured card | 2 small stacked cards
+4. **Support banner** — Gray band, "We appreciate your support!" + CTA
+5. **Content section** — "2026 NFL Draft" heading + 4-column card grid
+6. **Footer area** — 3 columns: BFB info + social, Recent Posts list, Recommendations
+7. **Bottom footer** — Copyright, links
 
-**Fonts** (loaded via `next/font/google`):
-- `--font-sans` → Inter (body)
-- `--font-display` → Syne (headings; use `font-display` class)
-- `--font-mono` → Courier Prime (monospace; default body font via `body` tag)
+### Build Order
 
-**Craftsman palette** (defined as CSS custom props in `globals.css`):
+1. Route group and layout (blank white page at `/demos/bfb`, no portfolio chrome)
+2. Header and navigation
+3. PostCard component (small, featured, list variants)
+4. Hero section
+5. Support banner
+6. Content section
+7. Footer
+8. Polish pass against screenshot
 
-| Token | Light | Dark | Description |
-|---|---|---|---|
-| `--linen` | `hsl(44 48% 94%)` | — | Warm paper; light bg |
-| `--thorn` | `hsl(107 18% 15%)` | — | Deep green-black; light text / dark bg |
-| `--eucalyptus` | `hsl(144 14% 63%)` | same | Muted sage green accent |
-| `--rust` / `--ferrum` | `hsl(22 76% 36%)` | same | Terracotta/orange |
-| `--fern` | `hsl(118 19% 41%)` | same | Mid green |
-| `--creamsicle` | `hsl(23 81% 63%)` | same | Warm orange highlight |
+### Content and Links
 
-Use `hsl(var(--token))` directly in inline styles; or `bg-[hsl(var(--token))]` in Tailwind classes. Semantic tokens (`--background`, `--foreground`, `--primary`, etc.) are mapped from the above in both light and dark layers.
+All content is real, pulled directly from the live BFB site:
 
-### Scroll system — how it works
+- **Post thumbnails**: Use actual BFB thumbnail image URLs from the Substack CDN — the images each post currently displays on brownsfilmbreakdown.com.
+- **Text fields**: Use the actual title, excerpt, date, and author exactly as displayed on the live page.
+- **Links**: All navigable items (nav bar, post cards, CTA buttons, footer links, social icons) link to their actual corresponding pages on brownsfilmbreakdown.com or the relevant external URL. Use `target="_blank" rel="noopener noreferrer"` on all outbound links.
 
-On **desktop** (≥ 768px), the homepage is essentially a tall page where:
+### Interactivity
 
-1. Each section creates a tall invisible spacer (`div`) that owns the scroll distance.
-2. A `position: fixed` motion overlay renders the visible content, opacity-driven by the spacer's scroll progress.
-3. `SectionCenterNudge` gently snaps the user to section "peak" positions (where opacity = 1) when scrolling slowly.
-4. `SidebarNav` and `ScrollProgressRail` appear after the hero, tracking the same anchor positions.
-5. `PinwheelBackground` pinwheels rotate from global scroll, with plumb correction at section anchors.
+All components are interactive to some extent, even if not fully functional:
 
-**Scroll height allocation:**
-- Hero (`isFirst`): `h-[200vh]`
-- About: `h-[420vh]` (extra for inner content scroll)
-- Standards, Work: `h-[400vh]`
-- Connect (`isLast`): `h-[200vh]`
+- **Search icon**: Opens a modal overlay matching Substack's search UI. Contains a text input, a "People" section (Jake Burns, Cody Suek, and any other BFB contributors), and a "Posts" section listing the most recent posts. The modal is visible and browseable but not wired to live search. A small italic note inside the modal reads: *"Search is not functional in this preview."*
+- **Nav items**: Real anchor links to their BFB URL equivalents.
+- **CTA buttons** ("Upgrade to founding", "Subscribe"): Link to the BFB subscribe page.
+- **Post cards**: Entire card is a link to the actual post URL on brownsfilmbreakdown.com.
+- **Footer social icons**: Link to BFB's actual social profiles.
+- **Recommendation cards**: Link to the respective Substack publication.
+- **All other non-linkable interactive elements** (e.g., bell icon, chat icon, avatar): Render a contextually appropriate visible-but-not-functional state — a tooltip, a placeholder dropdown, or a "not available in preview" indicator — rather than doing nothing on click.
 
-**Spring config** (used everywhere): `{ stiffness: 100, damping: 30, restDelta: 0.001 }`
+### What NOT To Do
 
-**Z-index layers:**
-- `z-0` — PinwheelBackground
-- `z-10` — ScrollSection fixed overlays
-- `z-40` — ScrollProgressRail
-- `z-50` — SidebarNav
+- Do not use portfolio Craftsman Palette colors, Syne/Courier Prime fonts, or dark mode.
+- Do not add creative improvements beyond what's on the real site.
+- Do not import Substack CSS. Build from scratch with Tailwind + extracted tokens.
+- Do not install new dependencies. Existing stack covers everything.
+- Do not prioritize mobile. Desktop fidelity first.
 
-### Intro animation timing (first load only)
+### Reference Files
 
-All timed to milliseconds from page load:
+- `app/demos/bfb/BFB_HOMEPAGE_WBS.md` — Complete layout analysis, DOM mapping, asset URLs, phased WBS
+- Full-page screenshot of BFB homepage for visual comparison
+- `app/demos/bfb/BFB_CSS.txt` — Raw HTML source of BFB Substack (if available)
 
-| Event | Time |
-|---|---|
-| Loading screen visible | 0 – ~2500ms |
-| Loading screen fade-out | ~2500 – ~3700ms |
-| Typewriter line 1 ("Hello, I'm") | 3800ms |
-| Typewriter line 2 ("Russell Bomer") | 4700ms |
-| Typewriter line 3 (tagline) | 5850ms |
-| Pinwheel intro rotation (0→360°) | 3800ms – 9960ms |
+### Existing Stack
 
-`INTRO_START` / `INTRO_END` constants in `PinwheelBackground.tsx` must stay in sync with the typewriter timing in `HeroContent.tsx`.
-
-### Accessibility
-
-- `prefers-reduced-motion`: all Framer Motion components check `useReducedMotion()`. When true, desktop scroll system degrades to natural scroll + `whileInView` fade-ins.
-- Skip-to-main link in root layout.
-- `PinwheelBackground` and `ScrollProgressRail` have `aria-hidden="true"`.
-- `SidebarNav` uses `aria-label` and `aria-current`.
+- Next.js 15.5.9 (App Router, TypeScript)
+- Tailwind CSS 4.1.7
+- React 19.1.0
+- lucide-react (already installed)
+- Inter font (already loaded)
+- Deployed on Vercel
