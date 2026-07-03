@@ -24,7 +24,8 @@ export const metadata: Metadata = {
     title: "Datum Home Systems",
     description:
       "Residential technology consulting and integration. Networks, media, automation, and security, run as one coordinated project.",
-    pathname: "/datum",
+    baseUrl: "https://datum.russellbomer.com",
+    pathname: "",
   }),
   // Favicon follows the OS-level color scheme (the only theming signal
   // available to a static <link> tag; it can't react to the in-page

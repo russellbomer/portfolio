@@ -11,6 +11,8 @@ interface BuildMetadataOptions {
   description?: string;
   pathname?: string;
   image?: string;
+  /** Override siteConfig.url, for pages served from a different (sub)domain. */
+  baseUrl?: string;
 }
 
 /**
@@ -21,14 +23,15 @@ export function buildMetadata({
   description = siteConfig.description,
   pathname = "",
   image,
+  baseUrl = siteConfig.url,
 }: BuildMetadataOptions = {}): Metadata {
   const fullTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
-  const url = `${siteConfig.url}${pathname}`;
+  const url = `${baseUrl}${pathname}`;
 
   return {
     title: fullTitle,
     description,
-    metadataBase: new URL(siteConfig.url),
+    metadataBase: new URL(baseUrl),
     alternates: {
       canonical: url,
     },
