@@ -93,7 +93,7 @@ export default function HomePage() {
                 ].map((tech) => (
                   <span
                     key={tech}
-                    className="px-3 py-1 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
+                    className="px-3 py-1 rounded-full font-mono text-xs bg-[hsl(var(--rust))] text-white"
                   >
                     {tech}
                   </span>
@@ -137,7 +137,7 @@ export default function HomePage() {
                   {["Next.js", "TypeScript", "Tailwind"].map((tech) => (
                     <span
                       key={tech}
-                      className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
+                      className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--rust))] text-white"
                     >
                       {tech}
                     </span>
@@ -174,7 +174,7 @@ export default function HomePage() {
                     {["Python", "FastAPI", "Next.js", "PostgreSQL", "Recharts", "Neon", "Vercel", "Render"].map((tech) => (
                       <span
                         key={tech}
-                        className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
+                        className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--rust))] text-white"
                       >
                         {tech}
                       </span>
@@ -214,7 +214,7 @@ export default function HomePage() {
                 <a
                   href="/resume.pdf"
                   download
-                  className="inline-flex items-center justify-center gap-2 rounded-md w-full sm:w-auto px-5 pb-1.5 pt-[9px] text-xs font-medium font-mono bg-[hsl(var(--fern))] dark:bg-[hsl(var(--rust))] text-white hover:bg-[hsl(var(--eucalyptus))] dark:hover:bg-[hsl(var(--creamsicle))] transition-colors"
+                  className="inline-flex items-center justify-center gap-2 rounded-md w-full sm:w-auto px-5 pb-1.5 pt-[9px] text-xs font-medium font-mono bg-[hsl(var(--rust))] text-white hover:bg-[hsl(var(--creamsicle))] transition-colors"
                 >
                   Download Resume
                   <span className="text-xs">↓</span>
@@ -240,7 +240,7 @@ export default function HomePage() {
             </p>
             <Link
               href="/connect"
-              className="inline-flex items-center justify-center gap-2 rounded-md w-full sm:w-auto px-5 pb-1.5 pt-[9px] text-xs font-medium font-mono bg-[hsl(var(--fern))] dark:bg-[hsl(var(--rust))] text-white hover:bg-[hsl(var(--eucalyptus))] dark:hover:bg-[hsl(var(--creamsicle))] transition-colors"
+              className="inline-flex items-center justify-center gap-2 rounded-md w-full sm:w-auto px-5 pb-1.5 pt-[9px] text-xs font-medium font-mono bg-[hsl(var(--rust))] text-white hover:bg-[hsl(var(--creamsicle))] transition-colors"
             >
               Drop me a line
             </Link>

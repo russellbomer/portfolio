@@ -10,6 +10,7 @@ import { useSyncExternalStore } from "react";
 
 const PROTOTYPE_ROUTE = "/easybank-prototype";
 const BARE_ROUTES = ["/demos/sbfcc_pbi", "/work/sbfcc_pbi"];
+const NO_PINWHEEL_ROUTES = ["/datum"];
 const LANDSCAPE_QUERY = "(min-width: 768px) and (orientation: landscape)";
 
 function useMediaQuery(query: string) {
@@ -36,8 +37,9 @@ export function GlobalDecor() {
 
   const isBareRoute = BARE_ROUTES.some((r) => pathname?.startsWith(r));
   const isPrototypeRoute = pathname?.startsWith(PROTOTYPE_ROUTE);
+  const isNoPinwheelRoute = NO_PINWHEEL_ROUTES.some((r) => pathname?.startsWith(r));
   const hideDecor = isBareRoute || (isPrototypeRoute && isLandscapeMd);
-  const hidePinwheel = isBareRoute || isPrototypeRoute;
+  const hidePinwheel = isBareRoute || isPrototypeRoute || isNoPinwheelRoute;
   const disableCursor = isBareRoute || isPrototypeRoute;
 
   return (

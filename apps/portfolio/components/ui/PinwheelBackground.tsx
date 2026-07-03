@@ -213,8 +213,20 @@ export function PinwheelBackground({
 
           return Math.max(0, centerAlignedScroll);
         })
-        .filter((value): value is number => value !== null)
-        .sort((a, b) => a - b);
+        .filter((value): value is number => value !== null);
+
+      // Correction is only interpolated between the first and last anchor;
+      // past the last one it freezes while the scroll-linked rotation keeps
+      // climbing, so the true bottom of the page (footer included) drifts
+      // off the 90-degree grid. Register it as the final anchor so the
+      // last stretch of scroll interpolates all the way to a square landing.
+      const maxScroll = Math.max(
+        0,
+        document.documentElement.scrollHeight - window.innerHeight
+      );
+      anchors.push(maxScroll);
+
+      anchors.sort((a, b) => a - b);
 
       setAlignmentAnchors(anchors);
     };

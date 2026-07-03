@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 // Only show BackToTop on these routes
-const ALLOWED_ROUTES = ["/", "/home"];
+const ALLOWED_ROUTES = ["/", "/home", "/datum"];
 
 export function BackToTop() {
   const [isVisible, setIsVisible] = useState(false);

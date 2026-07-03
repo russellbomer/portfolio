@@ -121,7 +121,7 @@
 @layer base {
   :root {
     /* Core: Linen & Thorn */
-    --background: 44 48% 94%; /* linen */
+    --background: 43 53% 85%; /* linen */
     --foreground: 107 18% 15%; /* thorn */
 
     /* Cards & Popovers */
@@ -136,7 +136,7 @@
 
     /* Secondary - Ferrum (rust) */
     --secondary: 22 76% 36%; /* ferrum */
-    --secondary-foreground: 44 48% 94%;
+    --secondary-foreground: 43 53% 85%;
 
     /* Muted - Mistral */
     --muted: 88 25% 78%; /* mistral */
@@ -148,7 +148,7 @@
 
     /* Destructive - Ferrum */
     --destructive: 22 76% 36%; /* ferrum */
-    --destructive-foreground: 44 48% 94%;
+    --destructive-foreground: 43 53% 85%;
 
     /* UI elements */
     --border: 22 76% 36%; /* ferrum */
@@ -161,7 +161,7 @@
     --fern: 118 19% 41%;
     --creamsicle: 23 81% 63%;
     --thorn: 107 18% 15%;
-    --linen: 44 48% 94%;
+    --linen: 43 53% 85%;
 
     --radius: 0.5rem;
   }
@@ -176,17 +176,17 @@
   .dark {
     /* Core: Thorn & Linen */
     --background: 107 18% 15%; /* thorn */
-    --foreground: 44 48% 94%; /* linen */
+    --foreground: 43 53% 85%; /* linen */
 
     /* Cards & Popovers */
     --card: 107 18% 15%; /* thorn */
-    --card-foreground: 44 48% 94%;
+    --card-foreground: 43 53% 85%;
     --popover: 23 81% 63%; /* creamsicle */
     --popover-foreground: 0 0% 0%;
 
     /* Primary - Thorn */
     --primary: 107 18% 15%; /* thorn */
-    --primary-foreground: 44 48% 94%;
+    --primary-foreground: 43 53% 85%;
 
     /* Secondary - Creamsicle */
     --secondary: 23 81% 63%; /* creamsicle */
@@ -215,7 +215,7 @@
     --fern: 118 19% 41%;
     --creamsicle: 23 81% 63%;
     --thorn: 107 18% 15%;
-    --linen: 44 48% 94%;
+    --linen: 43 53% 85%;
   }
 }
 
@@ -291,8 +291,10 @@
 }
 
 /* Reset browser/library default link color */
-a {
-  color: inherit;
+@layer base {
+  a {
+    color: inherit;
+  }
 }
 
 /*
@@ -301,10 +303,21 @@ a {
   position: static. Adding position: relative is layout-neutral (no offset)
   but satisfies the check and suppresses the false-positive warning.
 */
-html,
-body {
+/*
+  overflow-x is intentionally only set on html, not body: setting it on both
+  makes each compute overflow-y: auto too (the spec forces the "visible" axis
+  to auto when the other isn't visible), turning both into separate scroll-
+  container candidates. That ambiguity breaks position: sticky for descendants,
+  since sticky's containing-block resolution can end up tied to whichever one
+  isn't actually the element the page visually scrolls through.
+*/
+html {
   position: relative;
   overflow-x: hidden;
+}
+
+body {
+  position: relative;
 }
 
 /* Custom scrollbar styling */

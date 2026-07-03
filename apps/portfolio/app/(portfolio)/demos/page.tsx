@@ -122,7 +122,7 @@ export default function DemosPage() {
                 {demo.tech.map((tech) => (
                   <span
                     key={tech}
-                    className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--eucalyptus))] text-[hsl(var(--thorn))] dark:bg-[hsl(var(--rust))] dark:text-white"
+                    className="px-2 py-0.5 rounded-full font-mono text-xs bg-[hsl(var(--rust))] text-white"
                   >
                     {tech}
                   </span>

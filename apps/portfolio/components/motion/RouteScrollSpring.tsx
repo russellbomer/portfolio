@@ -26,6 +26,10 @@ export function RouteScrollSpring({ children }: RouteScrollSpringProps) {
     pathname === "/home" ||
     pathname === "/demos/sbfcc_pbi" ||
     pathname === "/work/sbfcc_pbi" ||
+    // The scroll-linked transform this wrapper applies breaks position:
+    // sticky for descendants (a transformed ancestor creates a new
+    // containing block), which Datum's sticky back-to-portfolio badge relies on.
+    pathname === "/datum" ||
     shouldReduceMotion;
 
   const { scrollYProgress } = useScroll();

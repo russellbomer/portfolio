@@ -60,15 +60,27 @@ const socialLinks = [
   },
 ];
 
-const siteLinks = [
+const defaultSiteLinks = [
   { label: "Writing", href: "/writing" },
   { label: "Demos", href: "/demos" },
 ];
 
-export default function Footer() {
+interface FooterProps {
+  title?: string;
+  siteLinks?: { label: string; href: string }[];
+  copyrightName?: string;
+  id?: string;
+}
+
+export default function Footer({
+  title = "Solutions Developer",
+  siteLinks = defaultSiteLinks,
+  copyrightName,
+  id,
+}: FooterProps = {}) {
   return (
-    <footer className="relative z-10 bg-background border-t border-[hsl(var(--rust))]">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-[50px] pb-[25px] md:pb-[75px]">
+    <footer id={id} className="relative z-10 bg-background border-t border-[hsl(var(--rust))]">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
         {/* Mobile: stacked single column | Desktop: row layout */}
         <div className="flex flex-col gap-3 items-center text-center md:flex-row md:items-center md:justify-between md:text-left">
           {/* Brand - stacks on mobile */}
@@ -78,36 +90,40 @@ export default function Footer() {
             </span>
             <span className="hidden md:inline text-muted-foreground/40">·</span>
             <span className="font-mono text-xs text-muted-foreground uppercase tracking-wide">
-              Solutions Developer
+              {title}
             </span>
           </div>
 
           {/* Links - stacks on mobile */}
           <div className="flex flex-col items-center gap-3 text-sm md:flex-row md:items-center md:gap-4">
             {/* Site links with separators */}
-            <div className="flex gap-2 items-center">
-              {siteLinks.map(({ label, href }, index) => (
-                <span key={label} className="flex items-center gap-2">
-                  <Link
-                    href={href}
-                    className="text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors duration-200"
-                  >
-                    {label}
-                  </Link>
-                  {index < siteLinks.length - 1 && (
-                    <span className="text-muted-foreground/40 select-none" aria-hidden="true">·</span>
-                  )}
-                </span>
-              ))}
-            </div>
+            {siteLinks.length > 0 && (
+              <>
+                <div className="flex gap-2 items-center">
+                  {siteLinks.map(({ label, href }, index) => (
+                    <span key={label} className="flex items-center gap-2">
+                      <Link
+                        href={href}
+                        className="text-[hsl(var(--thorn))] dark:text-[hsl(var(--eucalyptus))] hover:text-[hsl(var(--eucalyptus))] dark:hover:text-[hsl(var(--fern))] transition-colors duration-200"
+                      >
+                        {label}
+                      </Link>
+                      {index < siteLinks.length - 1 && (
+                        <span className="text-muted-foreground/40 select-none" aria-hidden="true">·</span>
+                      )}
+                    </span>
+                  ))}
+                </div>
 
-            {/* Separator - hidden on mobile */}
-            <span
-              className="hidden md:inline text-muted-foreground/40 select-none"
-              aria-hidden="true"
-            >
-              ·
-            </span>
+                {/* Separator - hidden on mobile */}
+                <span
+                  className="hidden md:inline text-muted-foreground/40 select-none"
+                  aria-hidden="true"
+                >
+                  ·
+                </span>
+              </>
+            )}
 
             {/* Social icons */}
             <div className="flex gap-3">
@@ -128,6 +144,7 @@ export default function Footer() {
             {/* Copyright */}
             <span className="text-xs text-muted-foreground/60">
               © {new Date().getFullYear()}
+              {copyrightName ? ` ${copyrightName}` : ""}
             </span>
           </div>
         </div>
