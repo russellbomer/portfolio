@@ -15,7 +15,9 @@ export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
-  // On mount, read from localStorage or system preference
+  // On mount, read from localStorage. Light is the sitewide default when
+  // nothing is stored yet (a deliberate branding choice, not an OS-preference
+  // fallback) since html has no "dark" class by default in the root layout.
   useEffect(() => {
     // Use a microtask to avoid synchronous setState warning
     queueMicrotask(() => {
@@ -24,12 +26,6 @@ export function ThemeToggle() {
       if (stored) {
         setTheme(stored);
         document.documentElement.classList.toggle("dark", stored === "dark");
-      } else {
-        const prefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches;
-        setTheme(prefersDark ? "dark" : "light");
-        document.documentElement.classList.toggle("dark", prefersDark);
       }
     });
   }, []);

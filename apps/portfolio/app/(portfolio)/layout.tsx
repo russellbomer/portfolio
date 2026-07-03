@@ -46,7 +46,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark ${inter.variable} ${syne.variable} ${courierPrime.variable}`}
+      className={`${inter.variable} ${syne.variable} ${courierPrime.variable}`}
       suppressHydrationWarning
     >
       <body className="min-h-[100dvh] bg-background text-foreground font-mono antialiased">
