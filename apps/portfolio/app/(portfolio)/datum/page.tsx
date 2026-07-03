@@ -19,30 +19,13 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  ...buildMetadata({
-    title: "Datum Home Systems",
-    description:
-      "Residential technology consulting and integration. Networks, media, automation, and security, run as one coordinated project.",
-    baseUrl: "https://datum.russellbomer.com",
-    pathname: "",
-  }),
-  // Favicon follows the OS-level color scheme (the only theming signal
-  // available to a static <link> tag; it can't react to the in-page
-  // ThemeToggle, which is a separate, JS-driven light/dark state).
-  icons: {
-    icon: [
-      {
-        url: "/images/datum/datum-mark-square.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/images/datum/datum-mark-square-dark.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-    ],
-  },
-};
+export const metadata: Metadata = buildMetadata({
+  title: "Datum Home Systems",
+  description:
+    "Residential technology consulting and integration. Networks, media, automation, and security, run as one coordinated project.",
+  baseUrl: "https://datum.russellbomer.com",
+  pathname: "",
+});
 
 export default function DatumPage() {
   return (

@@ -21,6 +21,16 @@ export async function middleware(request: NextRequest) {
   const isStaticAsset = /\.[a-zA-Z0-9]+$/.test(pathname);
 
   if (isDatumHost(host)) {
+    // Next.js's app/favicon.ico file-convention icon is global — a route's
+    // own metadata/icon.png gets added alongside it, not swapped in, and
+    // browsers request /favicon.ico directly regardless of <link> tags. So
+    // serve Datum's own mark at that exact well-known URL for this host.
+    if (pathname === "/favicon.ico") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/images/datum/datum-mark-square.png";
+      return NextResponse.rewrite(url);
+    }
+
     // Transparently serve /datum at the subdomain's root, so the address
     // bar always shows datum.russellbomer.com, never .../datum.
     if (!isStaticAsset && !pathname.startsWith("/datum")) {
@@ -46,6 +56,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api|_next/static|_next/image).*)"],
   runtime: "nodejs",
 };
