@@ -255,6 +255,17 @@ export default function LandingPage() {
         {/* Spacer for pinwheel alignment */}
         <div className="hidden md:block md:h-[380px]" aria-hidden="true" />
 
+        <div className="relative z-10 border-t border-border bg-rust px-4 pt-1.5 pb-2 text-center">
+          <Link
+            href="https://datum.russellbomer.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-linen transition-opacity hover:opacity-80"
+          >
+            P.S. For home tech consulting, I run a separate practice. → Datum Home Systems
+          </Link>
+        </div>
+
         {/* Footer */}
         <Footer />
       </main>

@@ -7,6 +7,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
+import { useIsDatumRoute } from "@/lib/isDatumRoute";
 import { usePathname } from "next/navigation";
 import { type ReactNode } from "react";
 
@@ -21,15 +22,19 @@ interface RouteScrollSpringProps {
 export function RouteScrollSpring({ children }: RouteScrollSpringProps) {
   const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
+  const isDatumRoute = useIsDatumRoute();
   const skipAnimation =
     pathname === "/" ||
     pathname === "/home" ||
     pathname === "/demos/sbfcc_pbi" ||
     pathname === "/work/sbfcc_pbi" ||
     // The scroll-linked transform this wrapper applies breaks position:
-    // sticky for descendants (a transformed ancestor creates a new
-    // containing block), which Datum's sticky back-to-portfolio badge relies on.
-    pathname === "/datum" ||
+    // sticky/fixed for descendants (a transformed ancestor creates a new
+    // containing block), which Datum's sticky header and back-to-portfolio
+    // badge rely on. Checked via hostname too since usePathname() reports
+    // "/" (not "/datum") on the datum.russellbomer.com subdomain, where
+    // middleware rewrites the root internally.
+    isDatumRoute ||
     shouldReduceMotion;
 
   const { scrollYProgress } = useScroll();

@@ -23,6 +23,16 @@ export default function ConnectPage() {
         </p>
       </header>
       <ContactForm />
+      <div className="relative z-10 border-t border-border bg-rust pt-1 pb-0.5 text-center">
+        <Link
+          href="https://datum.russellbomer.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-linen transition-opacity hover:opacity-80"
+        >
+          P.S. For home tech consulting, I run a separate practice. → Datum Home Systems
+        </Link>
+      </div>
       <nav className="text-center md:text-left">
         <Link
           href="/home#connect"

@@ -15,10 +15,15 @@ export async function middleware(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   const { pathname } = request.nextUrl;
 
+  // Static/public assets (images, pdfs, etc.) have a file extension and
+  // must be served as-is — rewriting these under /datum would 404 them,
+  // since /datum has no matching sub-path for e.g. /images/foo.png.
+  const isStaticAsset = /\.[a-zA-Z0-9]+$/.test(pathname);
+
   if (isDatumHost(host)) {
     // Transparently serve /datum at the subdomain's root, so the address
     // bar always shows datum.russellbomer.com, never .../datum.
-    if (!pathname.startsWith("/datum")) {
+    if (!isStaticAsset && !pathname.startsWith("/datum")) {
       const url = request.nextUrl.clone();
       url.pathname = `/datum${pathname === "/" ? "" : pathname}`;
       return NextResponse.rewrite(url);

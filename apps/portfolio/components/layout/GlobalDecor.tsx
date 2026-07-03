@@ -5,12 +5,12 @@ import { BackToTop } from "@/components/ui/BackToTop";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { NoiseTexture } from "@/components/ui/NoiseTexture";
 import { PinwheelBackground } from "@/components/ui/PinwheelBackground";
+import { useIsDatumRoute } from "@/lib/isDatumRoute";
 import { usePathname } from "next/navigation";
 import { useSyncExternalStore } from "react";
 
 const PROTOTYPE_ROUTE = "/easybank-prototype";
 const BARE_ROUTES = ["/demos/sbfcc_pbi", "/work/sbfcc_pbi"];
-const NO_PINWHEEL_ROUTES = ["/datum"];
 const LANDSCAPE_QUERY = "(min-width: 768px) and (orientation: landscape)";
 
 function useMediaQuery(query: string) {
@@ -34,10 +34,10 @@ function useMediaQuery(query: string) {
 export function GlobalDecor() {
   const pathname = usePathname();
   const isLandscapeMd = useMediaQuery(LANDSCAPE_QUERY);
+  const isNoPinwheelRoute = useIsDatumRoute();
 
   const isBareRoute = BARE_ROUTES.some((r) => pathname?.startsWith(r));
   const isPrototypeRoute = pathname?.startsWith(PROTOTYPE_ROUTE);
-  const isNoPinwheelRoute = NO_PINWHEEL_ROUTES.some((r) => pathname?.startsWith(r));
   const hideDecor = isBareRoute || (isPrototypeRoute && isLandscapeMd);
   const hidePinwheel = isBareRoute || isPrototypeRoute || isNoPinwheelRoute;
   const disableCursor = isBareRoute || isPrototypeRoute;

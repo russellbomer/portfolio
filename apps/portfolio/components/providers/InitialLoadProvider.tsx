@@ -1,5 +1,6 @@
 "use client";
 
+import { useIsDatumRoute } from "@/lib/isDatumRoute";
 import { usePathname } from "next/navigation";
 import { createContext, useContext, type ReactNode } from "react";
 
@@ -18,10 +19,14 @@ const InitialLoadContext = createContext<InitialLoadContextType>({
  */
 export function InitialLoadProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const isDatumRoute = useIsDatumRoute();
 
-  // Animations play on "/" only
-  // "/home" shows static content for back navigation
-  const shouldAnimate = pathname === "/";
+  // Animations play on "/" only. usePathname() also reports "/" on the
+  // datum.russellbomer.com subdomain (middleware rewrites /datum internally,
+  // but the browser's actual visited path stays "/"), so isDatumRoute is
+  // checked too or the homepage's loading screen/pinwheel intro/scroll lock
+  // would incorrectly fire there.
+  const shouldAnimate = pathname === "/" && !isDatumRoute;
 
   return (
     <InitialLoadContext.Provider value={{ shouldAnimate }}>
