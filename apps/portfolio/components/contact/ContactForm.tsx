@@ -80,7 +80,7 @@ export function ContactForm() {
             onChange={handleChange}
             required
             placeholder="Your name"
-            className="text-xs md:text-sm"
+            className="bg-[hsl(var(--creamsicle)/0.3)] text-xs md:text-sm"
           />
         </div>
         <div className="space-y-2">
@@ -93,7 +93,7 @@ export function ContactForm() {
             onChange={handleChange}
             required
             placeholder="you@company.com"
-            className="text-xs md:text-sm"
+            className="bg-[hsl(var(--creamsicle)/0.3)] text-xs md:text-sm"
           />
         </div>
       </div>
@@ -106,7 +106,7 @@ export function ContactForm() {
           value={formData.company}
           onChange={handleChange}
           placeholder="Your company"
-          className="text-xs md:text-sm"
+          className="bg-[hsl(var(--creamsicle)/0.3)] text-xs md:text-sm"
         />
       </div>
 
@@ -120,7 +120,7 @@ export function ContactForm() {
           required
           rows={5}
           placeholder="Tell me about your project, timeline, and team context..."
-          className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-xs md:text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex min-h-[80px] w-full rounded-md border border-input bg-[hsl(var(--creamsicle)/0.3)] px-3 py-2 text-xs md:text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30"
         />
       </div>
 

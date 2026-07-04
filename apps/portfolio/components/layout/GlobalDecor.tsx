@@ -6,30 +6,12 @@ import { CustomCursor } from "@/components/ui/CustomCursor";
 import { NoiseTexture } from "@/components/ui/NoiseTexture";
 import { PinwheelBackground } from "@/components/ui/PinwheelBackground";
 import { useIsDatumRoute } from "@/lib/isDatumRoute";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 import { usePathname } from "next/navigation";
-import { useSyncExternalStore } from "react";
 
 const PROTOTYPE_ROUTE = "/easybank-prototype";
 const BARE_ROUTES = ["/demos/sbfcc_pbi", "/work/sbfcc_pbi"];
 const LANDSCAPE_QUERY = "(min-width: 768px) and (orientation: landscape)";
-
-function useMediaQuery(query: string) {
-  return useSyncExternalStore(
-    (onStoreChange) => {
-      if (typeof window === "undefined") return () => {};
-      const mediaQuery = window.matchMedia(query);
-      const handler = () => onStoreChange();
-
-      mediaQuery.addEventListener("change", handler);
-
-      return () => {
-        mediaQuery.removeEventListener("change", handler);
-      };
-    },
-    () => (typeof window === "undefined" ? false : window.matchMedia(query).matches),
-    () => false
-  );
-}
 
 export function GlobalDecor() {
   const pathname = usePathname();

@@ -100,6 +100,17 @@ export function ScrollLinkedAbout({ className = "" }: ScrollLinkedAboutProps) {
     [0, 100]
   );
 
+  // Gradient fades scale continuously with scroll position through the
+  // inner content: top fade grows as you scroll down (more content behind
+  // you), bottom fade shrinks (less content ahead). A softer, slower spring
+  // than springConfig so the fade itself reads as gradual rather than
+  // tracking raw scroll 1:1.
+  const gradientSpringConfig = { stiffness: 40, damping: 20, restDelta: 0.001 };
+  const topGradientOpacityRaw = useTransform(scrollIndicator, [0, 100], [0, 1]);
+  const bottomGradientOpacityRaw = useTransform(scrollIndicator, [0, 100], [1, 0]);
+  const topGradientOpacity = useSpring(topGradientOpacityRaw, gradientSpringConfig);
+  const bottomGradientOpacity = useSpring(bottomGradientOpacityRaw, gradientSpringConfig);
+
   const [indicatorPercent, setIndicatorPercent] = useState(0);
   const [isInteractive, setIsInteractive] = useState(false);
 
@@ -158,7 +169,7 @@ export function ScrollLinkedAbout({ className = "" }: ScrollLinkedAboutProps) {
             </h2>
 
             {/* Scroll-linked container */}
-            <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg overflow-hidden">
+            <div className="bg-[hsl(var(--creamsicle)/0.5)] dark:bg-[hsl(var(--fern)/0.5)] backdrop-blur-sm border border-[hsl(var(--rust)/0.5)] dark:border-[hsl(var(--thorn)/0.5)] rounded-lg overflow-hidden">
               {/* Fixed height viewport with scroll-linked content */}
               <div className="md:h-[380px] lg:h-[400px] relative overflow-hidden">
                 <motion.div
@@ -174,20 +185,20 @@ export function ScrollLinkedAbout({ className = "" }: ScrollLinkedAboutProps) {
                 </motion.div>
 
                 {/* Gradient masks for scroll indication */}
-                <div
-                  className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-card/80 to-transparent pointer-events-none transition-opacity duration-200"
-                  style={{ opacity: indicatorPercent > 5 ? 1 : 0 }}
+                <motion.div
+                  className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-[hsl(var(--linen)/0.6)] dark:from-[hsl(var(--eucalyptus)/0.6)] to-transparent pointer-events-none"
+                  style={{ opacity: topGradientOpacity }}
                 />
-                <div
-                  className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-card/80 to-transparent pointer-events-none transition-opacity duration-200"
-                  style={{ opacity: indicatorPercent < 95 ? 1 : 0 }}
+                <motion.div
+                  className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-[hsl(var(--linen)/0.6)] dark:from-[hsl(var(--eucalyptus)/0.6)] to-transparent pointer-events-none"
+                  style={{ opacity: bottomGradientOpacity }}
                 />
               </div>
 
               {/* Progress bar */}
-              <div className="h-1 bg-border/30">
+              <div className="h-1 bg-[hsl(var(--rust)/0.3)] dark:bg-[hsl(var(--thorn)/0.3)]">
                 <motion.div
-                  className="h-full bg-[hsl(var(--eucalyptus))] dark:bg-[hsl(var(--rust))]"
+                  className="h-full bg-[hsl(var(--rust))] dark:bg-[hsl(var(--thorn))]"
                   style={{ width: `${indicatorPercent}%` }}
                 />
               </div>

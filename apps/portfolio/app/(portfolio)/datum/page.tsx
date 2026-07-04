@@ -10,6 +10,8 @@ import { DatumAbout } from "./components/DatumAbout";
 import { DatumContact } from "./components/DatumContact";
 import { DatumFooter } from "./components/DatumFooter";
 import { BackToPortfolioBadge } from "./components/BackToPortfolioBadge";
+import { DatumParallaxRails } from "./components/DatumParallaxRails";
+import { DatumSmoothScroll } from "./components/DatumSmoothScroll";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -29,18 +31,21 @@ export const metadata: Metadata = buildMetadata({
 
 export default function DatumPage() {
   return (
-    <div className={fraunces.variable}>
-      <main id="main-content">
-        <DatumHeader />
-        <DatumHero />
-        <DatumServices />
-        <DatumHowItWorks />
-        <DatumWhoFor />
-        <DatumAbout />
-        <DatumContact />
-      </main>
-      <DatumFooter />
-      <BackToPortfolioBadge />
-    </div>
+    <DatumSmoothScroll>
+      <div className={fraunces.variable}>
+        <DatumParallaxRails />
+        <main id="main-content">
+          <DatumHeader />
+          <DatumHero />
+          <DatumServices />
+          <DatumHowItWorks />
+          <DatumWhoFor />
+          <DatumAbout />
+          <DatumContact />
+        </main>
+        <DatumFooter />
+        <BackToPortfolioBadge />
+      </div>
+    </DatumSmoothScroll>
   );
 }

@@ -11,6 +11,10 @@ function isDatumHost(host: string) {
   return host === DATUM_HOST || host.startsWith(`${DATUM_HOST}:`);
 }
 
+function isLocalDevHost(host: string) {
+  return host.startsWith("localhost") || host.startsWith("127.0.0.1");
+}
+
 export async function middleware(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   const { pathname } = request.nextUrl;
@@ -43,7 +47,13 @@ export async function middleware(request: NextRequest) {
 
   // On every other host (the main domain, preview deployments, etc.),
   // /datum should never resolve directly — send it to the subdomain.
-  if (pathname === "/datum" || pathname.startsWith("/datum/")) {
+  // Exempt local dev (localhost/127.0.0.1) so /datum is directly
+  // previewable without spoofing the Host header; real traffic never
+  // sends that Host, so this has no effect in production.
+  if (
+    !isLocalDevHost(host) &&
+    (pathname === "/datum" || pathname.startsWith("/datum/"))
+  ) {
     const url = request.nextUrl.clone();
     url.hostname = DATUM_HOST;
     url.port = "";
