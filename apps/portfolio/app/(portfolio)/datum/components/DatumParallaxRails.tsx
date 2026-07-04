@@ -9,6 +9,8 @@ import {
   type MotionValue,
 } from "framer-motion";
 
+type Shape = "circle" | "triangle";
+
 // Shapes are cropped directly from the source logo mark (Datum-Logo.png),
 // preserving its actual stroke/fill proportions rather than approximating
 // them — see public/images/datum/datum-{triangle,circle}[-dark].png.
@@ -139,7 +141,7 @@ export function DatumParallaxRails() {
   const opacityForIndex = (i: number) => OUTER_OPACITY - i * opacityStep;
 
   const columns = speeds.map((y, i) => ({
-    shape: (i % 2 === 0 ? "circle" : "triangle") as const,
+    shape: (i % 2 === 0 ? "circle" : "triangle") as Shape,
     y,
     speedRatio: SPEED_RATIOS[i],
     offset: i * 2.25,
@@ -153,7 +155,7 @@ export function DatumParallaxRails() {
   // cluster's screen-space speed gradient instead of its true reflection —
   // reusing the same offset->speed pairing is what actually mirrors it.
   const rightColumns = speeds.map((y, i) => ({
-    shape: (i % 2 === 0 ? "circle" : "triangle") as const,
+    shape: (i % 2 === 0 ? "circle" : "triangle") as Shape,
     y,
     speedRatio: SPEED_RATIOS[i],
     offset: i * 2.25,
